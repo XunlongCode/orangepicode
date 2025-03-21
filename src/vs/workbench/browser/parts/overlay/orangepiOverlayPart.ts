@@ -36,7 +36,7 @@ const CHAT_ID = "orangepicode.chatView";
 const OVERLAY_TITLE = "orangepicode.firstLaunchOverlayView";
 
 export class OrangePiOverlayPart extends Part {
-	static readonly ID = "workbench.parts.firstLaunchOverlay";
+	static readonly ID = "workbench.parts.orangepiOverlay";
 
 	readonly minimumWidth: number = 300;
 	readonly maximumWidth: number = 800;
@@ -52,7 +52,6 @@ export class OrangePiOverlayPart extends Part {
 	private _isLocked: boolean = false;
 	private loadingOverlay: HTMLElement | undefined;
 	private isExtensionReady: boolean = false;
-	// private _storageService: IStorageService;
 	private isFirstLaunch: boolean;
 
 	constructor(
@@ -75,8 +74,8 @@ export class OrangePiOverlayPart extends Part {
 		);
 		// this.isFirstLaunch = !storageService.getBoolean(IS_FIRST_LAUNCH_KEY, 0);
 		this.isFirstLaunch = true
+		console.log("I AM HERE", this.isFirstLaunch);
 
-		// this._storageService = storageService;
 		this._webviewService =
 			this._instantiationService.createInstance(WebviewService);
 

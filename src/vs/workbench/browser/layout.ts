@@ -270,6 +270,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 	private auxiliaryBarPartView!: ISerializableView;
 	private editorPartView!: ISerializableView;
 	private statusBarPartView!: ISerializableView;
+	private orangePiOverlayPartView!: ISerializableView;
 
 	private environmentService!: IBrowserWorkbenchEnvironmentService;
 	private extensionService!: IExtensionService;
@@ -1131,6 +1132,8 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 
 	protected getPart(key: Parts): Part {
 		const part = this.parts.get(key);
+		console.log(part);
+
 		if (!part) {
 			throw new Error(`Unknown part ${key}`);
 		}
@@ -1512,6 +1515,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		const auxiliaryBarPart = this.getPart(Parts.AUXILIARYBAR_PART);
 		const sideBar = this.getPart(Parts.SIDEBAR_PART);
 		const statusBar = this.getPart(Parts.STATUSBAR_PART);
+		const orangepiOverlayPart = this.getPart(Parts.ORANGEPI_OVERLAY_PART);
 
 		// View references for all parts
 		this.titleBarPartView = titleBar;
@@ -1522,6 +1526,22 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.panelPartView = panelPart;
 		this.auxiliaryBarPartView = auxiliaryBarPart;
 		this.statusBarPartView = statusBar;
+		this.orangePiOverlayPartView = orangepiOverlayPart;
+
+		// Create a new container for orangepiOverlayPart
+		const orangepiOverlayPartContainer = document.createElement("div");
+		orangepiOverlayPartContainer.style.position = "absolute";
+		orangepiOverlayPartContainer.style.top = "0";
+		orangepiOverlayPartContainer.style.left = "0";
+		orangepiOverlayPartContainer.style.right = "0";
+		orangepiOverlayPartContainer.style.bottom = "0";
+		orangepiOverlayPartContainer.style.zIndex = "-10";
+		orangepiOverlayPartContainer.style.display = "absolute";
+		orangepiOverlayPartContainer.classList.add("orangepioverlay-part-container");
+		orangepiOverlayPartContainer.style.backgroundColor = 'transparent';
+
+		this.mainContainer.appendChild(orangepiOverlayPartContainer);
+		orangepiOverlayPart.create(orangepiOverlayPartContainer);
 
 		const viewMap = {
 			[Parts.ACTIVITYBAR_PART]: this.activityBarPartView,
@@ -1531,7 +1551,8 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			[Parts.PANEL_PART]: this.panelPartView,
 			[Parts.SIDEBAR_PART]: this.sideBarPartView,
 			[Parts.STATUSBAR_PART]: this.statusBarPartView,
-			[Parts.AUXILIARYBAR_PART]: this.auxiliaryBarPartView
+			[Parts.AUXILIARYBAR_PART]: this.auxiliaryBarPartView,
+			[Parts.ORANGEPI_OVERLAY_PART]: this.orangePiOverlayPartView
 		};
 
 		const fromJSON = ({ type }: { type: Parts }) => viewMap[type];
@@ -1602,6 +1623,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 
 			// Layout the grid widget
 			this.workbenchGrid.layout(this._mainContainerDimension.width, this._mainContainerDimension.height);
+			this.orangePiOverlayPartView.layout(this._mainContainerDimension.width, this._mainContainerDimension.height, 0, 0);
 			this.initialized = true;
 
 			// Emit as event

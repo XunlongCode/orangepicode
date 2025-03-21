@@ -30,7 +30,6 @@ import { URI } from "../../../../base/common/uri.js";
 import { ExtensionIdentifier } from "../../../../platform/extensions/common/extensions.js";
 import { IEditorGroupsService } from "../../../services/editor/common/editorGroupsService.js";
 import { IS_FIRST_LAUNCH_KEY } from "./common.js";
-import { IConfigurationService } from '../../../../platform/configuration/common/configuration.js';
 
 const CHAT_ID = "orangepicode.chatView";
 const OVERLAY_TITLE = "orangepicode.firstLaunchOverlayView";
@@ -92,13 +91,6 @@ export class OrangePiOverlayPart extends Part {
 		if (this.isFirstLaunch) {
 			this.state = "open";
 			this.lock();
-
-			// setting the theme to Overlay Dark on first launch here to avoid flicker
-			this._instantiationService.invokeFunction(accessor => {
-				const configurationService = accessor.get(IConfigurationService);
-				configurationService.updateValue('workbench.colorTheme', "Default Overlay Dark");
-			});
-
 		} else {
 			this.state = "closed";
 		}
@@ -107,8 +99,6 @@ export class OrangePiOverlayPart extends Part {
 			id: new ExtensionIdentifier(CHAT_ID),
 			location: URI.parse(""),
 		};
-
-		console.log("extensionDescription是什么", extensionDescription);
 
 		// 1. create an IOverlayWebview
 		const webview = this._webviewService!.createWebviewOverlay({

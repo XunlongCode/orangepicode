@@ -10,6 +10,8 @@ import * as vscode from 'vscode';
 import cdSpec from './completions/cd';
 import codeCompletionSpec from './completions/code';
 import codeInsidersCompletionSpec from './completions/code-insiders';
+import codiumCompletionSpec from './completions/codium';
+import codiumInsidersCompletionSpec from './completions/codium-insiders';
 import setLocationSpec from './completions/set-location';
 import { upstreamSpecs } from './constants';
 import { PathExecutableCache } from './env/pathExecutableCache';
@@ -50,6 +52,8 @@ export const availableSpecs: Fig.Spec[] = [
 	cdSpec,
 	codeInsidersCompletionSpec,
 	codeCompletionSpec,
+	codiumInsidersCompletionSpec,
+	codiumCompletionSpec,
 	setLocationSpec,
 ];
 for (const spec of upstreamSpecs) {

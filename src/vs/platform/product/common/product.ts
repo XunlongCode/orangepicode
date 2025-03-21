@@ -27,6 +27,42 @@ else if (globalThis._VSCODE_PRODUCT_JSON && globalThis._VSCODE_PACKAGE_JSON) {
 	// Obtain values from product.json and package.json-data
 	product = globalThis._VSCODE_PRODUCT_JSON as unknown as IProductConfiguration;
 
+	const { serviceUrl, publisherUrl, itemUrl, controlUrl, extensionUrlTemplate, resourceUrlTemplate } = product.extensionsGallery || {};
+
+	Object.assign(product, {
+		extensionsGallery: {
+			serviceUrl: env['VSCODE_GALLERY_SERVICE_URL'] || serviceUrl,
+			publisherUrl: env['VSCODE_GALLERY_PUBLISHER_URL'] || publisherUrl,
+			itemUrl: env['VSCODE_GALLERY_ITEM_URL'] || itemUrl,
+			controlUrl: env['VSCODE_GALLERY_CONTROL_URL'] || controlUrl,
+			extensionUrlTemplate: env['VSCODE_GALLERY_EXTENSION_URL_TEMPLATE'] || extensionUrlTemplate,
+			resourceUrlTemplate: env['VSCODE_GALLERY_RESOURCE_URL_TEMPLATE'] || resourceUrlTemplate,
+		}
+	});
+
+	// Merge user-customized product.json
+	try {
+		const merge = (...objects: any[]) =>
+			objects.reduce((result, current) => {
+				Object.keys(current).forEach((key) => {
+					if (Array.isArray(result[key]) && Array.isArray(current[key])) {
+						result[key] = current[key];
+					} else if (typeof result[key] === 'object' && typeof current[key] === 'object') {
+						result[key] = merge(result[key], current[key]);
+					} else {
+						result[key] = current[key];
+					}
+				});
+
+				return result;
+			}, {}) as any;
+
+		const userProduct = (globalThis as Record<string, any>)._VSCODE_USER_PRODUCT_JSON || {};
+
+		product = merge(product, userProduct);
+	} catch (ex) {
+	}
+
 	// Running out of sources
 	if (env['VSCODE_DEV']) {
 		Object.assign(product, {
@@ -41,10 +77,11 @@ else if (globalThis._VSCODE_PRODUCT_JSON && globalThis._VSCODE_PACKAGE_JSON) {
 	// want to have it running out of sources so we
 	// read it from package.json only when we need it.
 	if (!product.version) {
-		const pkg = globalThis._VSCODE_PACKAGE_JSON as { version: string };
+		const pkg = globalThis._VSCODE_PACKAGE_JSON as { version: string, release: string };
 
 		Object.assign(product, {
-			version: pkg.version
+			version: pkg.version,
+			release: pkg.release
 		});
 	}
 }

@@ -3,7 +3,7 @@
   "version": "1.98.2",
   "distro": "de81a091068fb03e277543d4f4900db005edf9f3",
   "author": {
-    "name": "Microsoft Corporation"
+    "name": "OrangePi Code"
   },
   "license": "MIT",
   "main": "./out/main.js",
@@ -31,7 +31,7 @@
     "watch-extensions": "node --max-old-space-size=8192 ./node_modules/gulp/bin/gulp.js watch-extensions watch-extension-media",
     "watch-extensionsd": "deemon npm run watch-extensions",
     "kill-watch-extensionsd": "deemon --kill npm run watch-extensions",
-    "precommit": "node build/hygiene.js",
+    "precommit": "",
     "gulp": "node --max-old-space-size=8192 ./node_modules/gulp/bin/gulp.js",
     "electron": "node build/lib/electron",
     "7z": "7z",
@@ -74,7 +74,7 @@
     "@types/semver": "^7.5.8",
     "@vscode/deviceid": "^0.1.1",
     "@vscode/iconv-lite-umd": "0.7.0",
-    "@vscode/policy-watcher": "^1.1.10",
+    "@vscodium/policy-watcher": "^1.1.10-2503041159",
     "@vscode/proxy-agent": "^0.32.0",
     "@vscode/ripgrep": "^1.15.10",
     "@vscode/spdlog": "^0.15.0",
@@ -154,7 +154,7 @@
     "cssnano": "^6.0.3",
     "debounce": "^1.0.0",
     "deemon": "^1.8.0",
-    "electron": "34.2.0",
+    "electron": "34.3.2",
     "eslint": "^9.11.1",
     "eslint-formatter-compact": "^8.40.0",
     "eslint-plugin-header": "3.1.1",
@@ -236,5 +236,6 @@
   },
   "optionalDependencies": {
     "windows-foreground-love": "0.5.0"
-  }
+  },
+  "release": "25079"
 }

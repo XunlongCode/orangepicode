@@ -119,7 +119,9 @@ type AnnouncementEntry = { id: string, title: string, url: string };
 
 const REDUCED_MOTION_KEY = 'workbench.welcomePage.preferReducedMotion';
 
-const BUILTIN_ANNOUNCEMENTS: AnnouncementEntry[] = [];
+const BUILTIN_ANNOUNCEMENTS: AnnouncementEntry[] = [
+]
+	;
 
 export class GettingStartedPage extends EditorPane {
 

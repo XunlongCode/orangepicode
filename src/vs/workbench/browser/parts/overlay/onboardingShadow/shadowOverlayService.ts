@@ -44,7 +44,7 @@ export class ShadowOverlayService
 
 	private registerCommands(): void {
 		CommandsRegistry.registerCommand(
-			"orangepi.highlightElements",
+			"orangepicodeoverlay.highlightElements",
 			(accessor, ...args) => {
 				const selectors = args[0] as string[]; // array of CSS selectors
 				this.highlight(selectors);
@@ -52,7 +52,7 @@ export class ShadowOverlayService
 		);
 
 		CommandsRegistry.registerCommand(
-			"orangepi.removeHighlight",
+			"orangepicodeoverlay.removeHighlight",
 			(accessor, ...args) => {
 				const selectors = args[0] as string[]; // array of CSS selectors
 				// Convert selectors to elements

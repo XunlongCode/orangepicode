@@ -34,7 +34,7 @@ import { TitlebarStyle } from '../../../platform/window/common/window.js';
 import { IPreferencesService } from '../../services/preferences/common/preferences.js';
 import { QuickInputAlignmentContextKey } from '../../../platform/quickinput/browser/quickInput.js';
 import { IEditorGroupsService } from '../../services/editor/common/editorGroupsService.js';
-import { ToggleOrangePiOverlayAction } from '../parts/overlay/orangepiOverlayActions.js';
+import { ToggleOrangePiCodeOverlayAction } from '../parts/overlay/orangePiCodeOverlayActions.js';
 
 // Register Icons
 const menubarIcon = registerIcon('menuBar', Codicon.layoutMenubar, localize('menuBarIcon', "Represents the menu bar"));
@@ -1386,7 +1386,7 @@ ToggleVisibilityActions.push(...[
 	CreateToggleLayoutItem(ToggleAuxiliaryBarAction.ID, AuxiliaryBarVisibleContext, localize('secondarySideBar', "Secondary Side Bar"), { whenA: ContextKeyExpr.equals('config.workbench.sideBar.location', 'left'), iconA: panelRightIcon, iconB: panelLeftIcon }),
 	CreateToggleLayoutItem(TogglePanelAction.ID, PanelVisibleContext, localize('panel', "Panel"), panelIcon),
 	CreateToggleLayoutItem(ToggleStatusbarVisibilityAction.ID, ContextKeyExpr.equals('config.workbench.statusBar.visible', true), localize('statusBar', "Status Bar"), statusBarIcon),
-	CreateToggleLayoutItem(ToggleOrangePiOverlayAction.ID, OrangePiVisibleContext, 'OrangePi', orangepiIcon)
+	CreateToggleLayoutItem(ToggleOrangePiCodeOverlayAction.ID, OrangePiVisibleContext, 'OrangePi', orangepiIcon)
 ]);
 
 const MoveSideBarActions: CustomizeLayoutItem[] = [

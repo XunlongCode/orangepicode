@@ -1,6 +1,6 @@
 import { registerAction2, Action2 } from "../../../../platform/actions/common/actions.js";
 import { ServicesAccessor } from "../../../../platform/instantiation/common/instantiation.js";
-import { IOrangePiOverlayService } from "./orangepiOverlayService.js";
+import { IOrangePiCodeOverlayService } from "./orangePiCodeOverlayService.js";
 import { KeyCode, KeyMod } from "../../../../base/common/keyCodes.js";
 import { IStorageService } from '../../../../platform/storage/common/storage.js';
 import { IS_FIRST_LAUNCH_KEY } from "./common.js";
@@ -23,17 +23,17 @@ export class CloseFirstLaunchOverlayAction extends Action2 {
 	}
 
 	run(accessor: ServicesAccessor): void {
-		const orangepiOverlayService = accessor.get(IOrangePiOverlayService);
-		orangepiOverlayService.hide();
+		const OrangePiCodeOverlayService = accessor.get(IOrangePiCodeOverlayService);
+		OrangePiCodeOverlayService.hide();
 	}
 }
 
-export class ToggleOrangePiOverlayAction extends Action2 {
-	static readonly ID = "workbench.action.toggleOrangePi";
+export class ToggleOrangePiCodeOverlayAction extends Action2 {
+	static readonly ID = "workbench.action.toggleOrangePiCodeOverlay";
 
 	constructor() {
 		super({
-			id: ToggleOrangePiOverlayAction.ID,
+			id: ToggleOrangePiCodeOverlayAction.ID,
 			title: { value: "Toggle Overlay Popup", original: "Toggle Overlay Popup" },
 			f1: true,
 			keybinding: {
@@ -44,17 +44,17 @@ export class ToggleOrangePiOverlayAction extends Action2 {
 	}
 
 	run(accessor: ServicesAccessor): void {
-		const orangepiOverlayService = accessor.get(IOrangePiOverlayService);
-		orangepiOverlayService.toggle();
+		const OrangePiCodeOverlayService = accessor.get(IOrangePiCodeOverlayService);
+		OrangePiCodeOverlayService.toggle();
 	}
 }
 
-export class MarkOrangePiFirstLaunchCompleteAction extends Action2 {
-	static readonly ID = "workbench.action.markOrangePiFirstLaunchComplete";
+export class MarkOrangePiCodeOverlayFirstLaunchCompleteAction extends Action2 {
+	static readonly ID = "workbench.action.markOrangePiCodeOverlayFirstLaunchComplete";
 
 	constructor() {
 		super({
-			id: MarkOrangePiFirstLaunchCompleteAction.ID,
+			id: MarkOrangePiCodeOverlayFirstLaunchCompleteAction.ID,
 			title: { value: "Mark Overlay First Launch Key Complete", original: "Mark Overlay First Launch Key Complete" },
 			f1: true,
 		});
@@ -84,12 +84,12 @@ export class MarkOrangePiFirstLaunchCompleteAction extends Action2 {
 	}
 }
 
-export class ResetOrangePiFirstLaunchKeyAction extends Action2 {
-	static readonly ID = "workbench.action.resetOrangePiFirstLaunchKey";
+export class ResetOrangePiCodeOverlayFirstLaunchKeyAction extends Action2 {
+	static readonly ID = "workbench.action.resetOrangePiCodeOverlayFirstLaunchKey";
 
 	constructor() {
 		super({
-			id: ResetOrangePiFirstLaunchKeyAction.ID,
+			id: ResetOrangePiCodeOverlayFirstLaunchKeyAction.ID,
 			title: { value: "Reset Overlay First Launch Key", original: "Reset Overlay First Launch Key" },
 			f1: true,
 		});
@@ -120,12 +120,12 @@ export class ResetOrangePiFirstLaunchKeyAction extends Action2 {
 	}
 }
 
-export class IsOrangePiFirstLaunchAction extends Action2 {
-	static readonly ID = "workbench.action.isOrangePiFirstLaunch";
+export class IsOrangePiCodeOverlayFirstLaunchAction extends Action2 {
+	static readonly ID = "workbench.action.isOrangePiCodeOverlayFirstLaunch";
 
 	constructor() {
 		super({
-			id: IsOrangePiFirstLaunchAction.ID,
+			id: IsOrangePiCodeOverlayFirstLaunchAction.ID,
 			title: { value: "Is Overlay First Launch", original: "Is Overlay First Launch" },
 			f1: true,
 		});
@@ -137,9 +137,9 @@ export class IsOrangePiFirstLaunchAction extends Action2 {
 	}
 }
 
-registerAction2(ToggleOrangePiOverlayAction);
+registerAction2(ToggleOrangePiCodeOverlayAction);
 registerAction2(CloseFirstLaunchOverlayAction);
 
-registerAction2(MarkOrangePiFirstLaunchCompleteAction);
-registerAction2(ResetOrangePiFirstLaunchKeyAction);
-registerAction2(IsOrangePiFirstLaunchAction);
+registerAction2(MarkOrangePiCodeOverlayFirstLaunchCompleteAction);
+registerAction2(ResetOrangePiCodeOverlayFirstLaunchKeyAction);
+registerAction2(IsOrangePiCodeOverlayFirstLaunchAction);

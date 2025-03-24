@@ -5,7 +5,6 @@ import {
 	InstantiationType,
 } from "../../../../platform/instantiation/common/extensions.js";
 import { Disposable, IDisposable } from "../../../../base/common/lifecycle.js";
-import { OrangePiOverlayPart } from "./orangepiOverlayPart.js";
 import {
 	createDecorator,
 	IInstantiationService,
@@ -13,18 +12,19 @@ import {
 import { IEditorService } from "../../../services/editor/common/editorService.js";
 import { ITerminalService } from "../../../contrib/terminal/browser/terminal.js";
 import { CommandsRegistry } from "../../../../platform/commands/common/commands.js";
+import { OrangePiCodeOverlayPart } from './orangePiCodeOverlayPart.js';
 
-export const IOrangePiOverlayService = createDecorator<IOrangePiOverlayService>(
-	"orangepicodeOverlayService",
+export const IOrangePiCodeOverlayService = createDecorator<IOrangePiCodeOverlayService>(
+	"orangepicodeoverlayOverlayService",
 );
 
-export interface IOrangePiOverlayService extends IDisposable {
+export interface IOrangePiCodeOverlayService extends IDisposable {
 	readonly _serviceBrand: undefined;
 
 	/**
 	 * Returns the FirstLaunchOverlayPart instance.
 	 */
-	readonly pearOverlayPart: OrangePiOverlayPart;
+	readonly pearOverlayPart: OrangePiCodeOverlayPart;
 
 	/**
 	 * Shows the Overlay popup.
@@ -67,12 +67,12 @@ export interface IOrangePiOverlayService extends IDisposable {
 	hideOverlayLoadingMessage(): void;
 }
 
-export class OrangePiOverlayService
+export class OrangePiCodeOverlayService
 	extends Disposable
-	implements IOrangePiOverlayService {
+	implements IOrangePiCodeOverlayService {
 	declare readonly _serviceBrand: undefined;
 
-	private readonly _pearOverlayPart: OrangePiOverlayPart;
+	private readonly _pearOverlayPart: OrangePiCodeOverlayPart;
 
 	constructor(
 		@IInstantiationService
@@ -83,7 +83,7 @@ export class OrangePiOverlayService
 	) {
 		super();
 		this._pearOverlayPart =
-			this.instantiationService.createInstance(OrangePiOverlayPart);
+			this.instantiationService.createInstance(OrangePiCodeOverlayPart);
 		this.registerListeners();
 		this.registerCommands();
 	}
@@ -103,49 +103,49 @@ export class OrangePiOverlayService
 	}
 
 	private registerCommands(): void {
-		// Register commands for external use e.g. in orangepicode submodule
-		CommandsRegistry.registerCommand("orangepicode.isOverlayVisible", (accessor) => {
-			const overlayService = accessor.get(IOrangePiOverlayService);
+		// Register commands for external use e.g. in orangepicodeoverlay submodule
+		CommandsRegistry.registerCommand("orangepicodeoverlay.isOverlayVisible", (accessor) => {
+			const overlayService = accessor.get(IOrangePiCodeOverlayService);
 			return overlayService.isVisible();
 		});
 
-		CommandsRegistry.registerCommand("orangepicode.showOverlay", (accessor) => {
-			const overlayService = accessor.get(IOrangePiOverlayService);
+		CommandsRegistry.registerCommand("orangepicodeoverlay.showOverlay", (accessor) => {
+			const overlayService = accessor.get(IOrangePiCodeOverlayService);
 			overlayService.show();
 		});
 
-		CommandsRegistry.registerCommand("orangepicode.hideOverlay", (accessor) => {
-			const overlayService = accessor.get(IOrangePiOverlayService);
+		CommandsRegistry.registerCommand("orangepicodeoverlay.hideOverlay", (accessor) => {
+			const overlayService = accessor.get(IOrangePiCodeOverlayService);
 			overlayService.hide();
 		});
 
-		CommandsRegistry.registerCommand("orangepicode.toggleOverlay", (accessor) => {
-			const overlayService = accessor.get(IOrangePiOverlayService);
+		CommandsRegistry.registerCommand("orangepicodeoverlay.toggleOverlay", (accessor) => {
+			const overlayService = accessor.get(IOrangePiCodeOverlayService);
 			overlayService.toggle();
 		});
 
-		CommandsRegistry.registerCommand("orangepicode.lockOverlay", (accessor) => {
-			const overlayService = accessor.get(IOrangePiOverlayService);
+		CommandsRegistry.registerCommand("orangepicodeoverlay.lockOverlay", (accessor) => {
+			const overlayService = accessor.get(IOrangePiCodeOverlayService);
 			overlayService.lock();
 		});
 
-		CommandsRegistry.registerCommand("orangepicode.unlockOverlay", (accessor) => {
-			const overlayService = accessor.get(IOrangePiOverlayService);
+		CommandsRegistry.registerCommand("orangepicodeoverlay.unlockOverlay", (accessor) => {
+			const overlayService = accessor.get(IOrangePiCodeOverlayService);
 			overlayService.unlock();
 		});
 
-		CommandsRegistry.registerCommand("orangepicode.isOverlayLocked", (accessor) => {
-			const overlayService = accessor.get(IOrangePiOverlayService);
+		CommandsRegistry.registerCommand("orangepicodeoverlay.isOverlayLocked", (accessor) => {
+			const overlayService = accessor.get(IOrangePiCodeOverlayService);
 			return overlayService.isLocked();
 		});
 
-		CommandsRegistry.registerCommand("orangepicode.hideOverlayLoadingMessage", (accessor) => {
-			const overlayService = accessor.get(IOrangePiOverlayService);
+		CommandsRegistry.registerCommand("orangepicodeoverlay.hideOverlayLoadingMessage", (accessor) => {
+			const overlayService = accessor.get(IOrangePiCodeOverlayService);
 			overlayService.hideOverlayLoadingMessage();
 		});
 	}
 
-	get pearOverlayPart(): OrangePiOverlayPart {
+	get pearOverlayPart(): OrangePiCodeOverlayPart {
 		return this._pearOverlayPart;
 	}
 
@@ -188,7 +188,7 @@ export class OrangePiOverlayService
 }
 
 registerSingleton(
-	IOrangePiOverlayService,
-	OrangePiOverlayService,
+	IOrangePiCodeOverlayService,
+	OrangePiCodeOverlayService,
 	InstantiationType.Eager,
 );

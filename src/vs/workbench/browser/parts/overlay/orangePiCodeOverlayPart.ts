@@ -31,11 +31,11 @@ import { ExtensionIdentifier } from "../../../../platform/extensions/common/exte
 import { IEditorGroupsService } from "../../../services/editor/common/editorGroupsService.js";
 import { IS_FIRST_LAUNCH_KEY } from "./common.js";
 
-const CHAT_ID = "orangepicode.chatView";
-const OVERLAY_TITLE = "orangepicode.firstLaunchOverlayView";
+const CHAT_ID = "orangepicodeoverlay.chatView";
+const OVERLAY_TITLE = "orangepicodeoverlay.firstLaunchOverlayView";
 
-export class OrangePiOverlayPart extends Part {
-	static readonly ID = "workbench.parts.orangepiOverlay";
+export class OrangePiCodeOverlayPart extends Part {
+	static readonly ID = "workbench.parts.orangepicodeoverlay";
 
 	readonly minimumWidth: number = 300;
 	readonly maximumWidth: number = 800;
@@ -65,7 +65,7 @@ export class OrangePiOverlayPart extends Part {
 		private readonly _editorGroupsService: IEditorGroupsService,
 	) {
 		super(
-			OrangePiOverlayPart.ID,
+			OrangePiCodeOverlayPart.ID,
 			{ hasTitle: false },
 			themeService,
 			storageService,
@@ -152,7 +152,7 @@ export class OrangePiOverlayPart extends Part {
 			show: (preserveFocus) => { },
 		};
 
-		// 3. ask the webviewViewService to connect our webviewView to the webviewViewProvider, OrangePiInventoryPanel
+		// 3. ask the webviewViewService to connect our webviewView to the webviewViewProvider, OrangePiCodeOverlayInventoryPanel
 		const source = new CancellationTokenSource(); // todo add to disposables
 		await this._webviewViewService.resolve(
 			CHAT_ID,
@@ -181,7 +181,7 @@ export class OrangePiOverlayPart extends Part {
 	}
 
 	protected override createContentArea(element: HTMLElement): HTMLElement {
-		// create the full screen overlay. this serves as a click target for closing orangepi
+		// create the full screen overlay. this serves as a click target for closing orangepicodeoverlay
 		this.element = element;
 		this.fullScreenOverlay = element; // use the pearOverlayPart root element as the fullScreenOverlay
 		this.fullScreenOverlay.style.zIndex = this.isFirstLaunch ? "95" : "-10"; // Only show on first launch
@@ -195,7 +195,7 @@ export class OrangePiOverlayPart extends Part {
 		this.fullScreenOverlay!.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Darken the overlay
 
 		// create the popup area overlay. this is just a target for webview to layout over
-		this.popupAreaOverlay = $("div.orangepi-popup-area-overlay");
+		this.popupAreaOverlay = $("div.orangepicodeoverlay-popup-area-overlay");
 		this.popupAreaOverlay.style.position = "absolute";
 		this.popupAreaOverlay.style.margin = "0";
 		this.popupAreaOverlay.style.top = "0";
@@ -207,7 +207,7 @@ export class OrangePiOverlayPart extends Part {
 		if (this.isFirstLaunch) {
 
 			// Create loading overlay with higher z-index and pointer-events handling
-			this.loadingOverlay = $('div.orangepi-loading-overlay');
+			this.loadingOverlay = $('div.orangepicodeoverlay-loading-overlay');
 			this.loadingOverlay.style.position = 'fixed'; // Change to fixed positioning
 			this.loadingOverlay.style.top = '0';
 			this.loadingOverlay.style.left = '0';
@@ -327,7 +327,7 @@ export class OrangePiOverlayPart extends Part {
 		const container = this.webviewView!.webview.container;
 
 		// Apply fade-out animation
-		container.style.animation = "orangepiFadeOut 0.2s ease-out";
+		container.style.animation = "orangepicodeoverlayFadeOut 0.2s ease-out";
 
 		// Hide elements after animation completes
 		setTimeout(() => {
@@ -427,7 +427,7 @@ export class OrangePiOverlayPart extends Part {
 
 	toJSON(): object {
 		return {
-			type: Parts.ORANGEPI_OVERLAY_PART,
+			type: Parts.ORANGEPICODE_OVERLAY_PART,
 		};
 	}
 }

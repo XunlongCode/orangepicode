@@ -1,1 +1,1 @@
-export const IS_FIRST_LAUNCH_KEY = 'orangepicode.isFirstLaunch';
+export const IS_FIRST_LAUNCH_KEY = 'orangepicodeoverlay.isFirstLaunch';

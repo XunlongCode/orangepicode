@@ -13,7 +13,7 @@ export class CloseFirstLaunchOverlayAction extends Action2 {
 	constructor() {
 		super({
 			id: CloseFirstLaunchOverlayAction.ID,
-			title: { value: "Close Overlay Popup", original: "Close Overlay Popup" },
+			title: { value: "Close Overlay", original: "Close Overlay" },
 			f1: true,
 			keybinding: {
 				weight: 200,
@@ -34,7 +34,7 @@ export class ToggleOrangePiCodeOverlayAction extends Action2 {
 	constructor() {
 		super({
 			id: ToggleOrangePiCodeOverlayAction.ID,
-			title: { value: "Toggle Overlay Popup", original: "Toggle Overlay Popup" },
+			title: { value: "Toggle Overlay", original: "Toggle Overlay" },
 			f1: true,
 			keybinding: {
 				weight: 200,
@@ -63,24 +63,6 @@ export class MarkOrangePiCodeOverlayFirstLaunchCompleteAction extends Action2 {
 	run(accessor: ServicesAccessor): void {
 		const storageService = accessor.get(IStorageService);
 		storageService.store(IS_FIRST_LAUNCH_KEY, true, 0, 0);
-		// const notificationService = accessor.get(INotificationService);
-		// const commandService = accessor.get(ICommandService);  // Get command service early
-		// notificationService.notify({
-		// 	severity: Severity.Info,
-		// 	message: 'Successfully marked Overlay first launch Key complete',
-		// 	actions: {
-		// 		primary: [{
-		// 			id: 'reloadWindow',
-		// 			label: 'Reload Window',
-		// 			tooltip: 'Reload Window',
-		// 			class: '',
-		// 			enabled: true,
-		// 			run: () => {
-		// 				commandService.executeCommand('workbench.action.reloadWindow');
-		// 			}
-		// 		}]
-		// 	}
-		// });
 	}
 }
 

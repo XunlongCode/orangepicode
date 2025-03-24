@@ -1,26 +1,30 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
+
 import * as vscode from 'vscode';
+import CoreProvider, { ORANGEPICODE_OVERLAY_VIEWID } from './core/CoreProvider';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
+let outputChannel: vscode.OutputChannel
+let extensionContext: vscode.ExtensionContext
+
 export function activate(context: vscode.ExtensionContext) {
+	extensionContext = context
+	outputChannel = vscode.window.createOutputChannel("OrangePi Code Core")
+	context.subscriptions.push(outputChannel)
+	outputChannel.appendLine("OrangePi Code Core activated")
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "orangepicode-core" is now active!');
+	const provider = new CoreProvider(context, outputChannel)
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('orangepicode-core.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from orangepicode-core!');
-	});
-
-	context.subscriptions.push(disposable);
+	// OrangePi Code Core webview
+	context.subscriptions.push(
+		vscode.window.registerWebviewViewProvider(
+			ORANGEPICODE_OVERLAY_VIEWID,
+			provider,
+			{
+				webviewOptions: { retainContextWhenHidden: true },
+			},
+		),
+	);
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() { }
+export function deactivate() {
+	outputChannel.appendLine("OrangePi Code Core deactivated")
+}

@@ -32,7 +32,7 @@ import { IEditorGroupsService } from "../../../services/editor/common/editorGrou
 import { IS_FIRST_LAUNCH_KEY } from "./common.js";
 
 const ORANGEPICODE_OVERLAY_VIEWID = "orangepicode.overlay";
-const OVERLAY_TITLE = "orangepicodeoverlay.firstLaunchOverlayView";
+const OVERLAY_TITLE = "orangepicode.overlay.title";
 
 export class OrangePiCodeOverlayPart extends Part {
 	static readonly ID = "workbench.parts.orangepicodeoverlay";
@@ -73,8 +73,7 @@ export class OrangePiCodeOverlayPart extends Part {
 		);
 		// TODO this.isFirstLaunch = !storageService.getBoolean(IS_FIRST_LAUNCH_KEY, 0);
 		this.isFirstLaunch = true
-		console.log("I AM HERE", this.isFirstLaunch);
-
+		console.log("I AM HERE, this.isFirstLaunch =", this.isFirstLaunch);
 		this._webviewService =
 			this._instantiationService.createInstance(WebviewService);
 
@@ -87,7 +86,6 @@ export class OrangePiCodeOverlayPart extends Part {
 
 	private async initialize() {
 		// Only set initial state to open if it's first launch
-		console.log("I AM HERE", this.isFirstLaunch);
 		if (this.isFirstLaunch) {
 			this.state = "open";
 			this.lock();
@@ -160,6 +158,8 @@ export class OrangePiCodeOverlayPart extends Part {
 			source.token,
 		);
 
+		console.log("webviewViewService resolved");
+
 		// if both content and webview are ready, end loading state and open
 		if (this.popupAreaOverlay && this.webviewView) {
 			this.webviewView.webview.layoutWebviewOverElement(this.popupAreaOverlay);
@@ -227,6 +227,12 @@ export class OrangePiCodeOverlayPart extends Part {
 			// loadingText.addEventListener('click', () => {
 			// 	this.hideOverlayLoadingMessage();
 			// });
+
+			// TODO test
+			loadingText.onclick = () => {
+				this.unlock()
+				this.close();
+			}
 
 			this.loadingOverlay.appendChild(loadingText);
 			this.element.appendChild(this.loadingOverlay);

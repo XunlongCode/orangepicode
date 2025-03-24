@@ -12,25 +12,22 @@ class CoreProvider implements vscode.WebviewViewProvider {
 		readonly context: vscode.ExtensionContext,
 		private readonly outputChannel: vscode.OutputChannel,
 	) {
-		// Overlay
-		context.subscriptions.push(
-			vscode.window.registerWebviewViewProvider(
-				ORANGEPICODE_OVERLAY_VIEWID,
-				this,
-				{
-					webviewOptions: { retainContextWhenHidden: true },
-				},
-			),
-		);
+		console.log("Here is Orange Pi Code Provider.");
 	}
 
 	public async resolveWebviewView(webviewView: vscode.WebviewView | vscode.WebviewPanel) {
+		console.log("CoreProvider resolveWebviewView");
 		this.outputChannel.appendLine("Resolving webview view");
 		this.view = webviewView;
-		webviewView.webview.html =
-			this.context.extensionMode === vscode.ExtensionMode.Development
-				? await this.getHMRHtmlContent(webviewView.webview)
-				: this.getHtmlContent(webviewView.webview)
+
+		const isDev = this.context.extensionMode === vscode.ExtensionMode.Development || process.env.VSCODE_DEV === '1'
+		webviewView.webview.html = isDev
+			? await this.getHMRHtmlContent(webviewView.webview)
+			: this.getHtmlContent(webviewView.webview)
+
+		console.log("Webview view resolved");
+		console.log(webviewView.webview.html);
+
 		this.outputChannel.appendLine("Webview view resolved");
 	}
 
@@ -92,7 +89,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
             <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${webview.cspSource}; style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} data:; script-src 'nonce-${nonce}' https://us-assets.i.posthog.com; connect-src https://openrouter.ai https://us.i.posthog.com https://us-assets.i.posthog.com;">
             <link rel="stylesheet" type="text/css" href="${stylesUri}">
 			<link href="${codiconsUri}" rel="stylesheet" />
-            <title>OrangePi AI Code</title>
+            <title>OrangePi Code Core</title>
           </head>
           <body>
             <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -164,7 +161,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 					<meta http-equiv="Content-Security-Policy" content="${csp.join("; ")}">
 					<link rel="stylesheet" type="text/css" href="${stylesUri}">
 					<link href="${codiconsUri}" rel="stylesheet" />
-					<title>OrangePi Code</title>
+					<title>OrangePi Code Core</title>
 				</head>
 				<body>
 					<div id="root"></div>

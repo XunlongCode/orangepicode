@@ -31,7 +31,7 @@ import { ExtensionIdentifier } from "../../../../platform/extensions/common/exte
 import { IEditorGroupsService } from "../../../services/editor/common/editorGroupsService.js";
 import { IS_FIRST_LAUNCH_KEY } from "./common.js";
 
-const CHAT_ID = "orangepicodeoverlay.chatView";
+const ORANGEPICODE_OVERLAY_VIEWID = "orangepicode.overlay";
 const OVERLAY_TITLE = "orangepicodeoverlay.firstLaunchOverlayView";
 
 export class OrangePiCodeOverlayPart extends Part {
@@ -71,7 +71,7 @@ export class OrangePiCodeOverlayPart extends Part {
 			storageService,
 			layoutService,
 		);
-		// this.isFirstLaunch = !storageService.getBoolean(IS_FIRST_LAUNCH_KEY, 0);
+		// TODO this.isFirstLaunch = !storageService.getBoolean(IS_FIRST_LAUNCH_KEY, 0);
 		this.isFirstLaunch = true
 		console.log("I AM HERE", this.isFirstLaunch);
 
@@ -96,7 +96,7 @@ export class OrangePiCodeOverlayPart extends Part {
 		}
 
 		const extensionDescription: WebviewExtensionDescription = {
-			id: new ExtensionIdentifier(CHAT_ID),
+			id: new ExtensionIdentifier(ORANGEPICODE_OVERLAY_VIEWID),
 			location: URI.parse(""),
 		};
 
@@ -155,7 +155,7 @@ export class OrangePiCodeOverlayPart extends Part {
 		// 3. ask the webviewViewService to connect our webviewView to the webviewViewProvider, OrangePiCodeOverlayInventoryPanel
 		const source = new CancellationTokenSource(); // todo add to disposables
 		await this._webviewViewService.resolve(
-			CHAT_ID,
+			ORANGEPICODE_OVERLAY_VIEWID,
 			this.webviewView!,
 			source.token,
 		);
@@ -221,7 +221,7 @@ export class OrangePiCodeOverlayPart extends Part {
 			this.loadingOverlay.style.pointerEvents = 'all'; // Ensure it blocks interactions
 
 			const loadingText = $('div.loading-text');
-			loadingText.textContent = 'Getting ready to make something great...';
+			loadingText.textContent = 'Loading...';
 			loadingText.style.color = '#839497';
 			loadingText.style.fontSize = '20px';
 			// loadingText.addEventListener('click', () => {
@@ -232,21 +232,13 @@ export class OrangePiCodeOverlayPart extends Part {
 			this.element.appendChild(this.loadingOverlay);
 		}
 
-		// // Add message listener to webview for extension ready event
-		// this.webviewView?.webview.onMessage(message => {
-		// 	if (message.type === 'extension-ready') {
-		// 		this.hideLoadingOverlay();
-		// 	}
-		// });
-
 		// if both content and webview are ready, end loading state and open
 		if (this.popupAreaOverlay && this.webviewView) {
 			this.webviewView.webview.layoutWebviewOverElement(this.popupAreaOverlay);
 			// Only open on first launch
 			if (this.isFirstLaunch) {
 				this.open();
-			}
-			else {
+			} else {
 				// createContentArea is called within the workbench and layout when instantiating the overlay.
 				// If we don't close it here, it will open up by default when editor starts, or appear for half a second.
 				// If we remove this completely, it gets stuck in the loading stage, so we must close it.

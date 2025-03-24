@@ -1131,8 +1131,6 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 	}
 
 	protected getPart(key: Parts): Part {
-		console.log(key);
-
 		const part = this.parts.get(key);
 		if (!part) {
 			throw new Error(`Unknown part ${key}`);

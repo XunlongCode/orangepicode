@@ -64,7 +64,7 @@ export interface IOnboardingService extends IDisposable {
 	/**
 	 * Hides the loading overlay message.
 	 */
-	hideOverlayLoadingMessage(): void;
+	hideLoadingOverlay(): void;
 }
 
 export class OnboardingService
@@ -139,9 +139,9 @@ export class OnboardingService
 			return overlayService.isLocked();
 		});
 
-		CommandsRegistry.registerCommand("onboarding.hideOverlayLoadingMessage", (accessor) => {
+		CommandsRegistry.registerCommand("onboarding.hideLoadingOverlay", (accessor) => {
 			const overlayService = accessor.get(IOnboardingService);
-			overlayService.hideOverlayLoadingMessage();
+			overlayService.hideLoadingOverlay();
 		});
 	}
 
@@ -157,8 +157,8 @@ export class OnboardingService
 		this._pearOverlayPart.hide();
 	}
 
-	hideOverlayLoadingMessage(): void {
-		this._pearOverlayPart.hideOverlayLoadingMessage();
+	hideLoadingOverlay(): void {
+		this._pearOverlayPart.hideLoadingOverlay();
 	}
 
 	toggle(): void {

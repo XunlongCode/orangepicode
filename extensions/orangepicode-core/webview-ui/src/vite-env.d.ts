@@ -1,7 +1,9 @@
 /// <reference types="vite/client" />
-
-interface vscode {
-	postMessage(message: any): vscode;
+declare global {
+	interface Window {
+		isOnboardingCompleted?: boolean
+		vscAssetsUrl: string
+	}
 }
 
-declare const vscode: any;
+export default {}

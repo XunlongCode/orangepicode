@@ -82,7 +82,7 @@ export class ResetOnboardingCompletedKeyAction extends Action2 {
 		const notificationService = accessor.get(INotificationService);
 		const commandService = accessor.get(ICommandService);  // Get command service early
 
-		storageService.store(IS_ONBOARDING_COMPLETED_KEY, false, 0, 0);
+		storageService.store(IS_ONBOARDING_COMPLETED_KEY, true, 0, 0);
 		notificationService.notify({
 			severity: Severity.Info,
 			message: 'Successfully reset onboarding complete key',
@@ -115,7 +115,7 @@ export class IsOnboardingCompletedAction extends Action2 {
 
 	run(accessor: ServicesAccessor): boolean | undefined {
 		const storageService = accessor.get(IStorageService);
-		return !storageService.getBoolean(IS_ONBOARDING_COMPLETED_KEY, 0);
+		return storageService.getBoolean(IS_ONBOARDING_COMPLETED_KEY, 0);
 	}
 }
 

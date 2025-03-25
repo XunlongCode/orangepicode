@@ -2,6 +2,8 @@ import vscode from 'vscode';
 import { getUri } from '../utils/getUri';
 import { getNonce } from '../utils/getNonce';
 import axios from 'axios';
+import { ExtensionMessage } from '../shared/ExtensionMessage';
+import { WebviewMessage } from '../shared/WebviewMessage';
 
 export const ORANGEPICODE_OVERLAY_VIEWID = "onboarding_view";
 
@@ -28,7 +30,9 @@ class CoreProvider implements vscode.WebviewViewProvider {
 		const isDev = this.context.extensionMode === vscode.ExtensionMode.Development || process.env.VSCODE_DEV === '1'
 		webviewView.webview.html = isDev
 			? await this.getHMRHtmlContent(webviewView.webview)
-			: this.getHtmlContent(webviewView.webview)
+			: await this.getHtmlContent(webviewView.webview)
+
+		this.setWebviewMessageListener(webviewView.webview)
 
 		console.log("Webview view resolved, isDev =", isDev);
 		console.log(webviewView.webview.html);
@@ -36,24 +40,26 @@ class CoreProvider implements vscode.WebviewViewProvider {
 		this.outputChannel.appendLine("Webview view resolved");
 	}
 
-	private getHtmlContent(webview: vscode.Webview): string {
-		// Get the local path to main script run in the webview,
-		// then convert it to a uri we can use in the webview.
+	public async postMessageToWebview(message: ExtensionMessage) {
+		await this.view?.webview.postMessage(message)
+	}
 
-		// The CSS file from the React build output
-		const stylesUri = getUri(webview, this.context.extensionUri, [
-			"webview-ui",
-			"build",
-			"assets",
-			"index.css",
-		])
-		// The JS file from the React build output
-		const scriptUri = getUri(webview, this.context.extensionUri, ["webview-ui", "build", "assets", "index.js"])
+	private setWebviewMessageListener(webview: vscode.Webview) {
+		webview.onDidReceiveMessage(async (message: WebviewMessage) => {
+			console.log("=== Received message from webview ===", message);
 
-		// The codicon font from the React build output
-		// https://github.com/microsoft/vscode-extension-samples/blob/main/webview-codicons-sample/src/extension.ts
-		// we installed this package in the extension so that we can access it how its intended from the extension (the font file is likely bundled in vscode), and we just import the css fileinto our react app we don't have access to it
-		// don't forget to add font-src ${webview.cspSource};
+			switch (message.type) {
+				case "hideOnboardingLoading": {
+					await vscode.commands.executeCommand("onboarding.hideLoadingOverlay")
+				}
+			}
+		})
+	}
+
+	private async getHtmlCommonHead(webview: vscode.Webview, nonce: string): Promise<string> {
+		const vscAssetsUrl: string = getUri(webview, this.context.extensionUri, ["webview-ui", "public", "assets"])
+			.toString();
+		const isOnboardingCompleted = await vscode.commands.executeCommand("workbench.action.isOnboardingCompleted")
 		const codiconsUri = getUri(webview, this.context.extensionUri, [
 			"node_modules",
 			"@vscode",
@@ -61,6 +67,36 @@ class CoreProvider implements vscode.WebviewViewProvider {
 			"dist",
 			"codicon.css",
 		])
+
+		const stylesUri = getUri(webview, this.context.extensionUri, [
+			"webview-ui",
+			"build",
+			"assets",
+			"index.css",
+		])
+
+		return /* html */`
+			<link href="${codiconsUri}" rel="stylesheet" />
+			<link rel="stylesheet" type="text/css" href="${stylesUri}">
+			<script nonce="${nonce}">localStorage.setItem("ide", '"vscode"')</script>
+			<script nonce="${nonce}">window.vscAssetsUrl = "${vscAssetsUrl}"</script>
+			<script nonce="${nonce}">window.isOnboardingCompleted = ${isOnboardingCompleted}</script>
+		`
+	}
+
+	private async getHtmlContent(webview: vscode.Webview): Promise<string> {
+		// Get the local path to main script run in the webview,
+		// then convert it to a uri we can use in the webview.
+
+		// The CSS file from the React build output
+
+		// The JS file from the React build output
+		const scriptUri = getUri(webview, this.context.extensionUri, ["webview-ui", "build", "assets", "index.js"])
+
+		// The codicon font from the React build output
+		// https://github.com/microsoft/vscode-extension-samples/blob/main/webview-codicons-sample/src/extension.ts
+		// we installed this package in the extension so that we can access it how its intended from the extension (the font file is likely bundled in vscode), and we just import the css fileinto our react app we don't have access to it
+		// don't forget to add font-src ${webview.cspSource};
 
 		// const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "assets", "main.js"))
 
@@ -92,9 +128,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
             <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
             <meta name="theme-color" content="#000000">
             <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${webview.cspSource}; style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} data:; script-src 'nonce-${nonce}' https://us-assets.i.posthog.com; connect-src https://openrouter.ai https://us.i.posthog.com https://us-assets.i.posthog.com;">
-						<script>localStorage.setItem("ide", '"vscode"')</script>
-            <link rel="stylesheet" type="text/css" href="${stylesUri}">
-			<link href="${codiconsUri}" rel="stylesheet" />
+						${await this.getHtmlCommonHead(webview, nonce)}
             <title>OrangePi Code Core</title>
           </head>
           <body>
@@ -121,22 +155,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 
 		const nonce = getNonce()
 
-		const stylesUri = getUri(webview, this.context.extensionUri, [
-			"webview-ui",
-			"build",
-			"assets",
-			"index.css",
-		])
-
-		const codiconsUri = getUri(webview, this.context.extensionUri, [
-			"node_modules",
-			"@vscode",
-			"codicons",
-			"dist",
-			"codicon.css",
-		])
-
-		const file = "src/index.tsx"
+		const file = "src/main.tsx"
 		const scriptUri = `http://${localServerUrl}/${file}`
 
 		const reactRefresh = /*html*/ `
@@ -165,9 +184,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 					<meta charset="utf-8">
 					<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
 					<meta http-equiv="Content-Security-Policy" content="${csp.join("; ")}">
-					<script>localStorage.setItem("ide", '"vscode"')</script>
-					<link rel="stylesheet" type="text/css" href="${stylesUri}">
-					<link href="${codiconsUri}" rel="stylesheet" />
+					${await this.getHtmlCommonHead(webview, nonce)}
 					<title>OrangePi Code Core</title>
 				</head>
 				<body>

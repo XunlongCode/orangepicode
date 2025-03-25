@@ -51,7 +51,7 @@ export class OnboardingPart extends Part {
 	private _isLocked: boolean = false;
 	private loadingOverlay: HTMLElement | undefined;
 	private isExtensionReady: boolean = false;
-	private isCompleted: boolean;
+	private storageService: IStorageService
 
 	constructor(
 		@IThemeService themeService: IThemeService,
@@ -71,13 +71,15 @@ export class OnboardingPart extends Part {
 			storageService,
 			layoutService,
 		);
-		// TODO this.isFirstLaunch = !storageService.getBoolean(IS_FIRST_LAUNCH_KEY, 0);
-		this.isCompleted = false;
-		console.log("I AM HERE, this.isCompleted =", this.isCompleted);
+		this.storageService = storageService;
 		this._webviewService =
 			this._instantiationService.createInstance(WebviewService);
 
 		this.initialize();
+	}
+
+	get isCompleted() {
+		return this.storageService.getBoolean(IS_ONBOARDING_COMPLETED_KEY, 0);
 	}
 
 	isVisible(): boolean {
@@ -180,6 +182,7 @@ export class OnboardingPart extends Part {
 	}
 
 	protected override createContentArea(element: HTMLElement): HTMLElement {
+		// 全屏背景
 		// create the full screen overlay. this serves as a click target for closing onboarding
 		this.element = element;
 		this.fullScreenOverlay = element; // use the pearOverlayPart root element as the fullScreenOverlay
@@ -193,6 +196,7 @@ export class OnboardingPart extends Part {
 		// this.fullScreenOverlay.style.pointerEvents = "none"; // Ignore clicks on the full screen overlay
 		this.fullScreenOverlay!.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Darken the overlay
 
+		// 引导页面
 		// create the popup area overlay. this is just a target for webview to layout over
 		this.viewOverlayEl = $("div.onboarding-overlay");
 		this.viewOverlayEl.style.position = "absolute";
@@ -222,9 +226,6 @@ export class OnboardingPart extends Part {
 			loadingText.textContent = 'Loading...';
 			loadingText.style.color = '#839497';
 			loadingText.style.fontSize = '20px';
-			// loadingText.addEventListener('click', () => {
-			// 	this.hideOverlayLoadingMessage();
-			// });
 
 			// TODO test
 			loadingText.onclick = () => {
@@ -382,7 +383,7 @@ export class OnboardingPart extends Part {
 		return this._isLocked;
 	}
 
-	public hideOverlayLoadingMessage(): void {
+	public hideLoadingOverlay(): void {
 		if (this.loadingOverlay) {
 			// Start fade out of loading overlay
 			this.loadingOverlay.style.transition = 'all 0.3s ease-out';

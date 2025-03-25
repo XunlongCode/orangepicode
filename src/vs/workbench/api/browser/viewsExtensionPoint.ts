@@ -301,6 +301,8 @@ class ViewsExtensionHandler implements IWorkbenchContribution {
 		const viewContainersRegistry = Registry.as<IViewContainersRegistry>(ViewContainerExtensions.ViewContainersRegistry);
 		let activityBarOrder = CUSTOM_VIEWS_START_ORDER + viewContainersRegistry.all.filter(v => !!v.extensionId && viewContainersRegistry.getViewContainerLocation(v) === ViewContainerLocation.Sidebar).length;
 		let panelOrder = 5 + viewContainersRegistry.all.filter(v => !!v.extensionId && viewContainersRegistry.getViewContainerLocation(v) === ViewContainerLocation.Panel).length + 1;
+		let auxiliaryBarOrder = CUSTOM_VIEWS_START_ORDER + viewContainersRegistry.all.filter(v => !!v.extensionId && viewContainersRegistry.getViewContainerLocation(v) === ViewContainerLocation.AuxiliaryBar).length;
+
 		for (const { value, collector, description } of extensionPoints) {
 			Object.entries(value).forEach(([key, value]) => {
 				if (!this.isValidViewsContainer(value, collector)) {
@@ -312,6 +314,15 @@ class ViewsExtensionHandler implements IWorkbenchContribution {
 						break;
 					case 'panel':
 						panelOrder = this.registerCustomViewContainers(value, description, panelOrder, existingViewContainers, ViewContainerLocation.Panel);
+						break;
+					case "auxiliarybar":
+						auxiliaryBarOrder = this.registerCustomViewContainers(
+							value,
+							description,
+							auxiliaryBarOrder,
+							existingViewContainers,
+							ViewContainerLocation.AuxiliaryBar,
+						);
 						break;
 				}
 			});

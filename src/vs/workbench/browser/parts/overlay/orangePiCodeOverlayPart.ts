@@ -43,7 +43,7 @@ export class OrangePiCodeOverlayPart extends Part {
 	readonly maximumHeight: number = 600;
 
 	private fullScreenOverlay: HTMLElement | undefined;
-	private popupAreaOverlay: HTMLElement | undefined;
+	private areaOverlayEl: HTMLElement | undefined;
 	private webviewView: WebviewView | undefined;
 	private _webviewService: WebviewService | undefined;
 
@@ -159,10 +159,11 @@ export class OrangePiCodeOverlayPart extends Part {
 		);
 
 		console.log("webviewViewService resolved");
+		console.log(this.webviewView, this.areaOverlayEl);
 
 		// if both content and webview are ready, end loading state and open
-		if (this.popupAreaOverlay && this.webviewView) {
-			this.webviewView.webview.layoutWebviewOverElement(this.popupAreaOverlay);
+		if (this.areaOverlayEl && this.webviewView) {
+			this.webviewView.webview.layoutWebviewOverElement(this.areaOverlayEl);
 			// Only open on first launch
 			if (this.isFirstLaunch) {
 				this.open();
@@ -195,14 +196,14 @@ export class OrangePiCodeOverlayPart extends Part {
 		this.fullScreenOverlay!.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Darken the overlay
 
 		// create the popup area overlay. this is just a target for webview to layout over
-		this.popupAreaOverlay = $("div.orangepicodeoverlay-popup-area-overlay");
-		this.popupAreaOverlay.style.position = "absolute";
-		this.popupAreaOverlay.style.margin = "0";
-		this.popupAreaOverlay.style.top = "0";
-		this.popupAreaOverlay.style.left = "0";
-		this.popupAreaOverlay.style.right = "0";
-		this.popupAreaOverlay.style.bottom = "0";
-		this.element.appendChild(this.popupAreaOverlay);
+		this.areaOverlayEl = $("div.orangepicodeoverlay-popup-area-overlay");
+		this.areaOverlayEl.style.position = "absolute";
+		this.areaOverlayEl.style.margin = "0";
+		this.areaOverlayEl.style.top = "0";
+		this.areaOverlayEl.style.left = "0";
+		this.areaOverlayEl.style.right = "0";
+		this.areaOverlayEl.style.bottom = "0";
+		this.element.appendChild(this.areaOverlayEl);
 
 		if (this.isFirstLaunch) {
 
@@ -239,8 +240,8 @@ export class OrangePiCodeOverlayPart extends Part {
 		}
 
 		// if both content and webview are ready, end loading state and open
-		if (this.popupAreaOverlay && this.webviewView) {
-			this.webviewView.webview.layoutWebviewOverElement(this.popupAreaOverlay);
+		if (this.areaOverlayEl && this.webviewView) {
+			this.webviewView.webview.layoutWebviewOverElement(this.areaOverlayEl);
 			// Only open on first launch
 			if (this.isFirstLaunch) {
 				this.open();
@@ -272,16 +273,16 @@ export class OrangePiCodeOverlayPart extends Part {
 			this.fullScreenOverlay!.style.height = `${height}px`;
 		}
 
-		if (this.popupAreaOverlay) {
-			this.popupAreaOverlay.style.width = `${width}px`;
-			this.popupAreaOverlay.style.height = `${height}px`;
-			this.popupAreaOverlay.style.backgroundColor = "transparent";
-			this.popupAreaOverlay.style.borderRadius = "12px";
+		if (this.areaOverlayEl) {
+			this.areaOverlayEl.style.width = `${width}px`;
+			this.areaOverlayEl.style.height = `${height}px`;
+			this.areaOverlayEl.style.backgroundColor = "transparent";
+			this.areaOverlayEl.style.borderRadius = "12px";
 		}
 
 		if (this.state === "open") {
 			this.webviewView!.webview.layoutWebviewOverElement(
-				this.popupAreaOverlay!,
+				this.areaOverlayEl!,
 			);
 		}
 	}
@@ -309,7 +310,7 @@ export class OrangePiCodeOverlayPart extends Part {
 			this.close();
 		});
 
-		this.webviewView!.webview.layoutWebviewOverElement(this.popupAreaOverlay!);
+		this.webviewView!.webview.layoutWebviewOverElement(this.areaOverlayEl!);
 		this.focus();
 	}
 

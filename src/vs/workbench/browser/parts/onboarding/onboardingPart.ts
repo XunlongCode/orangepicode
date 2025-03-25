@@ -29,13 +29,13 @@ import { WebviewService } from "../../../contrib/webview/browser/webviewService.
 import { URI } from "../../../../base/common/uri.js";
 import { ExtensionIdentifier } from "../../../../platform/extensions/common/extensions.js";
 import { IEditorGroupsService } from "../../../services/editor/common/editorGroupsService.js";
-import { IS_FIRST_LAUNCH_KEY } from "./common.js";
+import { IS_ONBOARDING_COMPLETED_KEY } from "./common.js";
 
-const ORANGEPICODE_OVERLAY_VIEWID = "orangepicode.overlay";
-const OVERLAY_TITLE = "orangepicode.overlay.title";
+const ONBOARDING_VIEWID = "onboarding_view";
+const ONBOARDING_TITLE = "Onboarding";
 
-export class OrangePiCodeOverlayPart extends Part {
-	static readonly ID = "workbench.parts.orangepicodeoverlay";
+export class OnboardingPart extends Part {
+	static readonly ID = "workbench.parts.onboarding";
 
 	readonly minimumWidth: number = 300;
 	readonly maximumWidth: number = 800;
@@ -43,7 +43,7 @@ export class OrangePiCodeOverlayPart extends Part {
 	readonly maximumHeight: number = 600;
 
 	private fullScreenOverlay: HTMLElement | undefined;
-	private areaOverlayEl: HTMLElement | undefined;
+	private viewOverlayEl: HTMLElement | undefined;
 	private webviewView: WebviewView | undefined;
 	private _webviewService: WebviewService | undefined;
 
@@ -51,7 +51,7 @@ export class OrangePiCodeOverlayPart extends Part {
 	private _isLocked: boolean = false;
 	private loadingOverlay: HTMLElement | undefined;
 	private isExtensionReady: boolean = false;
-	private isFirstLaunch: boolean;
+	private isCompleted: boolean;
 
 	constructor(
 		@IThemeService themeService: IThemeService,
@@ -65,15 +65,15 @@ export class OrangePiCodeOverlayPart extends Part {
 		private readonly _editorGroupsService: IEditorGroupsService,
 	) {
 		super(
-			OrangePiCodeOverlayPart.ID,
+			OnboardingPart.ID,
 			{ hasTitle: false },
 			themeService,
 			storageService,
 			layoutService,
 		);
 		// TODO this.isFirstLaunch = !storageService.getBoolean(IS_FIRST_LAUNCH_KEY, 0);
-		this.isFirstLaunch = true
-		console.log("I AM HERE, this.isFirstLaunch =", this.isFirstLaunch);
+		this.isCompleted = false;
+		console.log("I AM HERE, this.isCompleted =", this.isCompleted);
 		this._webviewService =
 			this._instantiationService.createInstance(WebviewService);
 
@@ -85,22 +85,21 @@ export class OrangePiCodeOverlayPart extends Part {
 	}
 
 	private async initialize() {
-		// Only set initial state to open if it's first launch
-		if (this.isFirstLaunch) {
+		if (this.isCompleted) {
+			this.state = "closed";
+		} else {
 			this.state = "open";
 			this.lock();
-		} else {
-			this.state = "closed";
 		}
 
 		const extensionDescription: WebviewExtensionDescription = {
-			id: new ExtensionIdentifier(ORANGEPICODE_OVERLAY_VIEWID),
+			id: new ExtensionIdentifier(ONBOARDING_VIEWID),
 			location: URI.parse(""),
 		};
 
 		// 1. create an IOverlayWebview
 		const webview = this._webviewService!.createWebviewOverlay({
-			title: OVERLAY_TITLE,
+			title: ONBOARDING_TITLE,
 			options: {
 				enableFindWidget: false,
 			},
@@ -112,9 +111,9 @@ export class OrangePiCodeOverlayPart extends Part {
 		});
 
 		// Ensure the overlay is visible immediately
-		webview.container.style.display = this.isFirstLaunch ? "flex" : "none";
-		webview.container.style.opacity = this.isFirstLaunch ? "1" : "0";
-		webview.container.style.zIndex = this.isFirstLaunch ? "1000" : "-1"; // Ensure proper z-index on first launch
+		webview.container.style.display = this.isCompleted ? "none" : "flex";
+		webview.container.style.opacity = this.isCompleted ? "0" : "1";
+		webview.container.style.zIndex = this.isCompleted ? "-1" : "1000"; // Ensure proper z-index on first launch
 		webview.container.style.transition = "opacity 0.3s ease-in";
 		webview.container.style.position = "absolute"; // Ensure proper stacking
 
@@ -131,7 +130,7 @@ export class OrangePiCodeOverlayPart extends Part {
 			},
 
 			get title(): string | undefined {
-				return OVERLAY_TITLE;
+				return ONBOARDING_TITLE;
 			},
 			set title(value: string | undefined) { },
 
@@ -150,42 +149,41 @@ export class OrangePiCodeOverlayPart extends Part {
 			show: (preserveFocus) => { },
 		};
 
-		// 3. ask the webviewViewService to connect our webviewView to the webviewViewProvider, OrangePiCodeOverlayInventoryPanel
+		// 3. ask the webviewViewService to connect our webviewView to the webviewViewProvider, OnboardingInventoryPanel
 		const source = new CancellationTokenSource(); // todo add to disposables
 		await this._webviewViewService.resolve(
-			ORANGEPICODE_OVERLAY_VIEWID,
+			ONBOARDING_VIEWID,
 			this.webviewView!,
 			source.token,
 		);
 
 		console.log("webviewViewService resolved");
-		console.log(this.webviewView, this.areaOverlayEl);
+		console.log(this.webviewView, this.viewOverlayEl);
 
 		// if both content and webview are ready, end loading state and open
-		if (this.areaOverlayEl && this.webviewView) {
-			this.webviewView.webview.layoutWebviewOverElement(this.areaOverlayEl);
-			// Only open on first launch
-			if (this.isFirstLaunch) {
+		if (this.viewOverlayEl && this.webviewView) {
+			this.webviewView.webview.layoutWebviewOverElement(this.viewOverlayEl);
+			// Only open on not completed
+			if (!this.isCompleted) {
 				this.open();
 			}
 		} else {
-			// Show loading overlay only if it's first launch
-			if (this.isFirstLaunch && this.loadingOverlay) {
+			if (!this.isCompleted && this.loadingOverlay) {
 				this.loadingOverlay.style.display = "flex";
 			}
 		}
 
 		// Set initial visibility of webview container based on first launch
-		webview.container.style.display = this.isFirstLaunch ? "flex" : "none";
-		webview.container.style.opacity = this.isFirstLaunch ? "1" : "0";
+		webview.container.style.display = this.isCompleted ? "none" : "flex";
+		webview.container.style.opacity = this.isCompleted ? "0" : "1";
 		webview.container.style.transition = "opacity 0.3s ease-in";
 	}
 
 	protected override createContentArea(element: HTMLElement): HTMLElement {
-		// create the full screen overlay. this serves as a click target for closing orangepicodeoverlay
+		// create the full screen overlay. this serves as a click target for closing onboarding
 		this.element = element;
 		this.fullScreenOverlay = element; // use the pearOverlayPart root element as the fullScreenOverlay
-		this.fullScreenOverlay.style.zIndex = this.isFirstLaunch ? "95" : "-10"; // Only show on first launch
+		this.fullScreenOverlay.style.zIndex = this.isCompleted ? "-10" : "95"; // Only show on first launch
 		this.fullScreenOverlay.style.position = "absolute";
 		this.fullScreenOverlay.style.top = "0";
 		this.fullScreenOverlay.style.left = "0";
@@ -196,18 +194,18 @@ export class OrangePiCodeOverlayPart extends Part {
 		this.fullScreenOverlay!.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Darken the overlay
 
 		// create the popup area overlay. this is just a target for webview to layout over
-		this.areaOverlayEl = $("div.orangepicodeoverlay-popup-area-overlay");
-		this.areaOverlayEl.style.position = "absolute";
-		this.areaOverlayEl.style.margin = "0";
-		this.areaOverlayEl.style.top = "0";
-		this.areaOverlayEl.style.left = "0";
-		this.areaOverlayEl.style.right = "0";
-		this.areaOverlayEl.style.bottom = "0";
-		this.element.appendChild(this.areaOverlayEl);
+		this.viewOverlayEl = $("div.onboarding-overlay");
+		this.viewOverlayEl.style.position = "absolute";
+		this.viewOverlayEl.style.margin = "0";
+		this.viewOverlayEl.style.top = "0";
+		this.viewOverlayEl.style.left = "0";
+		this.viewOverlayEl.style.right = "0";
+		this.viewOverlayEl.style.bottom = "0";
+		this.element.appendChild(this.viewOverlayEl);
 
-		if (this.isFirstLaunch) {
+		if (!this.isCompleted) {
 			// Create loading overlay with higher z-index and pointer-events handling
-			this.loadingOverlay = $('div.orangepicodeoverlay-loading-overlay');
+			this.loadingOverlay = $('div.onboarding-loading-overlay');
 			this.loadingOverlay.style.position = 'fixed'; // Change to fixed positioning
 			this.loadingOverlay.style.top = '0';
 			this.loadingOverlay.style.left = '0';
@@ -239,20 +237,20 @@ export class OrangePiCodeOverlayPart extends Part {
 		}
 
 		// if both content and webview are ready, end loading state and open
-		if (this.areaOverlayEl && this.webviewView) {
-			this.webviewView.webview.layoutWebviewOverElement(this.areaOverlayEl);
+		if (this.viewOverlayEl && this.webviewView) {
+			this.webviewView.webview.layoutWebviewOverElement(this.viewOverlayEl);
 			// Only open on first launch
-			if (this.isFirstLaunch) {
-				this.open();
-			} else {
+			if (this.isCompleted) {
 				// createContentArea is called within the workbench and layout when instantiating the overlay.
 				// If we don't close it here, it will open up by default when editor starts, or appear for half a second.
 				// If we remove this completely, it gets stuck in the loading stage, so we must close it.
 				this.close();
+			} else {
+				this.open();
 			}
 		} else {
 			// Show loading overlay only if it's first launch
-			if (this.isFirstLaunch && this.loadingOverlay) {
+			if (!this.isCompleted && this.loadingOverlay) {
 				this.loadingOverlay.style.display = "flex";
 			}
 		}
@@ -272,16 +270,16 @@ export class OrangePiCodeOverlayPart extends Part {
 			this.fullScreenOverlay!.style.height = `${height}px`;
 		}
 
-		if (this.areaOverlayEl) {
-			this.areaOverlayEl.style.width = `${width}px`;
-			this.areaOverlayEl.style.height = `${height}px`;
-			this.areaOverlayEl.style.backgroundColor = "transparent";
-			this.areaOverlayEl.style.borderRadius = "12px";
+		if (this.viewOverlayEl) {
+			this.viewOverlayEl.style.width = `${width}px`;
+			this.viewOverlayEl.style.height = `${height}px`;
+			this.viewOverlayEl.style.backgroundColor = "transparent";
+			this.viewOverlayEl.style.borderRadius = "12px";
 		}
 
 		if (this.state === "open") {
 			this.webviewView!.webview.layoutWebviewOverElement(
-				this.areaOverlayEl!,
+				this.viewOverlayEl!,
 			);
 		}
 	}
@@ -309,7 +307,7 @@ export class OrangePiCodeOverlayPart extends Part {
 			this.close();
 		});
 
-		this.webviewView!.webview.layoutWebviewOverElement(this.areaOverlayEl!);
+		this.webviewView!.webview.layoutWebviewOverElement(this.viewOverlayEl!);
 		this.focus();
 	}
 
@@ -325,7 +323,7 @@ export class OrangePiCodeOverlayPart extends Part {
 		const container = this.webviewView!.webview.container;
 
 		// Apply fade-out animation
-		container.style.animation = "orangepicodeoverlayFadeOut 0.2s ease-out";
+		container.style.animation = "onboardingFadeOut 0.2s ease-out";
 
 		// Hide elements after animation completes
 		setTimeout(() => {

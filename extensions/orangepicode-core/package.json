@@ -30,7 +30,7 @@
       "orangepicode-core": [
         {
           "type": "webview",
-          "id": "orangepicode.overlay",
+          "id": "onboarding_view",
           "name": "Overlay",
           "visibility": "visible"
         }

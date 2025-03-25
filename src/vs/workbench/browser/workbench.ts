@@ -48,8 +48,8 @@ import { AccessibilityProgressSignalScheduler } from '../../platform/accessibili
 import { setProgressAcccessibilitySignalScheduler } from '../../base/browser/ui/progressbar/progressAccessibilitySignal.js';
 import { AccessibleViewRegistry } from '../../platform/accessibility/browser/accessibleViewRegistry.js';
 import { NotificationAccessibleView } from './parts/notifications/notificationAccessibleView.js';
-import { IShadowOverlayService } from './parts/overlay/onboardingShadow/shadowOverlayService.js';
-import { IOrangePiCodeOverlayService } from './parts/overlay/orangePiCodeOverlayService.js';
+import { IOnboardingShadowService } from './parts/onboarding/onboardingShadow/onboardingShadowService.js';
+import { IOnboardingService } from './parts/onboarding/onboardingService.js';
 
 export interface IWorkbenchOptions {
 
@@ -344,13 +344,13 @@ export class Workbench extends Layout {
 
 			if (id === Parts.ORANGEPICODE_OVERLAY_PART) {
 				instantiationService.invokeFunction(accessor => {
-					accessor.get(IOrangePiCodeOverlayService);
+					accessor.get(IOnboardingService);
 				});
 			}
 
 			// instantiate highlighting
 			instantiationService.invokeFunction(accessor => {
-				accessor.get(IShadowOverlayService);
+				accessor.get(IOnboardingShadowService);
 			});
 
 			mark(`code/willCreatePart/${id}`);

@@ -10,20 +10,20 @@ import {
 import { Disposable, IDisposable } from "../../../../../base/common/lifecycle.js";
 import { CommandsRegistry } from "../../../../../platform/commands/common/commands.js";
 
-export const IShadowOverlayService = createDecorator<IShadowOverlayService>(
-	"shadowOverlayService",
+export const IOnboardingShadowService = createDecorator<IOnboardingShadowService>(
+	"onboardingShadowService",
 );
 
-export interface IShadowOverlayService extends IDisposable {
+export interface IOnboardingShadowService extends IDisposable {
 	readonly _serviceBrand: undefined;
 
 	highlight(elements: string[]): void;
 	restoreStyles(elements: string[]): void;
 }
 
-export class ShadowOverlayService
+export class onboardingShadowService
 	extends Disposable
-	implements IShadowOverlayService {
+	implements IOnboardingShadowService {
 	declare readonly _serviceBrand: undefined;
 	private highlightedElements: Map<
 		string,
@@ -44,7 +44,7 @@ export class ShadowOverlayService
 
 	private registerCommands(): void {
 		CommandsRegistry.registerCommand(
-			"orangepicodeoverlay.highlightElements",
+			"onboarding.highlightElements",
 			(accessor, ...args) => {
 				const selectors = args[0] as string[]; // array of CSS selectors
 				this.highlight(selectors);
@@ -52,7 +52,7 @@ export class ShadowOverlayService
 		);
 
 		CommandsRegistry.registerCommand(
-			"orangepicodeoverlay.removeHighlight",
+			"onboarding.removeHighlight",
 			(accessor, ...args) => {
 				const selectors = args[0] as string[]; // array of CSS selectors
 				// Convert selectors to elements
@@ -108,7 +108,7 @@ export class ShadowOverlayService
 }
 
 registerSingleton(
-	IShadowOverlayService,
-	ShadowOverlayService,
+	IOnboardingShadowService,
+	onboardingShadowService,
 	InstantiationType.Eager,
 );

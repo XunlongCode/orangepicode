@@ -3,7 +3,7 @@ import { getUri } from '../utils/getUri';
 import { getNonce } from '../utils/getNonce';
 import axios from 'axios';
 
-export const ORANGEPICODE_OVERLAY_VIEWID = "orangepicode.overlay";
+export const ORANGEPICODE_OVERLAY_VIEWID = "onboarding_view";
 
 class CoreProvider implements vscode.WebviewViewProvider {
 	private view?: vscode.WebviewView | vscode.WebviewPanel;

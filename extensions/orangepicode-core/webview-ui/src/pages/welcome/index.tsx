@@ -18,8 +18,8 @@ const Welcome: FC = () => {
 	}, []);
 
 	return (
-		<div>
-			<h1>Welcome to OrangePiCode</h1>
+		<div className="flex flex-col h-full w-full select-none items-center justify-center">
+			<h1>Welcome to Orange Pi Code</h1>
 		</div>
 	);
 };

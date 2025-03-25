@@ -206,7 +206,6 @@ export class OrangePiCodeOverlayPart extends Part {
 		this.element.appendChild(this.areaOverlayEl);
 
 		if (this.isFirstLaunch) {
-
 			// Create loading overlay with higher z-index and pointer-events handling
 			this.loadingOverlay = $('div.orangepicodeoverlay-loading-overlay');
 			this.loadingOverlay.style.position = 'fixed'; // Change to fixed positioning

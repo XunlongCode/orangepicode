@@ -24,10 +24,11 @@
 
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["./src/*"]
+			"@/*": ["./src/*"],
+			"@root/*": ["../src/*"]
 		},
 		"typeRoots": ["./node_modules/@types"],
 		"types": []
 	},
-	"include": ["./src"]
+	"include": ["./src", "../src"]
 }

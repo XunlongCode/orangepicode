@@ -1,12 +1,7 @@
 import { useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { WebviewMessage } from '../../../src/shared/WebviewMessage';
-
-interface IVscode {
-	postMessage(message: any): IVscode;
-}
-
-declare const vscode: IVscode;
+import { vscode } from '../utils/vscode';
 
 export function useWebviewMessager(
 	type: WebviewMessage["type"],

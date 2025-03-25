@@ -26,23 +26,9 @@ class CoreProvider implements vscode.WebviewViewProvider {
 		}
 
 		const isDev = this.context.extensionMode === vscode.ExtensionMode.Development || process.env.VSCODE_DEV === '1'
-		// webviewView.webview.html = isDev
-		// 	? await this.getHMRHtmlContent(webviewView.webview)
-		// 	: this.getHtmlContent(webviewView.webview)
-
-		webviewView.webview.html = /* html */`
-			<!DOCTYPE html>
-			<html lang="en">
-				<head>
-					<meta charset="UTF-8">
-					<meta name="viewport" content="width=device-width, initial-scale=1.0">
-					<title	>Orange Pi Code</title>
-				</head>
-				<body>
-					<h1>Orange Pi Code xxx</h1>
-				</body>
-			</html>
-		`
+		webviewView.webview.html = isDev
+			? await this.getHMRHtmlContent(webviewView.webview)
+			: this.getHtmlContent(webviewView.webview)
 
 		console.log("Webview view resolved, isDev =", isDev);
 		console.log(webviewView.webview.html);

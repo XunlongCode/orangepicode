@@ -2,6 +2,7 @@
 
 export interface WebviewMessage {
 	type:
+	| "webviewDidLaunch"
 	| "hideOnboardingLoading"
 	| "unlockOnboardingOverlay"
 	| "setTheme"

@@ -9,6 +9,7 @@ export const ORANGEPICODE_OVERLAY_VIEWID = "onboarding_view";
 
 class CoreProvider implements vscode.WebviewViewProvider {
 	private view?: vscode.WebviewView | vscode.WebviewPanel;
+	private disposables: vscode.Disposable[] = []
 
 	constructor(
 		readonly context: vscode.ExtensionContext,
@@ -49,8 +50,13 @@ class CoreProvider implements vscode.WebviewViewProvider {
 			console.log("=== Received message from webview ===", message);
 
 			switch (message.type) {
+				case "webviewDidLaunch": {
+					console.log("Webview did launch");
+					break;
+				}
 				case "hideOnboardingLoading": {
 					await vscode.commands.executeCommand("onboarding.hideLoadingOverlay")
+					break;
 				}
 			}
 		})
@@ -194,6 +200,20 @@ class CoreProvider implements vscode.WebviewViewProvider {
 				</body>
 			</html>
 		`;
+	}
+
+	async dispose() {
+		if (this.view && "dispose" in this.view) {
+			this.view.dispose()
+		}
+
+		while (this.disposables.length) {
+			const x = this.disposables.pop()
+
+			if (x) {
+				x.dispose()
+			}
+		}
 	}
 }
 

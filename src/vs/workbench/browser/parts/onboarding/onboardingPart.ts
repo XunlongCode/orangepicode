@@ -159,9 +159,6 @@ export class OnboardingPart extends Part {
 			source.token,
 		);
 
-		console.log("webviewViewService resolved");
-		console.log(this.webviewView, this.viewOverlayEl);
-
 		// if both content and webview are ready, end loading state and open
 		if (this.viewOverlayEl && this.webviewView) {
 			this.webviewView.webview.layoutWebviewOverElement(this.viewOverlayEl);

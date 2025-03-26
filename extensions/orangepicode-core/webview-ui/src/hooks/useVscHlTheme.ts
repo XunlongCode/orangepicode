@@ -90,6 +90,7 @@ function fallbackTheme() {
 	const { r, g, b } = parseHexColor(backgroundColor);
 	const avg = (r + g + b) / 3;
 
+	// 如果平均值大于或等于 128，则背景色较亮，否则较暗
 	return avg >= 128
 		? {
 			".hljs-comment": "#008000",
@@ -149,7 +150,7 @@ function fallbackTheme() {
 		};
 }
 
-export function useVscTheme() {
+export function useVscHlTheme() {
 	const [theme, setTheme] = useState<any>(
 		constructTheme(window.fullColorTheme || {})
 	);

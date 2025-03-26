@@ -67,7 +67,7 @@ const ThemeAndLanguage: FC<{ onNext: () => void }> = ({ onNext }) => {
 				/>
 				<div className='w-[12px]'></div>
 				<ThemeItem
-					value={{ value: "theme-light", label: "浅色" }}
+					value={{ value: "theme-light", label: "亮色" }}
 					isSelected={currentTheme.value === "theme-light"}
 					imgSrc={getVscExtensionPath("src/assets/welcome/theme-light.png")}
 					onChange={setCurrentTheme}

@@ -5,6 +5,7 @@ export interface WebviewMessage {
 	| "webviewDidLaunch"
 	| "hideOnboardingLoading"
 	| "unlockOnboardingOverlay"
+	| "completeOnboarding"
 	| "setTheme"
 	| "setThemeType"
 	messageId?: string

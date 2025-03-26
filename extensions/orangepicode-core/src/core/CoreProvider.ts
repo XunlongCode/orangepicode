@@ -17,7 +17,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 		readonly context: vscode.ExtensionContext,
 		private readonly outputChannel: vscode.OutputChannel,
 	) {
-		console.log("Here is Orange Pi Code Provider.");
+		console.log("OrangePi Code Provider.");
 	}
 
 	public async resolveWebviewView(webviewView: vscode.WebviewView | vscode.WebviewPanel) {
@@ -74,6 +74,12 @@ class CoreProvider implements vscode.WebviewViewProvider {
 				}
 				case "hideOnboardingLoading": {
 					await vscode.commands.executeCommand("onboarding.hideLoadingOverlay")
+					break;
+				}
+				case "completeOnboarding": {
+					await vscode.commands.executeCommand("onboarding.unlockOverlay")
+					await vscode.commands.executeCommand("onboarding.hideOverlay")
+					await vscode.commands.executeCommand("workbench.action.markOnboardingCompleted")
 					break;
 				}
 			}

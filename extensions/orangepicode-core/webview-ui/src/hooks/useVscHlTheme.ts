@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useWebviewMessager } from "./useWebviewMessager";
+import { useWebviewListener } from "./useWebviewListener";
 import { parseHexColor } from '../utils/color';
 
 const hljsToTextMate: Record<string, string[]> = {
@@ -155,7 +155,7 @@ export function useVscHlTheme() {
 		constructTheme(window.fullColorTheme || {})
 	);
 
-	useWebviewMessager("setTheme", async (data) => {
+	useWebviewListener("setTheme", async (data) => {
 		window.fullColorTheme = data.theme;
 		setTheme(constructTheme(data.theme));
 	});
@@ -165,7 +165,7 @@ export function useVscHlTheme() {
 
 export function useThemeType() {
 	const [themeType, setThemeType] = useState('dark');
-	useWebviewMessager("setThemeType", async (data) => {
+	useWebviewListener("setThemeType", async (data) => {
 		console.log("setThemeType", data);
 		setThemeType(data.themeType || 'dark');
 	});

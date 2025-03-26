@@ -1,20 +1,13 @@
 import { FC, useEffect } from "react";
-import { useWebviewMessager } from "../../hooks/useWebviewMessager";
 import VscodeTheme from "../../components/VscodeTheme";
+import { vscode } from '../../utils/vscode';
 
 const Welcome: FC = () => {
-	const { post: hideOnboardingLoading } = useWebviewMessager(
-		"hideOnboardingLoading"
-	);
-	const { post: unlockOnboardingOverlay } = useWebviewMessager(
-		"unlockOnboardingOverlay"
-	);
-
 	useEffect(() => {
-		hideOnboardingLoading();
+		vscode.postMessage({ type: "hideOnboardingLoading" })
 
 		return () => {
-			unlockOnboardingOverlay();
+			vscode.postMessage({ type: "unlockOnboardingOverlay" })
 		};
 	}, []);
 

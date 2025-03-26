@@ -4,6 +4,8 @@ import { getNonce } from '../utils/getNonce';
 import axios from 'axios';
 import { ExtensionMessage } from '../shared/ExtensionMessage';
 import { WebviewMessage } from '../shared/WebviewMessage';
+import { getTheme, getThemeType } from '../utils/getTheme';
+import { v4 as uuidv4 } from 'uuid';
 
 export const ORANGEPICODE_OVERLAY_VIEWID = "onboarding_view";
 
@@ -35,14 +37,29 @@ class CoreProvider implements vscode.WebviewViewProvider {
 
 		this.setWebviewMessageListener(webviewView.webview)
 
-		console.log("Webview view resolved, isDev =", isDev);
-		console.log(webviewView.webview.html);
-
 		this.outputChannel.appendLine("Webview view resolved");
 	}
 
 	public async postMessageToWebview(message: ExtensionMessage) {
+		message.messageId = message.messageId ?? uuidv4()
 		await this.view?.webview.postMessage(message)
+	}
+
+	private onWebviewDidLaunch() {
+		vscode.window.onDidChangeActiveColorTheme(async (e) => {
+			const theme = await getTheme(this.context)
+			const themeType = getThemeType()
+			this.postMessageToWebview({
+				type: "setTheme",
+				theme
+			})
+			this.postMessageToWebview({
+				type: "setThemeType",
+				themeType,
+			})
+		})
+
+		vscode.workspace.onDidChangeConfiguration(async () => { })
 	}
 
 	private setWebviewMessageListener(webview: vscode.Webview) {
@@ -52,6 +69,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 			switch (message.type) {
 				case "webviewDidLaunch": {
 					console.log("Webview did launch");
+					this.onWebviewDidLaunch();
 					break;
 				}
 				case "hideOnboardingLoading": {
@@ -80,6 +98,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 			"assets",
 			"index.css",
 		])
+		const currentTheme = await getTheme(this.context);
 
 		return /* html */`
 			<link href="${codiconsUri}" rel="stylesheet" />
@@ -87,6 +106,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 			<script nonce="${nonce}">localStorage.setItem("ide", '"vscode"')</script>
 			<script nonce="${nonce}">window.vscAssetsUrl = "${vscAssetsUrl}"</script>
 			<script nonce="${nonce}">window.isOnboardingCompleted = ${isOnboardingCompleted}</script>
+			<script nonce="${nonce}">window.fullColorTheme = ${JSON.stringify(currentTheme)}</script>
 		`
 	}
 

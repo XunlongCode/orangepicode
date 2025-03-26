@@ -3,6 +3,21 @@ import { useCssVar } from "../../hooks/useCssVar";
 import tinycolor from "tinycolor2";
 import { round } from "lodash-es";
 import { cn } from '../../lib/utils';
+import { useVscHlTheme } from '../../hooks/useVscHlTheme';
+
+const convertToHslValue = (value?: string, defaultValue?: string) => {
+	if (!value) {
+		return defaultValue;
+	}
+
+	const c = tinycolor(value);
+	if (!c.isValid()) {
+		return defaultValue;
+	}
+
+	const { h, s, l } = c.toHsl();
+	return `${round(h, 1)} ${round(s * 100, 1)}% ${round(l * 100, 1)}%`;
+}
 
 const VscodeTheme: FC<PropsWithChildren & { className: string }> = ({
 	children,
@@ -34,19 +49,7 @@ const VscodeTheme: FC<PropsWithChildren & { className: string }> = ({
 	const chart5 = useCssVar({ name: "--chart-5" });
 	const radius = useCssVar({ name: "--radius" });
 
-	const convertToHslValue = (value?: string, defaultValue?: string) => {
-		if (!value) {
-			return defaultValue;
-		}
-
-		const c = tinycolor(value);
-		if (!c.isValid()) {
-			return defaultValue;
-		}
-
-		const { h, s, l } = c.toHsl();
-		return `${round(h, 1)} ${round(s * 100, 1)}% ${round(l * 100, 1)}%`;
-	};
+	const theme = useVscHlTheme()
 
 	const themeVariables = useMemo(() => {
 		return {
@@ -120,6 +123,7 @@ const VscodeTheme: FC<PropsWithChildren & { className: string }> = ({
 		chart4,
 		chart5,
 		radius,
+		theme
 	]);
 
 	return (

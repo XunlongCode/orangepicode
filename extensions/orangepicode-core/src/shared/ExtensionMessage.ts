@@ -1,7 +1,10 @@
 
 export interface ExtensionMessage {
 	type:
-	| "test"
+	| "setTheme"
+	| "setThemeType"
+	theme?: any
+	themeType?: string
 	messageId?: string
 }
 

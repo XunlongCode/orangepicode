@@ -1,27 +1,32 @@
 import { Button } from "@/components/ui/button";
-import { getVscAssetsPath } from "../../../utils";
+import { getVscExtensionPath } from "../../../utils";
+import { FC } from 'react';
 
-const SplashScreen = ({ onNext }: { onNext: () => void }) => {
+const SplashScreen: FC<{ onNext: () => void }> = ({ onNext }) => {
 	return (
-		<div className="h-full flex-col justify-center items-center gap-10 inline-flex overflow-hidden select-none">
-			<div className="max-w-2xl mx-auto text-center flex flex-col gap-7 justify-center">
-				<div className="flex-col justify-center items-center gap-7 flex w-64 mx-auto">
-					<img src={getVscAssetsPath("logo.png")} alt="..." />
+		<div className="h-full flex-col justify-center items-center inline-flex overflow-hidden select-none">
+			<div className="max-w-2xl mx-auto text-center flex flex-col justify-center">
+				<div className="flex-col justify-center items-center gap-7 flex w-[164px] mx-auto ">
+					<img src={getVscExtensionPath("src/assets/welcome/logo.png")} alt="" />
 				</div>
-				<div className="flex flex-col gap-2">
-					<div className="text-4xl font-['SF Pro']">
-						Welcome to OrangePi Code
+				<div className="flex flex-col mt-10">
+					<div className="text-[40px] text-[#979CA6] leading-none font-medium">
+						欢迎使用
 					</div>
-					<div className="text-xl font-['SF Pro']">
-						The AI Code Editor For Your Next Project
+					<div className="text-[32px] mt-10 leading-none">
+						OrangePi AI Code
 					</div>
 				</div>
-				<Button
-					className="mx-auto w-[300px] rounded-lg justify-center items-center gap-1 inline-flex overflow-hidden"
-					onClick={onNext}
-				>
-					<div className="text-xs font-['SF Pro']">Next</div>
-				</Button>
+
+				<div>
+					<Button
+						size="sm"
+						className="mt-14 w-[112px]"
+						onClick={onNext}
+					>
+						<div className='text-base font-medium'>下一步</div>
+					</Button>
+				</div>
 			</div>
 		</div>
 	);

@@ -2,7 +2,7 @@
 declare global {
 	interface Window {
 		isOnboardingCompleted?: boolean
-		vscAssetsUrl: string
+		vscExtensionUrl: string
 		fullColorTheme?: {
 			rules?: {
 				token?: string;

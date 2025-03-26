@@ -81,7 +81,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 	}
 
 	private async getHtmlCommonHead(webview: vscode.Webview, nonce: string): Promise<string> {
-		const vscAssetsUrl: string = getUri(webview, this.context.extensionUri, ["webview-ui", "public", "assets"])
+		const vscExtensionUrl: string = getUri(webview, this.context.extensionUri, ["webview-ui"])
 			.toString();
 		const isOnboardingCompleted = await vscode.commands.executeCommand("workbench.action.isOnboardingCompleted")
 		const codiconsUri = getUri(webview, this.context.extensionUri, [
@@ -104,7 +104,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 			<link href="${codiconsUri}" rel="stylesheet" />
 			<link rel="stylesheet" type="text/css" href="${stylesUri}">
 			<script nonce="${nonce}">localStorage.setItem("ide", '"vscode"')</script>
-			<script nonce="${nonce}">window.vscAssetsUrl = "${vscAssetsUrl}"</script>
+			<script nonce="${nonce}">window.vscExtensionUrl = "${vscExtensionUrl}"</script>
 			<script nonce="${nonce}">window.isOnboardingCompleted = ${isOnboardingCompleted}</script>
 			<script nonce="${nonce}">window.fullColorTheme = ${JSON.stringify(currentTheme)}</script>
 		`

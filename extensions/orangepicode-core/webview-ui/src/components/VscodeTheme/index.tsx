@@ -19,7 +19,7 @@ const convertToHslValue = (value?: string, defaultValue?: string) => {
 	return `${round(h, 1)} ${round(s * 100, 1)}% ${round(l * 100, 1)}%`;
 }
 
-const VscodeTheme: FC<PropsWithChildren & { className: string }> = ({
+const VscodeTheme: FC<PropsWithChildren & { className?: string }> = ({
 	children,
 	className,
 }) => {

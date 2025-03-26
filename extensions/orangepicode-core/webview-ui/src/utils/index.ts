@@ -1,4 +1,4 @@
 
-export const getVscAssetsPath = (path: string) => {
-	return `${window.vscAssetsUrl}/${path}`;
+export const getVscExtensionPath = (path: string) => {
+	return `${window.vscExtensionUrl}/${path}`;
 }

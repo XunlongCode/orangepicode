@@ -224,12 +224,6 @@ export class OnboardingPart extends Part {
 			loadingText.style.color = '#839497';
 			loadingText.style.fontSize = '20px';
 
-			// TODO test
-			loadingText.onclick = () => {
-				this.unlock()
-				this.close();
-			}
-
 			this.loadingOverlay.appendChild(loadingText);
 			this.element.appendChild(this.loadingOverlay);
 		}

@@ -2,6 +2,8 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from "path"
 import tailwindcss from "tailwindcss"
+import autoprefixer from "autoprefixer"
+import cssnano from "cssnano"
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -9,7 +11,13 @@ export default defineConfig({
 	css: {
 		postcss: {
 			plugins: [
-				tailwindcss()
+				tailwindcss(),
+				autoprefixer(),
+				cssnano(),
+				(await import("postcss-pxtorem").then((m) => m.default))({
+					rootValue: 16,
+					propList: ["*"],
+				}) as any,
 			]
 		}
 	},

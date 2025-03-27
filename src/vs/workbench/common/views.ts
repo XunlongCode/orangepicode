@@ -26,6 +26,7 @@ import { registerIcon } from '../../platform/theme/common/iconRegistry.js';
 import { CancellationToken } from '../../base/common/cancellation.js';
 import { VSDataTransfer } from '../../base/common/dataTransfer.js';
 import { ILocalizedString } from '../../platform/action/common/action.js';
+import { orangePiCodeAuxiliaryBarAllowedViewContainerIDs } from '../services/views/orangepicode/shared.js';
 
 export const VIEWS_LOG_ID = 'views';
 export const VIEWS_LOG_NAME = localize('views log', "Views");
@@ -34,12 +35,14 @@ export const defaultViewIcon = registerIcon('default-view-icon', Codicon.window,
 export namespace Extensions {
 	export const ViewContainersRegistry = 'workbench.registry.view.containers';
 	export const ViewsRegistry = 'workbench.registry.view';
+	export const ViewOrangePiCodeCore = 'workbench.orangepicodecore.view';
 }
 
 export const enum ViewContainerLocation {
 	Sidebar,
 	Panel,
-	AuxiliaryBar
+	AuxiliaryBar,
+	Core
 }
 
 export const ViewContainerLocations = [ViewContainerLocation.Sidebar, ViewContainerLocation.Panel, ViewContainerLocation.AuxiliaryBar];
@@ -49,6 +52,7 @@ export function ViewContainerLocationToString(viewContainerLocation: ViewContain
 		case ViewContainerLocation.Sidebar: return 'sidebar';
 		case ViewContainerLocation.Panel: return 'panel';
 		case ViewContainerLocation.AuxiliaryBar: return 'auxiliarybar';
+		case ViewContainerLocation.Core: return 'core';
 	}
 }
 
@@ -256,6 +260,21 @@ class ViewContainersRegistryImpl extends Disposable implements IViewContainersRe
 }
 
 Registry.add(Extensions.ViewContainersRegistry, new ViewContainersRegistryImpl());
+
+class OrangePiCodeViewContainersRegistryImpl extends ViewContainersRegistryImpl implements IViewContainersRegistry {
+	override registerViewContainer(viewContainerDescriptor: IViewContainerDescriptor, viewContainerLocation: ViewContainerLocation, options?: { isDefault?: boolean; doNotRegisterOpenCommand?: boolean }): ViewContainer {
+		// Register to sidebar instead of aux bar if non pearai integration
+		if (
+			viewContainerLocation === ViewContainerLocation.AuxiliaryBar &&
+			!orangePiCodeAuxiliaryBarAllowedViewContainerIDs.includes(viewContainerDescriptor.id)
+		) {
+			viewContainerLocation = ViewContainerLocation.Sidebar;
+		}
+		return super.registerViewContainer(viewContainerDescriptor, viewContainerLocation, options);
+	}
+}
+
+Registry.add(Extensions.ViewOrangePiCodeCore, new OrangePiCodeViewContainersRegistryImpl());
 
 export interface IViewDescriptor {
 

@@ -48,6 +48,8 @@ import { AccessibilityProgressSignalScheduler } from '../../platform/accessibili
 import { setProgressAcccessibilitySignalScheduler } from '../../base/browser/ui/progressbar/progressAccessibilitySignal.js';
 import { AccessibleViewRegistry } from '../../platform/accessibility/browser/accessibleViewRegistry.js';
 import { NotificationAccessibleView } from './parts/notifications/notificationAccessibleView.js';
+import { IOnboardingShadowService } from './parts/onboarding/onboardingShadow/onboardingShadowService.js';
+import { IOnboardingService } from './parts/onboarding/onboardingService.js';
 
 export interface IWorkbenchOptions {
 
@@ -335,9 +337,21 @@ export class Workbench extends Layout {
 			{ id: Parts.EDITOR_PART, role: 'main', classes: ['editor'], options: { restorePreviousState: this.willRestoreEditors() } },
 			{ id: Parts.PANEL_PART, role: 'none', classes: ['panel', 'basepanel', positionToString(this.getPanelPosition())] },
 			{ id: Parts.AUXILIARYBAR_PART, role: 'none', classes: ['auxiliarybar', 'basepanel', this.getSideBarPosition() === Position.LEFT ? 'right' : 'left'] },
-			{ id: Parts.STATUSBAR_PART, role: 'status', classes: ['statusbar'] }
+			{ id: Parts.STATUSBAR_PART, role: 'status', classes: ['statusbar'] },
+			{ id: Parts.ORANGEPICODE_OVERLAY_PART, role: 'none', classes: [] }
 		]) {
 			const partContainer = this.createPart(id, role, classes);
+
+			if (id === Parts.ORANGEPICODE_OVERLAY_PART) {
+				instantiationService.invokeFunction(accessor => {
+					accessor.get(IOnboardingService);
+				});
+			}
+
+			// instantiate highlighting
+			instantiationService.invokeFunction(accessor => {
+				accessor.get(IOnboardingShadowService);
+			});
 
 			mark(`code/willCreatePart/${id}`);
 			this.getPart(id).create(partContainer, options);

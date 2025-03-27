@@ -301,6 +301,8 @@ class ViewsExtensionHandler implements IWorkbenchContribution {
 		const viewContainersRegistry = Registry.as<IViewContainersRegistry>(ViewContainerExtensions.ViewContainersRegistry);
 		let activityBarOrder = CUSTOM_VIEWS_START_ORDER + viewContainersRegistry.all.filter(v => !!v.extensionId && viewContainersRegistry.getViewContainerLocation(v) === ViewContainerLocation.Sidebar).length;
 		let panelOrder = 5 + viewContainersRegistry.all.filter(v => !!v.extensionId && viewContainersRegistry.getViewContainerLocation(v) === ViewContainerLocation.Panel).length + 1;
+		let coreOrder = viewContainersRegistry.all.filter(v => !!v.extensionId && viewContainersRegistry.getViewContainerLocation(v) === ViewContainerLocation.Core).length;
+
 		for (const { value, collector, description } of extensionPoints) {
 			Object.entries(value).forEach(([key, value]) => {
 				if (!this.isValidViewsContainer(value, collector)) {
@@ -312,6 +314,16 @@ class ViewsExtensionHandler implements IWorkbenchContribution {
 						break;
 					case 'panel':
 						panelOrder = this.registerCustomViewContainers(value, description, panelOrder, existingViewContainers, ViewContainerLocation.Panel);
+						break;
+					case "core":
+						coreOrder = this.registerCustomViewContainers(
+							value,
+							description,
+							coreOrder,
+							existingViewContainers,
+							ViewContainerLocation.Core,
+						);
+						console.log('coreOrder', coreOrder);
 						break;
 				}
 			});

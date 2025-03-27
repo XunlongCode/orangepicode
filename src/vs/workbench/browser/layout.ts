@@ -329,6 +329,10 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.statusBarService = accessor.get(IStatusbarService);
 		accessor.get(IBannerService);
 
+		if (this.configurationService.getValue(LegacyWorkbenchLayoutSettings.SIDEBAR_POSITION) === "right") {
+			this.configurationService.updateValue(LegacyWorkbenchLayoutSettings.SIDEBAR_POSITION, "left")
+		}
+
 		// Listeners
 		this.registerLayoutListeners();
 
@@ -545,6 +549,10 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 	}
 
 	private setSideBarPosition(position: Position): void {
+		if (position === Position.RIGHT) {
+			position = Position.LEFT as Position
+		}
+
 		const activityBar = this.getPart(Parts.ACTIVITYBAR_PART);
 		const sideBar = this.getPart(Parts.SIDEBAR_PART);
 		const auxiliaryBar = this.getPart(Parts.AUXILIARYBAR_PART);

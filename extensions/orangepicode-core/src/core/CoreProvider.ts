@@ -6,6 +6,7 @@ import { ExtensionMessage } from '../shared/ExtensionMessage';
 import { WebviewMessage } from '../shared/WebviewMessage';
 import { getTheme, getThemeType } from '../utils/getTheme';
 import { v4 as uuidv4 } from 'uuid';
+import { importUserSettingsFromCursor, importUserSettingsFromVSCode } from '../utils/copySettings';
 
 export const ORANGEPICODE_OVERLAY_VIEWID = "onboarding_view";
 
@@ -81,6 +82,34 @@ class CoreProvider implements vscode.WebviewViewProvider {
 					await vscode.commands.executeCommand("onboarding.hideOverlay")
 					await vscode.commands.executeCommand("workbench.action.markOnboardingCompleted")
 					break;
+				}
+				case "importUserSettingsFromVSCode": {
+					let result
+					try {
+						result = await importUserSettingsFromVSCode()
+					} catch (error) {
+						result = { ok: false, error: error }
+						vscode.window.showErrorMessage(`Failed to import settings: ${error}`)
+					}
+					this.postMessageToWebview({
+						type: "importUserSettingsFromVSCodeDone",
+						importUserSettingsFromVSCodeResult: result
+					})
+					break;
+				}
+				case "importUserSettingsFromCursor": {
+					let result
+					try {
+						result = await importUserSettingsFromCursor()
+					} catch (error) {
+						result = { ok: false, error: error }
+						vscode.window.showErrorMessage(`Failed to import settings: ${error}`)
+					}
+					this.postMessageToWebview({
+						type: "importUserSettingsFromVSCodeDone",
+						importUserSettingsFromCursorResult: result
+					})
+					break
 				}
 			}
 		})

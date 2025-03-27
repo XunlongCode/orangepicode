@@ -8,6 +8,8 @@ export interface WebviewMessage {
 	| "completeOnboarding"
 	| "setTheme"
 	| "setThemeType"
+	| "importUserSettingsFromVSCode"
+	| "importUserSettingsFromCursor"
 	messageId?: string
 	theme?: {
 		rules?: {

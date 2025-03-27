@@ -1,9 +1,49 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { Button } from '../../../components/ui/button'
 import { getVscExtensionPath } from '../../../utils'
+import { vscode } from '../../../utils/vscode'
+import { useWebviewListener } from '../../../hooks/useWebviewListener'
 
 
 const ImportSettings: FC<{ onNext: () => void }> = ({ onNext }) => {
+	const [importingFrom, setImportingFrom] = useState<"vscode" | "cursor">()
+	const [isImportingExtensions, setIsImportingExtensions] = useState(false)
+
+	useWebviewListener("importUserSettingsFromVSCodeDone", async (e: any) => {
+		console.log(e);
+		setIsImportingExtensions(false)
+		setImportingFrom(undefined)
+		if (e.error) {
+			console.log(e);
+			return
+		}
+
+		onNext()
+	})
+
+	useWebviewListener("importUserSettingsFromCursorDone", async (e: any) => {
+		console.log(e);
+		setIsImportingExtensions(false)
+		setImportingFrom(undefined)
+		if (e.error) {
+			console.log(e);
+			return
+		}
+
+		onNext()
+	})
+
+	const onImportFromVSCode = async () => {
+		setImportingFrom("vscode")
+		setIsImportingExtensions(true)
+		vscode.postMessage({ type: "importUserSettingsFromVSCode" })
+	}
+
+	const onImportFromCursor = async () => {
+		setImportingFrom("cursor")
+		setIsImportingExtensions(true)
+		vscode.postMessage({ type: "importUserSettingsFromCursor" })
+	}
 
 	return <div>
 		<div className='text-2xl font-medium leading-none text-center mb-3'>导入配置</div>
@@ -23,11 +63,21 @@ const ImportSettings: FC<{ onNext: () => void }> = ({ onNext }) => {
 			</div>
 		</div>
 		<div className='flex flex-col items-center'>
-			<Button className='h-[34px] w-[200px] text-base'>从VSCode中导入</Button>
+			<Button className='h-[34px] w-[200px] text-base' disabled={isImportingExtensions} onClick={onImportFromVSCode}>
+				<div className='flex items-center gap-2'>
+					{isImportingExtensions && importingFrom === "vscode" && <div className='codicon codicon-loading animate-spin'></div>}
+					<div>从VSCode中导入</div>
+				</div>
+			</Button>
 			<div className='h-5'></div>
-			<Button className='h-[34px] w-[200px] text-base'>从VSCode中导入</Button>
+			<Button className='h-[34px] w-[200px] text-base' disabled={isImportingExtensions} onClick={onImportFromCursor}>
+				<div className='flex items-center gap-2'>
+					{isImportingExtensions && importingFrom === "cursor" && <div className='codicon codicon-loading animate-spin'></div>}
+					<div>从Cursor中导入</div>
+				</div>
+			</Button>
 			<div className='h-5'></div>
-			<Button className='h-[21px] p-0 w-auto text-sm !no-underline' variant="link" onClick={onNext}>
+			<Button className='h-[21px] p-0 w-auto text-sm !no-underline' disabled={isImportingExtensions} variant="link" onClick={onNext}>
 				<div className='text-foreground opacity-80'>跳过</div>
 			</Button>
 		</div>

@@ -684,14 +684,16 @@ export class BrowserTitlebarPart extends Part implements ITitlebarPart {
 				);
 			}
 
-			// --- Activity Actions (always at the end)
-			if (this.activityActionsEnabled) {
-				if (isAccountsActionVisible(this.storageService)) {
-					actions.primary.push(ACCOUNTS_ACTIVITY_TILE_ACTION);
-				}
+			// --- Activity Actions (always at the end) vscode原账号和设置按钮(活动为顶部的状态)
+			// if (this.activityActionsEnabled) {
+			// 	if (isAccountsActionVisible(this.storageService)) {
+			// 		actions.primary.push(ACCOUNTS_ACTIVITY_TILE_ACTION);
+			// 	}
 
-				actions.primary.push(GLOBAL_ACTIVITY_TITLE_ACTION);
-			}
+			// 	actions.primary.push(GLOBAL_ACTIVITY_TITLE_ACTION);
+			// }
+
+			actions.primary.push(GLOBAL_ACTIVITY_TITLE_ACTION);
 
 			this.actionToolBar.setActions(prepareActions(actions.primary), prepareActions(actions.secondary));
 		};

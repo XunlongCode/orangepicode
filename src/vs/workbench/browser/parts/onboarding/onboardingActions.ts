@@ -72,7 +72,7 @@ export class ResetOnboardingCompletedKeyAction extends Action2 {
 	constructor() {
 		super({
 			id: ResetOnboardingCompletedKeyAction.ID,
-			title: { value: "Reset onboarding complete key", original: "Reset onboarding complete key" },
+			title: { value: "Reset Onboarding Complete Key", original: "Reset Onboarding Complete Key" },
 			f1: true,
 		});
 	}

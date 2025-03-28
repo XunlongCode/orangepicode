@@ -5,6 +5,7 @@ export interface ExtensionMessage {
 	| "setThemeType"
 	| "importUserSettingsFromVSCodeDone"
 	| "importUserSettingsFromCursorDone"
+	| "changeLanguage"
 	theme?: any
 	themeType?: string
 	importUserSettingsFromVSCodeResult?: { ok: boolean, error?: any }

@@ -254,13 +254,14 @@ export class ActivityBarCompositeBar extends PaneCompositeBar {
 			}
 		}
 
-		// Global Composite Bar
+		// Global Composite Bar 活动栏添加 Accounts- 账户
 		if (this.globalCompositeBar) {
-			actions.push(new Separator());
-			actions.push(...this.globalCompositeBar.getContextMenuActions());
+			// actions.push(new Separator());
+			// actions.push(...this.globalCompositeBar.getContextMenuActions());
 		}
-		actions.push(new Separator());
-		actions.push(...this.getActivityBarContextMenuActions());
+		// 活动栏添加Activity Bar Position 和 移动活动栏到右侧
+		// actions.push(new Separator());
+		// actions.push(...this.getActivityBarContextMenuActions());
 	}
 
 	private uninstallMenubar() {

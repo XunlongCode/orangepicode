@@ -17,7 +17,7 @@ import './browser/workbench.contribution.js';
 
 import './browser/actions/textInputActions.js';
 import './browser/actions/developerActions.js';
-import './browser/actions/helpActions.js';
+// import './browser/actions/helpActions.js';
 import './browser/actions/layoutActions.js';
 import './browser/actions/listCommands.js';
 import './browser/actions/navigationActions.js';
@@ -162,7 +162,7 @@ registerSingleton(IContextKeyService, ContextKeyService, InstantiationType.Delay
 registerSingleton(ITextResourceConfigurationService, TextResourceConfigurationService, InstantiationType.Delayed);
 registerSingleton(IDownloadService, DownloadService, InstantiationType.Delayed);
 registerSingleton(IOpenerService, OpenerService, InstantiationType.Delayed);
-registerSingleton(IViewDescriptorService, OrangePiCodeViewDescriptorService, InstantiationType.Delayed);
+// registerSingleton(IViewDescriptorService, OrangePiCodeViewDescriptorService, InstantiationType.Delayed);
 
 //#endregion
 
@@ -399,7 +399,7 @@ import './contrib/inlineCompletions/browser/inlineCompletions.contribution.js';
 // Drop or paste into
 import './contrib/dropOrPasteInto/browser/dropOrPasteInto.contribution.js';
 import { AllowedExtensionsService } from '../platform/extensionManagement/common/allowedExtensionsService.js';
-import { OrangePiCodeViewDescriptorService } from './services/views/orangepicode/viewDescriptorService.js';
-import { IViewDescriptorService } from './common/views.js';
+// import { OrangePiCodeViewDescriptorService } from './services/views/orangepicode/viewDescriptorService.js';
+// import { IViewDescriptorService } from './common/views.js';
 
 //#endregion

@@ -1,0 +1,19 @@
+{
+	"welcome": "欢迎使用",
+	"appName": "OrangePi AI Code",
+	"nextStep": "下一步",
+	"selectThemeAndLanguage": "选择主题与语言",
+	"selectTheme": "选择主题",
+	"selectLanguage": "选择语言",
+	"theme": {
+	},
+	"continue": "继续",
+	"importSettings": "导入配置",
+	"importSettingsDescription": "从VSCode、Cursor中一键导入IDE配置，包括插件、设置、快捷键配置等",
+	"importFromVSCode": "从VSCode中导入",
+	"importFromCursor": "从Cursor中导入",
+	"skip": "跳过",
+	"accountSignIn": "账号登录",
+	"accountSignInDescription": "支持Google账号、Github账号、邮箱账号进行登录。",
+	"signIn": "登录"
+}

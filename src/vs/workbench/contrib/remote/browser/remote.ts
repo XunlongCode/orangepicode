@@ -400,45 +400,45 @@ class HelpItem extends HelpItemBase {
 	}
 }
 
-class IssueReporterItem extends HelpItemBase {
-	constructor(
-		icon: ThemeIcon,
-		label: string,
-		values: HelpItemValue[],
-		quickInputService: IQuickInputService,
-		environmentService: IWorkbenchEnvironmentService,
-		private commandService: ICommandService,
-		private openerService: IOpenerService,
-		remoteExplorerService: IRemoteExplorerService,
-		workspaceContextService: IWorkspaceContextService
-	) {
-		super(icon, label, values, quickInputService, environmentService, remoteExplorerService, workspaceContextService);
-	}
+// class IssueReporterItem extends HelpItemBase {
+// 	constructor(
+// 		icon: ThemeIcon,
+// 		label: string,
+// 		values: HelpItemValue[],
+// 		quickInputService: IQuickInputService,
+// 		environmentService: IWorkbenchEnvironmentService,
+// 		private commandService: ICommandService,
+// 		private openerService: IOpenerService,
+// 		remoteExplorerService: IRemoteExplorerService,
+// 		workspaceContextService: IWorkspaceContextService
+// 	) {
+// 		super(icon, label, values, quickInputService, environmentService, remoteExplorerService, workspaceContextService);
+// 	}
 
-	protected override async getActions(): Promise<{
-		label: string;
-		description: string;
-		url: string;
-		extensionDescription: IExtensionDescription;
-	}[]> {
-		return Promise.all(this.values.map(async (value) => {
-			return {
-				label: value.extensionDescription.displayName || value.extensionDescription.identifier.value,
-				description: '',
-				url: await value.url,
-				extensionDescription: value.extensionDescription
-			};
-		}));
-	}
+// 	protected override async getActions(): Promise<{
+// 		label: string;
+// 		description: string;
+// 		url: string;
+// 		extensionDescription: IExtensionDescription;
+// 	}[]> {
+// 		return Promise.all(this.values.map(async (value) => {
+// 			return {
+// 				label: value.extensionDescription.displayName || value.extensionDescription.identifier.value,
+// 				description: '',
+// 				url: await value.url,
+// 				extensionDescription: value.extensionDescription
+// 			};
+// 		}));
+// 	}
 
-	protected async takeAction(extensionDescription: IExtensionDescription, url: string): Promise<void> {
-		if (!url) {
-			await this.commandService.executeCommand('workbench.action.openIssueReporter', [extensionDescription.identifier.value]);
-		} else {
-			await this.openerService.open(URI.parse(url));
-		}
-	}
-}
+// 	protected async takeAction(extensionDescription: IExtensionDescription, url: string): Promise<void> {
+// 		if (!url) {
+// 			await this.commandService.executeCommand('workbench.action.openIssueReporter', [extensionDescription.identifier.value]);
+// 		} else {
+// 			await this.openerService.open(URI.parse(url));
+// 		}
+// 	}
+// }
 
 class HelpPanel extends ViewPane {
 	static readonly ID = '~remote.helpPanel';

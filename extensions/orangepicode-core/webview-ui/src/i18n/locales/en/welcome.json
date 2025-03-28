@@ -1,0 +1,18 @@
+{
+	"welcome": "Welcome",
+	"appName": "OrangePi AI Code",
+	"nextStep": "Next Step",
+	"selectThemeAndLanguage": "Select Theme and Language",
+	"selectTheme": "Select Theme",
+	"selectLanguage": "Select Language",
+	"theme": {},
+	"continue": "Continue",
+	"importSettings": "Import Settings",
+	"importSettingsDescription": "Easily import IDE settings from VSCode or Cursor, including extensions, preferences, and keybindings.",
+	"importFromVSCode": "Import from VSCode",
+	"importFromCursor": "Import from Cursor",
+	"skip": "Skip",
+	"accountSignIn": "Account Sign-In",
+	"accountSignInDescription": "Sign in with Google, GitHub, or email.",
+	"signIn": "Sign In"
+}

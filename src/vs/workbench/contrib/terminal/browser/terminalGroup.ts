@@ -562,7 +562,6 @@ export class TerminalGroup extends Disposable implements ITerminalGroup {
 
 	private _getPosition(): Position {
 		switch (this._terminalLocation) {
-			case ViewContainerLocation.Core:
 			case ViewContainerLocation.Panel:
 				return this._panelPosition;
 			case ViewContainerLocation.Sidebar:

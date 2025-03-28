@@ -17,7 +17,7 @@
   "contributes": {
     "commands": [],
     "viewsContainers": {
-      "core": [
+      "auxiliarybar": [
         {
           "id": "orangepicode-core",
           "title": "OrangePi Code",

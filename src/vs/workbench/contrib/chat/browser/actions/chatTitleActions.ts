@@ -142,47 +142,47 @@ export function registerChatTitleActions() {
 		}
 	});
 
-	// registerAction2(class ReportIssueForBugAction extends Action2 {
-	// 	constructor() {
-	// 		super({
-	// 			id: 'workbench.action.chat.reportIssueForBug',
-	// 			title: localize2('interactive.reportIssueForBug.label', "Report Issue"),
-	// 			f1: false,
-	// 			category: CHAT_CATEGORY,
-	// 			icon: Codicon.report,
-	// 			menu: [{
-	// 				id: MenuId.ChatMessageFooter,
-	// 				group: 'navigation',
-	// 				order: 3,
-	// 				when: ContextKeyExpr.and(ChatContextKeys.responseSupportsIssueReporting, ChatContextKeys.isResponse)
-	// 			}, {
-	// 				id: MENU_INLINE_CHAT_WIDGET_SECONDARY,
-	// 				group: 'navigation',
-	// 				order: 3,
-	// 				when: ContextKeyExpr.and(ChatContextKeys.responseSupportsIssueReporting, ChatContextKeys.isResponse)
-	// 			}]
-	// 		});
-	// 	}
+	registerAction2(class ReportIssueForBugAction extends Action2 {
+		constructor() {
+			super({
+				id: 'workbench.action.chat.reportIssueForBug',
+				title: localize2('interactive.reportIssueForBug.label', "Report Issue"),
+				f1: false,
+				category: CHAT_CATEGORY,
+				icon: Codicon.report,
+				menu: [{
+					id: MenuId.ChatMessageFooter,
+					group: 'navigation',
+					order: 3,
+					when: ContextKeyExpr.and(ChatContextKeys.responseSupportsIssueReporting, ChatContextKeys.isResponse)
+				}, {
+					id: MENU_INLINE_CHAT_WIDGET_SECONDARY,
+					group: 'navigation',
+					order: 3,
+					when: ContextKeyExpr.and(ChatContextKeys.responseSupportsIssueReporting, ChatContextKeys.isResponse)
+				}]
+			});
+		}
 
-	// 	run(accessor: ServicesAccessor, ...args: any[]) {
-	// 		const item = args[0];
-	// 		if (!isResponseVM(item)) {
-	// 			return;
-	// 		}
+		run(accessor: ServicesAccessor, ...args: any[]) {
+			const item = args[0];
+			if (!isResponseVM(item)) {
+				return;
+			}
 
-	// 		const chatService = accessor.get(IChatService);
-	// 		chatService.notifyUserAction({
-	// 			agentId: item.agent?.id,
-	// 			command: item.slashCommand?.name,
-	// 			sessionId: item.sessionId,
-	// 			requestId: item.requestId,
-	// 			result: item.result,
-	// 			action: {
-	// 				kind: 'bug'
-	// 			}
-	// 		});
-	// 	}
-	// });
+			const chatService = accessor.get(IChatService);
+			chatService.notifyUserAction({
+				agentId: item.agent?.id,
+				command: item.slashCommand?.name,
+				sessionId: item.sessionId,
+				requestId: item.requestId,
+				result: item.result,
+				action: {
+					kind: 'bug'
+				}
+			});
+		}
+	});
 
 	registerAction2(class RetryChatAction extends Action2 {
 		constructor() {

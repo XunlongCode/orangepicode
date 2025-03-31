@@ -3,9 +3,12 @@ import { Button } from '../../../components/ui/button'
 import { getVscExtensionPath } from '../../../utils'
 import { vscode } from '../../../utils/vscode'
 import { useWebviewListener } from '../../../hooks/useWebviewListener'
+import { useTranslation } from 'react-i18next'
 
 
 const ImportSettings: FC<{ onNext: () => void }> = ({ onNext }) => {
+	const { t } = useTranslation()
+
 	const [importingFrom, setImportingFrom] = useState<"vscode" | "cursor">()
 	const [isImportingExtensions, setIsImportingExtensions] = useState(false)
 
@@ -46,8 +49,12 @@ const ImportSettings: FC<{ onNext: () => void }> = ({ onNext }) => {
 	}
 
 	return <div>
-		<div className='text-2xl font-medium leading-none text-center mb-3'>导入配置</div>
-		<div className='text-sm leading-none'>从VSCode、Cursor中一键导入IDE配置，包括插件、设置、快捷键配置等</div>
+		<div className='text-2xl font-medium leading-none text-center mb-3'>
+			{t("importSettings", { ns: "welcome" })}
+		</div>
+		<div className='text-sm leading-none'>
+			{t("importSettingsDescription", { ns: "welcome" })}
+		</div>
 		<div className='flex items-center justify-center my-20'>
 			<div className='w-[88px] h-[88px] border-foreground border-[1.26px] rounded-[10.08px] p-[12px] bg-secondary'>
 				<img src={getVscExtensionPath("src/assets/welcome/settings-logo.png")} />
@@ -66,19 +73,25 @@ const ImportSettings: FC<{ onNext: () => void }> = ({ onNext }) => {
 			<Button className='h-[34px] w-[200px] text-base' disabled={isImportingExtensions} onClick={onImportFromVSCode}>
 				<div className='flex items-center gap-2'>
 					{isImportingExtensions && importingFrom === "vscode" && <div className='codicon codicon-loading animate-spin'></div>}
-					<div>从VSCode中导入</div>
+					<div>
+						{t("importFromVSCode", { ns: "welcome" })}
+					</div>
 				</div>
 			</Button>
 			<div className='h-5'></div>
 			<Button className='h-[34px] w-[200px] text-base' disabled={isImportingExtensions} onClick={onImportFromCursor}>
 				<div className='flex items-center gap-2'>
 					{isImportingExtensions && importingFrom === "cursor" && <div className='codicon codicon-loading animate-spin'></div>}
-					<div>从Cursor中导入</div>
+					<div>
+						{t("importFromCursor", { ns: "welcome" })}
+					</div>
 				</div>
 			</Button>
 			<div className='h-5'></div>
 			<Button className='h-[21px] p-0 w-auto text-sm !no-underline' disabled={isImportingExtensions} variant="link" onClick={onNext}>
-				<div className='text-foreground opacity-80'>跳过</div>
+				<div className='text-foreground opacity-80'>
+					{t("skip", { ns: "welcome" })}
+				</div>
 			</Button>
 		</div>
 	</div>

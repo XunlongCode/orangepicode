@@ -135,6 +135,8 @@ class CoreProvider implements vscode.WebviewViewProvider {
 		])
 		const currentTheme = await getTheme(this.context);
 
+		const language = vscode.env.language;
+
 		return /* html */`
 			<link href="${codiconsUri}" rel="stylesheet" />
 			<link rel="stylesheet" type="text/css" href="${stylesUri}">
@@ -142,6 +144,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 			<script nonce="${nonce}">window.vscExtensionUrl = "${vscExtensionUrl}"</script>
 			<script nonce="${nonce}">window.isOnboardingCompleted = ${isOnboardingCompleted}</script>
 			<script nonce="${nonce}">window.fullColorTheme = ${JSON.stringify(currentTheme)}</script>
+			<script nonce="${nonce}">window.language = "${language}"</script>
 		`
 	}
 

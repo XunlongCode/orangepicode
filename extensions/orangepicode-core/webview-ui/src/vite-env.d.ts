@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 declare global {
 	interface Window {
+		language?: string
 		isOnboardingCompleted?: boolean
 		vscExtensionUrl: string
 		fullColorTheme?: {

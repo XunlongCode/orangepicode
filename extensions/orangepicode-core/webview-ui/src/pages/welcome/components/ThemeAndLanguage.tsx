@@ -4,6 +4,8 @@ import { cn } from '../../../lib/utils';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import VscodeTheme from '../../../components/VscodeTheme';
 import { Button } from '../../../components/ui/button';
+import { useTranslation } from 'react-i18next';
+import { vscode } from '../../../utils/vscode';
 
 const ThemeItem: FC<{
 	value: { value: string, label: string },
@@ -41,52 +43,80 @@ const LanguageItem: FC<{
 	}
 
 const ThemeAndLanguage: FC<{ onNext: () => void }> = ({ onNext }) => {
+	const { t, i18n } = useTranslation()
 
 	const [currentTheme, setCurrentTheme] = useState({
-		value: "theme-dark",
-		label: "深色"
+		value: "dark",
+		label: t("darkTheme", { ns: "welcome" })
 	})
 
-	const [currentLanguage, setCurrentLanguage] = useState({
-		value: "zh-CN",
-		label: "简体中文"
-	})
+	const initLanguage = window.language?.toLocaleLowerCase() === "zh-cn" ? {
+		label: "中文",
+		value: "zh-CN"
+	} : {
+		label: "English",
+		value: "en"
+	}
 
+	const [currentLanguage, setCurrentLanguage] = useState(initLanguage)
 	const [langPopverOpen, setLangPopoverOpen] = useState(false)
 
+	const selectTheme = (value: { value: string, label: string }) => {
+		setCurrentTheme(value)
+		vscode.postMessage({
+			type: "setTheme",
+			theme: value.value
+		})
+	}
+
+	const selectLanguage = (value: { value: string, label: string }) => {
+		setCurrentLanguage(value)
+		i18n.changeLanguage(value.value)
+		vscode.postMessage({
+			type: "setLanguage",
+			language: value.value.toLowerCase()
+		})
+	}
+
 	return <div>
-		<div className='text-2xl font-medium leading-none text-center'>选择语言和主题</div>
+		<div className='text-2xl font-medium leading-none text-center'>
+			{t("selectThemeAndLanguage", { ns: "welcome" })}
+		</div>
 		<div className='w-full max-w-[612px]'>
-			<div className='leading-none mt-8 text-base font-medium mb-4'>选择主题</div>
+			<div className='leading-none mt-8 text-base font-medium mb-4'>
+				{t("selectTheme", { ns: "welcome" })}
+			</div>
 			<div className='flex'>
 				<ThemeItem
-					value={{ value: "theme-dark", label: "深色" }}
-					isSelected={currentTheme.value === "theme-dark"}
+					value={{ value: "dark", label: t("darkTheme", { ns: "welcome" }) }}
+					isSelected={currentTheme.value === "dark"}
 					imgSrc={getVscExtensionPath("src/assets/welcome/theme-dark.png")}
-					onChange={setCurrentTheme}
+					onChange={selectTheme}
 				/>
 				<div className='w-[12px]'></div>
 				<ThemeItem
-					value={{ value: "theme-light", label: "亮色" }}
-					isSelected={currentTheme.value === "theme-light"}
+					value={{ value: "light", label: t("lightTheme", { ns: "welcome" }) }}
+					isSelected={currentTheme.value === "light"}
 					imgSrc={getVscExtensionPath("src/assets/welcome/theme-light.png")}
-					onChange={setCurrentTheme}
+					onChange={selectTheme}
 				/>
 				<div className='w-[12px]'></div>
 				<ThemeItem
-					value={{ value: "theme-purple", label: "紫色" }}
-					isSelected={currentTheme.value === "theme-purple"}
+					value={{ value: "purple", label: t("purpleTheme", { ns: "welcome" }) }}
+					isSelected={currentTheme.value === "purple"}
 					imgSrc={getVscExtensionPath("src/assets/welcome/theme-purple.png")}
-					onChange={setCurrentTheme}
+					onChange={selectTheme}
 				/>
 			</div>
-			<div className='leading-none mt-8 text-base font-medium mb-4'>选择语言</div>
+			<div className='leading-none mt-8 text-base font-medium mb-4'>
+				{t("selectTheme", { ns: "welcome" })}
+			</div>
 			<Popover open={langPopverOpen} onOpenChange={setLangPopoverOpen}>
 				<PopoverTrigger className='w-full h-8 bg-secondary flex items-center justify-between rounded px-[10px]'>
 					<div className='text-sm'>
 						{currentLanguage.label}
 					</div>
-					<div className={cn({"rotate-180": langPopverOpen})}>
+					<div className={cn({ "rotate-180": langPopverOpen })}>
 						<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<path d="M12.2368 4.70752L7 9.94434L1.76318 4.70752" stroke="#DADDE5" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round" />
 						</svg>
@@ -98,15 +128,15 @@ const ThemeAndLanguage: FC<{ onNext: () => void }> = ({ onNext }) => {
 						<LanguageItem
 							value={{ value: "zh-CN", label: "简体中文" }}
 							onChange={(value) => {
-								setCurrentLanguage(value)
+								selectLanguage(value)
 								setLangPopoverOpen(false)
 							}}
 						/>
 						<div className='h-[5px]'></div>
 						<LanguageItem
-							value={{ value: "en-US", label: "English" }}
+							value={{ value: "en", label: "English" }}
 							onChange={(value) => {
-								setCurrentLanguage(value)
+								selectLanguage(value)
 								setLangPopoverOpen(false)
 							}}
 						/>
@@ -122,7 +152,9 @@ const ThemeAndLanguage: FC<{ onNext: () => void }> = ({ onNext }) => {
 				className="w-[96px]"
 				onClick={onNext}
 			>
-				<div className='text-base font-medium'>继续</div>
+				<div className='text-base font-medium'>
+					{t("continue", { ns: "welcome" })}
+				</div>
 			</Button>
 		</div>
 	</div>

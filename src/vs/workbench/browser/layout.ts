@@ -1521,7 +1521,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		const auxiliaryBarPart = this.getPart(Parts.AUXILIARYBAR_PART);
 		const sideBar = this.getPart(Parts.SIDEBAR_PART);
 		const statusBar = this.getPart(Parts.STATUSBAR_PART);
-		const onboardingPart = this.getPart(Parts.ORANGEPICODE_OVERLAY_PART);
+		const onboardingPart = this.getPart(Parts.ORANGEPICODE_ONBOARDING_PART);
 
 		// View references for all parts
 		this.titleBarPartView = titleBar;
@@ -1558,7 +1558,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			[Parts.SIDEBAR_PART]: this.sideBarPartView,
 			[Parts.STATUSBAR_PART]: this.statusBarPartView,
 			[Parts.AUXILIARYBAR_PART]: this.auxiliaryBarPartView,
-			[Parts.ORANGEPICODE_OVERLAY_PART]: this.onboardingPartView
+			[Parts.ORANGEPICODE_ONBOARDING_PART]: this.onboardingPartView
 		};
 
 		const fromJSON = ({ type }: { type: Parts }) => viewMap[type];

@@ -35,7 +35,7 @@ const ONBOARDING_VIEWID = "onboarding_view";
 const ONBOARDING_TITLE = "Onboarding";
 
 export class OnboardingPart extends Part {
-	static readonly ID = "workbench.parts.onboarding";
+	static readonly ID = Parts.ORANGEPICODE_ONBOARDING_PART;
 
 	readonly minimumWidth: number = 300;
 	readonly maximumWidth: number = 800;
@@ -419,7 +419,7 @@ export class OnboardingPart extends Part {
 
 	toJSON(): object {
 		return {
-			type: Parts.ORANGEPICODE_OVERLAY_PART,
+			type: Parts.ORANGEPICODE_ONBOARDING_PART,
 		};
 	}
 }

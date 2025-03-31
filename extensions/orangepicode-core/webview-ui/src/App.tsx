@@ -4,7 +4,6 @@ import { VscHlThemeContext } from "./context/VscHlTheme";
 import { useVscHlTheme } from "./hooks/useVscHlTheme";
 import { useEffect } from "react";
 import { vscode } from './utils/vscode';
-import TranslationProvider from './i18n/TranslationContext';
 
 function App() {
 	const vscTheme = useVscHlTheme();
@@ -16,11 +15,9 @@ function App() {
 	}, []);
 
 	return (
-		<TranslationProvider>
-			<VscHlThemeContext.Provider value={vscTheme}>
-				<RouterProvider router={router} />
-			</VscHlThemeContext.Provider>
-		</TranslationProvider>
+		<VscHlThemeContext.Provider value={vscTheme}>
+			<RouterProvider router={router} />
+		</VscHlThemeContext.Provider>
 	);
 }
 

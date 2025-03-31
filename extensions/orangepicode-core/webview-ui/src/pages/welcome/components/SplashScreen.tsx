@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { getVscExtensionPath } from "../../../utils";
 import { FC } from 'react';
-import { useAppTranslation } from '../../../i18n/TranslationContext';
+import { useTranslation } from 'react-i18next';
 
 const SplashScreen: FC<{ onNext: () => void }> = ({ onNext }) => {
-	const { t } = useAppTranslation();
+	const { t } = useTranslation();
 
 	return (
 		<div className="h-full flex-col justify-center items-center inline-flex overflow-hidden select-none">
@@ -17,7 +17,7 @@ const SplashScreen: FC<{ onNext: () => void }> = ({ onNext }) => {
 						{t("welcome:welcome")}
 					</div>
 					<div className="text-[32px] mt-10 leading-none">
-						OrangePi AI Code
+						{t("welcome:appName")}
 					</div>
 				</div>
 

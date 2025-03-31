@@ -302,6 +302,7 @@ class ViewsExtensionHandler implements IWorkbenchContribution {
 		let activityBarOrder = CUSTOM_VIEWS_START_ORDER + viewContainersRegistry.all.filter(v => !!v.extensionId && viewContainersRegistry.getViewContainerLocation(v) === ViewContainerLocation.Sidebar).length;
 		let panelOrder = 5 + viewContainersRegistry.all.filter(v => !!v.extensionId && viewContainersRegistry.getViewContainerLocation(v) === ViewContainerLocation.Panel).length + 1;
 		let auxiliaryBarOrder = viewContainersRegistry.all.filter(v => !!v.extensionId && viewContainersRegistry.getViewContainerLocation(v) === ViewContainerLocation.AuxiliaryBar).length;
+		let coreOrder = viewContainersRegistry.all.filter(v => !!v.extensionId && viewContainersRegistry.getViewContainerLocation(v) === ViewContainerLocation.Core).length;
 
 		for (const { value, collector, description } of extensionPoints) {
 			Object.entries(value).forEach(([key, value]) => {
@@ -323,8 +324,15 @@ class ViewsExtensionHandler implements IWorkbenchContribution {
 							existingViewContainers,
 							ViewContainerLocation.AuxiliaryBar,
 						);
-						console.log('AuxiliaryBar Order', auxiliaryBarOrder);
 						break;
+					case "core":
+						coreOrder = this.registerCustomViewContainers(
+							value,
+							description,
+							coreOrder,
+							existingViewContainers,
+							ViewContainerLocation.Core,
+						)
 				}
 			});
 		}

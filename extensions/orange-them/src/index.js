@@ -16,9 +16,9 @@ const darkTheme = getClassicTheme({
 	name: "OrangePi black",
 });
 
-const orange_white = getClassicTheme({
-	style: "OrangePi blue",
-	name: "OrangePi blue",
+const orangePI_orange = getClassicTheme({
+	style: "OrangePi orange",
+	name: "OrangePi orange",
 });
 console.log("lightDefaultTheme", lightTheme);
 
@@ -30,7 +30,7 @@ fs.mkdir("./themes", { recursive: true })
 	.then(() => Promise.all([
 		fs.writeFile("./themes/orangepi-white.json", JSON.stringify(lightTheme, null, 2)),
 		fs.writeFile("./themes/orangepi-black.json", JSON.stringify(darkTheme, null, 2)),
-		fs.writeFile("./themes/orangepi-blue.json", JSON.stringify(orange_white, null, 2)),
+		fs.writeFile("./themes/orangepi-orange.json", JSON.stringify(orangePI_orange, null, 2)),
 		// fs.writeFile("./themes/dark-default.json", JSON.stringify(darkDefaultTheme, null, 2)),
 		// fs.writeFile("./themes/dark-high-contrast.json", JSON.stringify(darkHighContrastTheme, null, 2)),
 		// fs.writeFile("./themes/dark-colorblind.json", JSON.stringify(darkColorblindTheme, null, 2)),

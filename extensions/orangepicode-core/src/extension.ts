@@ -1,7 +1,7 @@
 
 import * as vscode from 'vscode';
 import CoreProvider, { ORANGEPICODE_ONBOARDING_VIEWID, ORANGEPICODE_USERMENU_VIEWID } from './core/CoreProvider';
-import { registerCommands } from './commands';
+import { registerUsermenuCommands } from './commands';
 
 let outputChannel: vscode.OutputChannel
 let extensionContext: vscode.ExtensionContext
@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
 		),
 	);
 
-	registerCommands({ context, outputChannel, provider: usermenuProvider })
+	registerUsermenuCommands({ context, outputChannel, provider: usermenuProvider })
 }
 
 export function deactivate() {

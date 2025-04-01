@@ -18,19 +18,25 @@ export type RegisterCommandOptions = {
 	provider: CoreProvider
 }
 
-export const registerCommands = (options: RegisterCommandOptions) => {
+export const registerUsermenuCommands = (options: RegisterCommandOptions) => {
 	const { context } = options
 
-	for (const [command, callback] of Object.entries(getCommandsMap(options))) {
+	for (const [command, callback] of Object.entries(getUsermenuCommandsMap(options))) {
 		context.subscriptions.push(vscode.commands.registerCommand(command, callback))
 	}
 }
 
 
-const getCommandsMap = ({ context, outputChannel, provider }: RegisterCommandOptions) => {
+const getUsermenuCommandsMap = ({ context, outputChannel, provider }: RegisterCommandOptions) => {
 	const usermenuOverlayOptions: CreateOverlayOptions = {
 		id: "orangepicode-core-usermenu",
-		viewId: "usermenu_view"
+		viewId: "usermenu_view",
+		styles: {
+			// top: "45px",
+			// left: "calc(100% - 264px)",
+			// height: "456px",
+			// width: "240px",
+		}
 	}
 
 	return {

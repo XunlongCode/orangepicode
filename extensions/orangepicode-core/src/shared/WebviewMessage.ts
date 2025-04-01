@@ -11,6 +11,7 @@ export interface WebviewMessage {
 	| "importUserSettingsFromVSCode"
 	| "importUserSettingsFromCursor"
 	| "setLanguage"
+	| "hideUsermenu"
 	messageId?: string
 	theme?: string
 	themeType?: string

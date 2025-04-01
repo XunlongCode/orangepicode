@@ -68,6 +68,11 @@ export class OverlayPart extends Part implements IOverlayService {
 		const element = append(parent, $('div.overlay-part'))
 		// 创建覆盖整个VSCode的遮罩容器
 		this.container = element;
+
+		this.container.onclick = () => {
+			this.hideAllOverlay();
+		}
+
 		return this.container;
 	}
 
@@ -130,6 +135,12 @@ export class OverlayPart extends Part implements IOverlayService {
 			return overlay;
 		}
 		return null;
+	}
+
+	public hideAllOverlay() {
+		for (const overlay of this.overlayMap.values()) {
+			overlay.hide();
+		}
 	}
 
 	public onDidOverlayVisibilityChange() {

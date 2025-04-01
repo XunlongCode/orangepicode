@@ -163,13 +163,6 @@ export class Overlay extends Disposable {
 			this.setStyles(this.options.styles);
 		}
 
-		this.setStyles({
-			width: "300px",
-			height: "300px",
-			left: "100px",
-			top: "100px"
-		})
-
 		this.updateStatus("visible")
 	}
 

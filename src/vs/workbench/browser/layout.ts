@@ -271,6 +271,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 	private editorPartView!: ISerializableView;
 	private statusBarPartView!: ISerializableView;
 	private onboardingPartView!: ISerializableView;
+	private overlayPartView!: ISerializableView;
 
 	private environmentService!: IBrowserWorkbenchEnvironmentService;
 	private extensionService!: IExtensionService;
@@ -1558,7 +1559,8 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			[Parts.SIDEBAR_PART]: this.sideBarPartView,
 			[Parts.STATUSBAR_PART]: this.statusBarPartView,
 			[Parts.AUXILIARYBAR_PART]: this.auxiliaryBarPartView,
-			[Parts.ORANGEPICODE_ONBOARDING_PART]: this.onboardingPartView
+			[Parts.ORANGEPICODE_ONBOARDING_PART]: this.onboardingPartView,
+			[Parts.ORANGEPICODE_OVERLAY_PART]: this.overlayPartView,
 		};
 
 		const fromJSON = ({ type }: { type: Parts }) => viewMap[type];

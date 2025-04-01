@@ -1,6 +1,7 @@
 import "./media/overlay.css";
 import { Disposable, DisposableStore } from '../../../../base/common/lifecycle.js';
 import { generateUuid } from '../../../../base/common/uuid.js';
+import { OverlayPart } from './overlayPart.js';
 
 export type OverlayOptions = {
 	styles?: Record<string, string>;
@@ -16,7 +17,7 @@ export class Overlay extends Disposable {
 	private disposables = new DisposableStore();
 
 	constructor(
-		private readonly overlayPartContainer: HTMLElement,
+		private readonly overlayPart: OverlayPart,
 		private readonly viewId: string,
 		private readonly options?: OverlayOptions
 	) {
@@ -37,6 +38,15 @@ export class Overlay extends Disposable {
 		return this.state === 'visible';
 	}
 
+	private updateStatus(state: typeof this.state) {
+		this.state = state;
+		if (state === "visible") {
+			this.overlayPart.onDidOverlayVisibilityChange(true)
+		} else if (state === "hidden") {
+			this.overlayPart.onDidOverlayVisibilityChange(false)
+		}
+	}
+
 	show(): void {
 		if (this.state === 'visible') {
 			return
@@ -51,7 +61,7 @@ export class Overlay extends Disposable {
 			this.setStyles(this.options.styles);
 		}
 
-		this.state = 'visible';
+		this.updateStatus("visible")
 	}
 
 	hide(): void {
@@ -66,7 +76,7 @@ export class Overlay extends Disposable {
 			setTimeout(() => {
 				if (this.overlayContainer && this.state === 'hidden') {
 					this.overlayContainer.classList.remove("active")
-					this.state = 'hidden';
+					this.updateStatus("hidden")
 				}
 			}, 300);
 		}

@@ -15,7 +15,13 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
-    "commands": [],
+    "commands": [
+			{
+				"command": "orangepicode-core.usermenuClicked",
+				"title": "Usermenu Clicked",
+				"icon": "$(gear)"
+			}
+    ],
     "viewsContainers": {
       "core": [
         {
@@ -30,9 +36,17 @@
       "orangepicode-core": [
         {
           "type": "webview",
+          "icon": "$(gear)",
           "id": "onboarding_view",
           "name": "Onboarding",
-          "visibility": "visible"
+          "visibility": "hidden"
+        },
+        {
+          "type": "webview",
+          "icon": "$(gear)",
+          "id": "usermenu_view",
+          "name": "Usermenu",
+          "visibility": "hidden"
         }
       ]
     }

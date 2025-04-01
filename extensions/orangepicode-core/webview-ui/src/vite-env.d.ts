@@ -4,6 +4,7 @@ declare global {
 		language?: string
 		isOnboardingCompleted?: boolean
 		vscExtensionUrl: string
+		viewId?: string
 		fullColorTheme?: {
 			rules?: {
 				token?: string;

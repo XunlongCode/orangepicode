@@ -19,19 +19,20 @@ class OverlayMap extends Map implements Map<string, Overlay> {
 
 	override set(key: string, value: Overlay): this {
 		super.set(key, value);
-		this.overlayPart.updateVisibility();
+		// this.overlayPart.updateIsVisibility();
 		return this;
 	}
 
 	override delete(key: string): boolean {
 		const ok = super.delete(key);
-		this.overlayPart.updateVisibility();
+		// this.overlayPart.updateIsVisibility();
 		return ok
 	}
 
 	override clear(): void {
-		super.clear();
-		this.overlayPart.updateVisibility();
+		// super.clear();
+		// this.overlayPart.updateIsVisibility();
+		this.overlayPart.clearOverlayMap()
 	}
 }
 
@@ -49,13 +50,13 @@ export class OverlayPart extends Part implements IOverlayService {
 	override maximumHeight: number = Number.MAX_VALUE;
 
 	private partContainer: HTMLElement | undefined;
-	private overlaySet: OverlayMap = new OverlayMap(this)
+	private overlayMap: OverlayMap = new OverlayMap(this)
 
 	readonly onVisibilityChange = new Emitter<boolean>();
 
 	private overlayVisibleContextKey: any;
 
-	public isVisible: boolean = false;
+	private _isVisible: boolean = false;
 
 	constructor(
 		@IThemeService themeService: IThemeService,
@@ -75,6 +76,10 @@ export class OverlayPart extends Part implements IOverlayService {
 		this.overlayVisibleContextKey = this.contextKeyService.createKey(OverlayVisibleContext, false);
 	}
 
+	get isVisible(): boolean {
+		return this._isVisible;
+	}
+
 	protected override createContentArea(element: HTMLElement): HTMLElement {
 		// 创建覆盖整个VSCode的遮罩容器
 		this.partContainer = element;
@@ -91,16 +96,49 @@ export class OverlayPart extends Part implements IOverlayService {
 		}
 	}
 
-	public updateVisibility(): void {
-		let isVisible = false;
-		for (const overlay of this.overlaySet) {
-			if (overlay instanceof Overlay && overlay.isVisible) {
-				isVisible = true;
-				break;
-			}
+	public createOverlay(options?: CreateOverlayOptions): Overlay | null {
+		if (!this.partContainer) {
+			return null;
 		}
 
-		this.isVisible = isVisible;
+		const viewId = options?.viewId ?? generateUuid();
+		const overlayId = options?.overlayId;
+		const styles = options?.styles;
+
+		const overlay = new Overlay(this, viewId, { styles, overlayId });
+		this.overlayMap.set(overlay.overlayId, overlay);
+		return overlay;
+	}
+
+	public show(overlayId: string) {
+		const overlay = this.overlayMap.get(overlayId);
+		if (overlay) {
+			overlay.show();
+			return overlay;
+		}
+		return null;
+	}
+
+	public hide(overlayId: string) {
+		const overlay = this.overlayMap.get(overlayId);
+		if (overlay) {
+			overlay.hide();
+			return overlay;
+		}
+		return null;
+	}
+
+	public toggle(overlayId: string) {
+		const overlay = this.overlayMap.get(overlayId);
+		if (overlay) {
+			overlay.hide();
+			return overlay;
+		}
+		return null;
+	}
+
+	public onDidOverlayVisibilityChange(visible: boolean) {
+		this._isVisible = this._isVisible || visible;
 
 		if (this.isVisible) {
 			this.partContainer?.classList.add('active');
@@ -112,40 +150,14 @@ export class OverlayPart extends Part implements IOverlayService {
 		this.onVisibilityChange.fire(this.isVisible);
 	}
 
-	public createOverlay(options?: CreateOverlayOptions): Overlay | null {
-		if (!this.partContainer) {
-			return null;
-		}
-
-		const viewId = options?.viewId ?? generateUuid();
-		const overlayId = options?.overlayId;
-		const styles = options?.styles;
-
-		const overlay = new Overlay(this.partContainer!, viewId, { styles, overlayId });
-		this.overlaySet.set(overlay.overlayId, overlay);
-		return overlay;
-	}
-
-	public show(overlayId: string) {
-		const overlay = this.overlaySet.get(overlayId);
-		if (overlay) {
-			overlay.show();
-			return overlay;
-		}
-		return null;
-	}
-
-	public hide(overlayId: string) {
-		const overlay = this.overlaySet.get(overlayId);
-		if (overlay) {
-			overlay.hide();
-			return overlay;
-		}
-		return null;
+	public clearOverlayMap() {
+		this._isVisible = false;
+		this.overlayMap.clear();
 	}
 
 	override dispose(): void {
-		this.overlaySet.forEach(d => d.dispose());
+		this.overlayMap.forEach(d => d.dispose());
+		this.clearOverlayMap()
 		this.onVisibilityChange.dispose();
 		super.dispose();
 	}

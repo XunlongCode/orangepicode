@@ -78,11 +78,21 @@ export class OverlayPart extends Part implements IOverlayService {
 			this.container.style.width = `${width}px`;
 			this.container.style.height = `${height}px`;
 		}
+
+		for (const overlay of this.overlayMap.values()) {
+			if (overlay.isVisible) {
+				overlay.layoutWebviewOverElement();
+			}
+		}
 	}
 
 	public createOverlay(options?: CreateOverlayOptions): Overlay | null {
 		if (!this.container) {
 			return null;
+		}
+
+		if (options?.id && this.overlayMap.has(options.id)) {
+			return this.overlayMap.get(options.id)!;
 		}
 
 		const viewId = options?.viewId ?? "";

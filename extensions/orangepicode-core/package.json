@@ -19,8 +19,14 @@
 			{
 				"icon": "$(gear)",
         "category": "Core",
-				"title": "Usermenu Clicked",
-				"command": "orangepicode-core.usermenuClicked"
+				"title": "Show Usermenu",
+				"command": "orangepicode-core.ShowUsermenu"
+			},
+			{
+				"icon": "$(gear)",
+        "category": "Core",
+				"title": "Hide Usermenu",
+				"command": "orangepicode-core.HideUsermenu"
 			}
     ],
     "viewsContainers": {

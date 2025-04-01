@@ -7,7 +7,7 @@ import { ExtensionIdentifier } from '../../../../platform/extensions/common/exte
 import { URI } from '../../../../base/common/uri.js';
 import { CancellationTokenSource } from "../../../../base/common/cancellation.js";
 import { WebviewView } from '../../../contrib/webviewView/browser/webviewViewService.js';
-import { $ } from '../../../../base/browser/dom.js';
+import { $, getActiveWindow } from '../../../../base/browser/dom.js';
 
 export type OverlayOptions = {
 	styles?: Record<string, string>;
@@ -54,6 +54,8 @@ export class Overlay extends Disposable {
 	}
 
 	public createWebview(webview: IOverlayWebview) {
+		webview.container.classList.add("overlay-webview");
+
 		const webviewView: WebviewView = {
 			webview,
 			onDidChangeVisibility: () => {
@@ -86,6 +88,12 @@ export class Overlay extends Disposable {
 		return webviewView
 	}
 
+	focus(): void {
+		if (this.webviewView) {
+			this.webviewView.webview.focus();
+		}
+	}
+
 	public async resolveContent() {
 		if (!this.overlayContainer || !this.contentContainer || !this.viewId) {
 			return;
@@ -108,6 +116,8 @@ export class Overlay extends Disposable {
 			extension: extensionDescription,
 		});
 
+		webview.claim(this, getActiveWindow(), undefined);
+
 		this.webviewView = this.createWebview(webview);
 
 		const source = new CancellationTokenSource(); // todo add to disposables
@@ -116,10 +126,21 @@ export class Overlay extends Disposable {
 			this.webviewView,
 			source.token,
 		);
+
+		if (this.contentContainer && this.webviewView) {
+			this.layoutWebviewOverElement()
+			this.focus()
+		}
 	}
 
 	get isVisible(): boolean {
 		return this.state === 'visible';
+	}
+
+	public layoutWebviewOverElement() {
+		if (this.webviewView && this.contentContainer) {
+			this.webviewView.webview.layoutWebviewOverElement(this.contentContainer);
+		}
 	}
 
 	private updateStatus(state: typeof this.state) {
@@ -128,18 +149,26 @@ export class Overlay extends Disposable {
 	}
 
 	show(): void {
-		if (this.state === 'visible') {
+		if (this.state === 'visible' || !this.webviewView?.webview || !this.overlayContainer) {
 			return
 		}
+
+		this.webviewView.webview.container.classList.add("active")
+
 		// 显示overlay
-		if (this.overlayContainer) {
-			this.overlayContainer.classList.add("visible")
-			this.overlayContainer.classList.add("active")
-		}
+		this.overlayContainer.classList.add("visible")
+		this.overlayContainer.classList.add("active")
 
 		if (this.options?.styles) {
 			this.setStyles(this.options.styles);
 		}
+
+		this.setStyles({
+			width: "300px",
+			height: "300px",
+			left: "100px",
+			top: "100px"
+		})
 
 		this.updateStatus("visible")
 	}
@@ -150,11 +179,12 @@ export class Overlay extends Disposable {
 		}
 
 		if (this.overlayContainer) {
-			this.overlayContainer.classList.remove("visible")
+			this.overlayContainer.classList.remove("active")
 
 			// 等待动画结束
 			setTimeout(() => {
-				if (this.overlayContainer) {
+				if (this.overlayContainer && this.webviewView) {
+					this.webviewView.webview.container.classList.remove("active")
 					this.overlayContainer.classList.remove("active")
 					this.updateStatus("hidden")
 				}
@@ -175,7 +205,7 @@ export class Overlay extends Disposable {
 			return;
 		}
 
-		// 应用样式到遮罩层
+		// 应用自定义样式
 		Object.entries(styles).forEach(([key, value]) => {
 			(this.overlayContainer!.style as any)[key] = value;
 		});
@@ -193,5 +223,13 @@ export class Overlay extends Disposable {
 	override dispose(): void {
 		this.disposables.dispose();
 		super.dispose();
+	}
+
+	toJSON(): object {
+		return {
+			type: "overlay",
+			id: this.id,
+			viewId: this.viewId
+		};
 	}
 }

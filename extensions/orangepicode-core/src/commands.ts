@@ -28,19 +28,18 @@ export const registerCommands = (options: RegisterCommandOptions) => {
 
 
 const getCommandsMap = ({ context, outputChannel, provider }: RegisterCommandOptions) => {
+	const usermenuOverlayOptions: CreateOverlayOptions = {
+		id: "orangepicode-core-usermenu",
+		viewId: "usermenu_view"
+	}
+
 	return {
-		'orangepicode-core.usermenuClicked': async () => {
-			const createOverlayOptions: CreateOverlayOptions = {
-				id: "orangepicode-core-usermenu"
-			}
-
-			await vscode.commands.executeCommand(CREATE_OVERLAY_COMMAND_ID, createOverlayOptions)
-			await vscode.commands.executeCommand(SHOW_OVERLAY_COMMAND_ID, createOverlayOptions.id)
-
-			setTimeout(() => {
-				console.log("Hiding overlay");
-				vscode.commands.executeCommand(HIDE_OVERLAY_COMMAND_ID, createOverlayOptions.id)
-			}, 10000);
+		'orangepicode-core.ShowUsermenu': async () => {
+			await vscode.commands.executeCommand(CREATE_OVERLAY_COMMAND_ID, usermenuOverlayOptions)
+			await vscode.commands.executeCommand(SHOW_OVERLAY_COMMAND_ID, usermenuOverlayOptions.id)
+		},
+		'orangepicode-core.HideUsermenu': async () => {
+			vscode.commands.executeCommand(HIDE_OVERLAY_COMMAND_ID, usermenuOverlayOptions.id)
 		}
 	}
 }

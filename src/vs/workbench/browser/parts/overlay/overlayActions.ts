@@ -14,6 +14,7 @@ export class CreateOverlayAction extends Action2 {
 	constructor() {
 		super({
 			id: CreateOverlayAction.ID,
+			category: "Developer",
 			title: { value: "Create Overlay", original: "Create Overlay" },
 			f1: true,
 		});
@@ -31,6 +32,7 @@ export class ShowOverlayAction extends Action2 {
 	constructor() {
 		super({
 			id: ShowOverlayAction.ID,
+			category: "Developer",
 			title: { value: "Show Overlay", original: "Show Overlay" },
 			f1: true,
 		});
@@ -48,6 +50,7 @@ export class HideOverlayAction extends Action2 {
 	constructor() {
 		super({
 			id: HideOverlayAction.ID,
+			category: "Developer",
 			title: { value: "Hide Overlay", original: "Hide Overlay" },
 			f1: true,
 		});
@@ -66,6 +69,7 @@ export class ToggleOverlayAction extends Action2 {
 	constructor() {
 		super({
 			id: ToggleOverlayAction.ID,
+			category: "Developer",
 			title: { value: "Toggle Overlay", original: "Toggle Overlay" },
 			f1: true,
 		});

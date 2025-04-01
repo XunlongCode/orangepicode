@@ -1523,6 +1523,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		const sideBar = this.getPart(Parts.SIDEBAR_PART);
 		const statusBar = this.getPart(Parts.STATUSBAR_PART);
 		const onboardingPart = this.getPart(Parts.ORANGEPICODE_ONBOARDING_PART);
+		const overlayPart = this.getPart(Parts.ORANGEPICODE_OVERLAY_PART);
 
 		// View references for all parts
 		this.titleBarPartView = titleBar;
@@ -1534,21 +1535,11 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.auxiliaryBarPartView = auxiliaryBarPart;
 		this.statusBarPartView = statusBar;
 		this.onboardingPartView = onboardingPart;
+		this.overlayPartView = overlayPart
 
-		// Create a new container for onboardingPart
-		const onboardingPartContainer = document.createElement("div");
-		onboardingPartContainer.style.position = "absolute";
-		onboardingPartContainer.style.top = "0";
-		onboardingPartContainer.style.left = "0";
-		onboardingPartContainer.style.right = "0";
-		onboardingPartContainer.style.bottom = "0";
-		onboardingPartContainer.style.zIndex = "-10";
-		onboardingPartContainer.style.display = "absolute";
-		onboardingPartContainer.classList.add("onboarding-part-container");
-		onboardingPartContainer.style.backgroundColor = 'transparent';
-
-		this.mainContainer.appendChild(onboardingPartContainer);
-		onboardingPart.create(onboardingPartContainer);
+		// Create a new container for onboardingPart and overlayPart
+		onboardingPart.create(this.mainContainer);
+		overlayPart.create(this.mainContainer);
 
 		const viewMap = {
 			[Parts.ACTIVITYBAR_PART]: this.activityBarPartView,

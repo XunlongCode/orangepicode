@@ -2,6 +2,11 @@ import "./media/overlay.css";
 import { Disposable, DisposableStore } from '../../../../base/common/lifecycle.js';
 import { generateUuid } from '../../../../base/common/uuid.js';
 import { OverlayPart } from './overlayPart.js';
+import { IOverlayWebview, WebviewExtensionDescription } from "../../../contrib/webview/browser/webview.js";
+import { ExtensionIdentifier } from '../../../../platform/extensions/common/extensions.js';
+import { URI } from '../../../../base/common/uri.js';
+import { CancellationTokenSource } from "../../../../base/common/cancellation.js";
+import { WebviewView } from '../../../contrib/webviewView/browser/webviewViewService.js';
 
 export type OverlayOptions = {
 	styles?: Record<string, string>;
@@ -14,6 +19,7 @@ export class Overlay extends Disposable {
 	private overlayContainer: HTMLElement | undefined;
 	private contentContainer: HTMLElement | undefined;
 	private state: 'visible' | 'hidden' = 'hidden';
+	private webviewView: WebviewView | undefined;
 	private disposables = new DisposableStore();
 
 	constructor(
@@ -26,12 +32,89 @@ export class Overlay extends Disposable {
 		if (options?.overlayId) {
 			this.overlayId = options.overlayId;
 		}
+
+		this.initialize()
 	}
 
-	public resolveContent(): void {
-		if (!this.overlayContainer || !this.contentContainer) {
+	private initialize() {
+		if (!this.overlayPart.container) {
 			return;
 		}
+
+		this.overlayContainer = document.createElement('div.overlay-container');
+		this.overlayContainer.setAttribute('data-overlay-id', this.overlayId);
+		this.overlayContainer.setAttribute('data-view-id', this.viewId);
+
+		this.contentContainer = document.createElement('div.overlay-content');
+		this.overlayContainer.appendChild(this.contentContainer);
+
+		this.overlayPart.container.appendChild(this.overlayContainer);
+		this.resolveContent()
+	}
+
+	public createWebview(webview: IOverlayWebview) {
+		const webviewView: WebviewView = {
+			webview,
+			onDidChangeVisibility: () => {
+				return { dispose: () => { } };
+			},
+			onDispose: () => {
+				return { dispose: () => { } };
+			},
+
+			get title(): string | undefined {
+				return undefined;
+			},
+			set title(value: string | undefined) { },
+
+			get description(): string | undefined {
+				return undefined;
+			},
+			set description(value: string | undefined) { },
+
+			get badge() {
+				return undefined;
+			},
+			set badge(badge) { },
+
+			dispose: () => { },
+
+			show: (preserveFocus) => { },
+		};
+
+		return webviewView
+	}
+
+	public async resolveContent() {
+		if (!this.overlayContainer || !this.contentContainer || !this.viewId) {
+			return;
+		}
+
+		const extensionDescription: WebviewExtensionDescription = {
+			id: new ExtensionIdentifier(this.viewId),
+			location: URI.parse(""),
+		}
+
+		const webview = this.overlayPart._webviewService.createWebviewOverlay({
+			title: undefined,
+			options: {
+				enableFindWidget: false,
+			},
+			contentOptions: {
+				allowScripts: true,
+				localResourceRoots: [],
+			},
+			extension: extensionDescription,
+		});
+
+		this.webviewView = this.createWebview(webview);
+
+		const source = new CancellationTokenSource(); // todo add to disposables
+		await this.overlayPart._webviewViewService.resolve(
+			this.viewId,
+			this.webviewView,
+			source.token,
+		);
 	}
 
 	get isVisible(): boolean {

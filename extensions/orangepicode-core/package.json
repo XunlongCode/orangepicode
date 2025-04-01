@@ -17,9 +17,10 @@
   "contributes": {
     "commands": [
 			{
-				"command": "orangepicode-core.usermenuClicked",
+				"icon": "$(gear)",
+        "category": "Core",
 				"title": "Usermenu Clicked",
-				"icon": "$(gear)"
+				"command": "orangepicode-core.usermenuClicked"
 			}
     ],
     "viewsContainers": {

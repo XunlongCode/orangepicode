@@ -13,6 +13,7 @@ export class CloseOnboardingAction extends Action2 {
 	constructor() {
 		super({
 			id: CloseOnboardingAction.ID,
+			category: "Developer",
 			title: { value: "Close Onboarding", original: "Close Onboarding" },
 			f1: true,
 			keybinding: {
@@ -34,6 +35,7 @@ export class ToggleOnboardingAction extends Action2 {
 	constructor() {
 		super({
 			id: ToggleOnboardingAction.ID,
+			category: "Developer",
 			title: { value: "Toggle Onboarding", original: "Toggle Onboarding" },
 			f1: true,
 			keybinding: {
@@ -55,6 +57,7 @@ export class MarkOnboardingCompletedAction extends Action2 {
 	constructor() {
 		super({
 			id: MarkOnboardingCompletedAction.ID,
+			category: "Developer",
 			title: { value: "Mark Onboarding Complete", original: "Mark Onboarding Complete" },
 			f1: true,
 		});
@@ -72,6 +75,7 @@ export class ResetOnboardingCompletedKeyAction extends Action2 {
 	constructor() {
 		super({
 			id: ResetOnboardingCompletedKeyAction.ID,
+			category: "Developer",
 			title: { value: "Reset Onboarding Complete Key", original: "Reset Onboarding Complete Key" },
 			f1: true,
 		});
@@ -108,6 +112,7 @@ export class IsOnboardingCompletedAction extends Action2 {
 	constructor() {
 		super({
 			id: IsOnboardingCompletedAction.ID,
+			category: "Developer",
 			title: { value: "Get Onboarding Complete Key Value", original: "Get Onboarding Complete Key Value" },
 			f1: true,
 		});

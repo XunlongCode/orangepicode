@@ -20,9 +20,7 @@ export class CreateOverlayAction extends Action2 {
 	}
 
 	run(accessor: ServicesAccessor, options: CreateOverlayOptions) {
-		console.log("CreateOverlayAction.run");
 		const overlayService = accessor.get(IOverlayService);
-		console.log(overlayService);
 		return overlayService.createOverlay(options)
 	}
 }

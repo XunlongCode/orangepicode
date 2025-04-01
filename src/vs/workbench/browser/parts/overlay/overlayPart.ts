@@ -101,7 +101,7 @@ export class OverlayPart extends Part implements IOverlayService {
 			return null;
 		}
 
-		const viewId = options?.viewId ?? generateUuid();
+		const viewId = options?.viewId ?? "";
 		const overlayId = options?.overlayId;
 		const styles = options?.styles;
 

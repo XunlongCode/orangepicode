@@ -204,9 +204,8 @@ export class OnboardingPart extends Part {
 		this.viewOverlayEl.style.bottom = "0";
 		this.element.appendChild(this.viewOverlayEl);
 
-		console.log("OnboardingPart created");
+		console.log("OnboardingPart createContentArea");
 		console.log(this.isCompleted);
-
 
 		if (!this.isCompleted) {
 			// Create loading overlay with higher z-index and pointer-events handling

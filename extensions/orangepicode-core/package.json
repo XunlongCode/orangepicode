@@ -20,13 +20,13 @@
 				"icon": "$(gear)",
         "category": "Core",
 				"title": "Show Usermenu",
-				"command": "orangepicode-core.ShowUsermenu"
+				"command": "orangepicode-core.showUsermenu"
 			},
 			{
 				"icon": "$(gear)",
         "category": "Core",
 				"title": "Hide Usermenu",
-				"command": "orangepicode-core.HideUsermenu"
+				"command": "orangepicode-core.hideUsermenu"
 			}
     ],
     "viewsContainers": {

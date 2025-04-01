@@ -114,7 +114,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 					break
 				}
 				case "hideUsermenu": {
-					await vscode.commands.executeCommand("orangepicode-core.HideUsermenu")
+					await vscode.commands.executeCommand("orangepicode-core.hideUsermenu")
 					break
 				}
 			}

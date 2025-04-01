@@ -47,7 +47,7 @@ const ThemeAndLanguage: FC<{ onNext: () => void }> = ({ onNext }) => {
 
 	const [currentTheme, setCurrentTheme] = useState({
 		value: "dark",
-		label: t("darkTheme", { ns: "welcome" })
+		label: t("darkTheme", { ns: "theme" })
 	})
 
 	const initLanguage = window.language?.toLocaleLowerCase() === "zh-cn" ? {
@@ -88,23 +88,23 @@ const ThemeAndLanguage: FC<{ onNext: () => void }> = ({ onNext }) => {
 			</div>
 			<div className='flex'>
 				<ThemeItem
-					value={{ value: "dark", label: t("darkTheme", { ns: "welcome" }) }}
+					value={{ value: "dark", label: t("darkTheme", { ns: "theme" }) }}
 					isSelected={currentTheme.value === "dark"}
 					imgSrc={getVscExtensionPath("src/assets/welcome/theme-dark.png")}
 					onChange={selectTheme}
 				/>
 				<div className='w-[12px]'></div>
 				<ThemeItem
-					value={{ value: "light", label: t("lightTheme", { ns: "welcome" }) }}
+					value={{ value: "light", label: t("lightTheme", { ns: "theme" }) }}
 					isSelected={currentTheme.value === "light"}
 					imgSrc={getVscExtensionPath("src/assets/welcome/theme-light.png")}
 					onChange={selectTheme}
 				/>
 				<div className='w-[12px]'></div>
 				<ThemeItem
-					value={{ value: "purple", label: t("purpleTheme", { ns: "welcome" }) }}
-					isSelected={currentTheme.value === "purple"}
-					imgSrc={getVscExtensionPath("src/assets/welcome/theme-purple.png")}
+					value={{ value: "orange", label: t("orangeTheme", { ns: "theme" }) }}
+					isSelected={currentTheme.value === "orange"}
+					imgSrc={getVscExtensionPath("src/assets/welcome/theme-orange.png")}
 					onChange={selectTheme}
 				/>
 			</div>

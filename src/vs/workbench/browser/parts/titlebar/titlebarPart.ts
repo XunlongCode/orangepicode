@@ -32,7 +32,7 @@ import { WindowTitle } from './windowTitle.js';
 import { CommandCenterControl } from './commandCenterControl.js';
 import { Categories } from '../../../../platform/action/common/actionCommonCategories.js';
 import { WorkbenchToolBar } from '../../../../platform/actions/browser/toolbar.js';
-import { ACCOUNTS_ACTIVITY_ID, GLOBAL_ACTIVITY_ID } from '../../../common/activity.js';
+import { ACCOUNTS_ACTIVITY_ID, GLOBAL_ACTIVITY_ID, ORANGE_SETTING_ID } from '../../../common/activity.js';
 import {
 	AccountsActivityActionViewItem,
 	//  isAccountsActionVisible,
@@ -700,7 +700,20 @@ export class BrowserTitlebarPart extends Part implements ITitlebarPart {
 			// 	actions.primary.push(GLOBAL_ACTIVITY_TITLE_ACTION);
 			// }
 
-			actions.primary.push(GLOBAL_ACTIVITY_TITLE_ACTION);
+			// actions.primary.push(GLOBAL_ACTIVITY_TITLE_ACTION);
+
+			const orangeSettingsAction = new Action(
+				ORANGE_SETTING_ID,
+				localize('customSettings', "自定义设置"),
+				'codicon-gear', // 使用与原设置相同的图标
+				true,
+				async () => this.instantiationService.invokeFunction(accessor => {
+					const commandService = accessor.get(ICommandService);
+					return commandService.executeCommand('orangepicode-core.showUsermenu');
+				})
+			);
+			actions.primary.push(orangeSettingsAction);
+
 
 			this.actionToolBar.setActions(prepareActions(actions.primary), prepareActions(actions.secondary));
 		};

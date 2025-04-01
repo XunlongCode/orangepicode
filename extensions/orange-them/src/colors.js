@@ -33,7 +33,7 @@ function getColors(theme) {
 			lightColors.fg.muted = "#F5DAA3";
 			lightColors.actionListItem.default.activeBg = "#F5DAA3";
 			lightColors.default.bg = "#F5DAA3";
-			lightColors.default
+			// lightColors.default
 			// lightColors. = "#F5DAA3";
 			// #FFF9ED
 			return lightColors;

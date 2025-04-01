@@ -12,33 +12,6 @@ import { WebviewService } from '../../../contrib/webview/browser/webviewService.
 import { IWebviewViewService } from '../../../contrib/webviewView/browser/webviewViewService.js';
 import { $, append } from '../../../../base/browser/dom.js';
 
-class OverlayMap extends Map implements Map<string, Overlay> {
-
-	constructor(
-		private readonly overlayPart: OverlayPart,
-	) {
-		super();
-	}
-
-	override set(key: string, value: Overlay): this {
-		super.set(key, value);
-		// this.overlayPart.updateIsVisibility();
-		return this;
-	}
-
-	override delete(key: string): boolean {
-		const ok = super.delete(key);
-		// this.overlayPart.updateIsVisibility();
-		return ok
-	}
-
-	override clear(): void {
-		// super.clear();
-		// this.overlayPart.updateIsVisibility();
-		this.overlayPart.clearOverlayMap()
-	}
-}
-
 // 定义上下文键
 export const OverlayVisibleContext = 'overlayVisible';
 
@@ -54,7 +27,7 @@ export class OverlayPart extends Part implements IOverlayService {
 
 	public _webviewService: WebviewService;
 	public container: HTMLElement | undefined;
-	private overlayMap: OverlayMap = new OverlayMap(this)
+	private overlayMap: Map<string, Overlay> = new Map<string, Overlay>()
 
 	readonly onVisibilityChange = new Emitter<boolean>();
 
@@ -113,16 +86,17 @@ export class OverlayPart extends Part implements IOverlayService {
 		}
 
 		const viewId = options?.viewId ?? "";
-		const overlayId = options?.overlayId;
+		const id = options?.id;
 		const styles = options?.styles;
 
-		const overlay = new Overlay(this, viewId, { styles, overlayId });
-		this.overlayMap.set(overlay.overlayId, overlay);
+		const overlay = new Overlay(this, viewId, { styles, id });
+		this.overlayMap.set(overlay.id, overlay);
 		return overlay;
 	}
 
-	public show(overlayId: string) {
-		const overlay = this.overlayMap.get(overlayId);
+	public show(id: string) {
+		const overlay = this.overlayMap.get(id);
+		console.log(id, overlay);
 		if (overlay) {
 			overlay.show();
 			return overlay;
@@ -130,8 +104,8 @@ export class OverlayPart extends Part implements IOverlayService {
 		return null;
 	}
 
-	public hide(overlayId: string) {
-		const overlay = this.overlayMap.get(overlayId);
+	public hide(id: string) {
+		const overlay = this.overlayMap.get(id);
 		if (overlay) {
 			overlay.hide();
 			return overlay;
@@ -139,8 +113,8 @@ export class OverlayPart extends Part implements IOverlayService {
 		return null;
 	}
 
-	public toggle(overlayId: string) {
-		const overlay = this.overlayMap.get(overlayId);
+	public toggle(id: string) {
+		const overlay = this.overlayMap.get(id);
 		if (overlay) {
 			overlay.hide();
 			return overlay;
@@ -148,8 +122,15 @@ export class OverlayPart extends Part implements IOverlayService {
 		return null;
 	}
 
-	public onDidOverlayVisibilityChange(visible: boolean) {
-		this._isVisible = this._isVisible || visible;
+	public onDidOverlayVisibilityChange() {
+		let isVisible = false
+		for (const overlay of this.overlayMap.values()) {
+			if (overlay.isVisible) {
+				isVisible = true;
+				break;
+			}
+		}
+		this._isVisible = isVisible;
 
 		if (this.isVisible) {
 			this.container?.classList.add('active');
@@ -161,14 +142,18 @@ export class OverlayPart extends Part implements IOverlayService {
 		this.onVisibilityChange.fire(this.isVisible);
 	}
 
-	public clearOverlayMap() {
-		this._isVisible = false;
+	public onDidClearOverlayMap() {
 		this.overlayMap.clear();
+		this.onDidOverlayVisibilityChange();
+
+		if (this.container) {
+			this.container.innerText = ""
+		}
 	}
 
 	override dispose(): void {
 		this.overlayMap.forEach(d => d.dispose());
-		this.clearOverlayMap()
+		this.onDidClearOverlayMap()
 		this.onVisibilityChange.dispose();
 		super.dispose();
 	}

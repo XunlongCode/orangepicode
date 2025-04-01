@@ -8,9 +8,9 @@ import { OverlayPart } from './overlayPart.js';
 export const IOverlayService = createDecorator<IOverlayService>('overlayService');
 
 export type CreateOverlayOptions = {
+	id?: string;
 	viewId?: string;
-	overlayId?: string;
-	styles: Record<string, string>;
+	styles?: Record<string, string>;
 }
 
 export interface IOverlayService {
@@ -23,17 +23,17 @@ export interface IOverlayService {
 	/**
 	 * 显示遮罩
 	 */
-	show(overlayId: string): Overlay | null;
+	show(id: string): Overlay | null;
 
 	/**
 	 * 隐藏遮罩
 	 */
-	hide(overlayId: string): Overlay | null;
+	hide(id: string): Overlay | null;
 
 	/**
 	 * 切换遮罩
 	 */
-	toggle(overlayId: string): Overlay | null;
+	toggle(id: string): Overlay | null;
 
 	/**
 	 * 遮罩是否可见

@@ -7,14 +7,15 @@ import { ExtensionIdentifier } from '../../../../platform/extensions/common/exte
 import { URI } from '../../../../base/common/uri.js';
 import { CancellationTokenSource } from "../../../../base/common/cancellation.js";
 import { WebviewView } from '../../../contrib/webviewView/browser/webviewViewService.js';
+import { $ } from '../../../../base/browser/dom.js';
 
 export type OverlayOptions = {
 	styles?: Record<string, string>;
-	overlayId?: string;
+	id?: string;
 }
 
 export class Overlay extends Disposable {
-	public overlayId: string = generateUuid();
+	public id: string = generateUuid();
 
 	private overlayContainer: HTMLElement | undefined;
 	private contentContainer: HTMLElement | undefined;
@@ -29,8 +30,8 @@ export class Overlay extends Disposable {
 	) {
 		super();
 
-		if (options?.overlayId) {
-			this.overlayId = options.overlayId;
+		if (options?.id) {
+			this.id = options.id;
 		}
 
 		this.initialize()
@@ -41,11 +42,11 @@ export class Overlay extends Disposable {
 			return;
 		}
 
-		this.overlayContainer = document.createElement('div.overlay-container');
-		this.overlayContainer.setAttribute('data-overlay-id', this.overlayId);
+		this.overlayContainer = $('div.overlay-container');
+		this.overlayContainer.setAttribute('data-id', this.id);
 		this.overlayContainer.setAttribute('data-view-id', this.viewId);
 
-		this.contentContainer = document.createElement('div.overlay-content');
+		this.contentContainer = $('div.overlay-content');
 		this.overlayContainer.appendChild(this.contentContainer);
 
 		this.overlayPart.container.appendChild(this.overlayContainer);
@@ -123,11 +124,7 @@ export class Overlay extends Disposable {
 
 	private updateStatus(state: typeof this.state) {
 		this.state = state;
-		if (state === "visible") {
-			this.overlayPart.onDidOverlayVisibilityChange(true)
-		} else if (state === "hidden") {
-			this.overlayPart.onDidOverlayVisibilityChange(false)
-		}
+		this.overlayPart.onDidOverlayVisibilityChange();
 	}
 
 	show(): void {
@@ -157,7 +154,7 @@ export class Overlay extends Disposable {
 
 			// 等待动画结束
 			setTimeout(() => {
-				if (this.overlayContainer && this.state === 'hidden') {
+				if (this.overlayContainer) {
 					this.overlayContainer.classList.remove("active")
 					this.updateStatus("hidden")
 				}

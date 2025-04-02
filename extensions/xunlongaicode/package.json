@@ -58,14 +58,43 @@
 					"title": "OrangePi AI Code",
 					"icon": "assets/icons/orangepi.svg"
 				}
+			],
+			"auxiliarybar": [
+				{
+					"id": "orangepiaicode-AuxiliaryBarChat",
+					"title": "Chat",
+					"icon": "assets/icons/orangepi.svg"
+				},
+				{
+					"id": "orangepiaicode-AuxiliaryBarCode",
+					"title": "Code",
+					"icon": "assets/icons/orangepi.svg"
+				}
 			]
 		},
 		"views": {
 			"orangepiaicode-ActivityBar": [
 				{
 					"type": "webview",
+					"icon": "assets/icons/orangepi.svg",
 					"id": "orangepiaicode.SidebarProvider",
 					"name": ""
+				}
+			],
+			"orangepiaicode-AuxiliaryBarChat": [
+				{
+					"type": "webview",
+					"icon": "assets/icons/orangepi.svg",
+					"id": "orangepiaicode.AuxiliaryBarChatProvider",
+					"name": "Chat"
+				}
+			],
+			"orangepiaicode-AuxiliaryBarCode": [
+				{
+					"type": "webview",
+					"icon": "assets/icons/orangepi.svg",
+					"id": "orangepiaicode.AuxiliaryBarCodeProvider",
+					"name": "Code"
 				}
 			]
 		},

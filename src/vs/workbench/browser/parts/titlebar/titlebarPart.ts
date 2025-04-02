@@ -704,7 +704,7 @@ export class BrowserTitlebarPart extends Part implements ITitlebarPart {
 
 			const orangeSettingsAction = new Action(
 				ORANGE_SETTING_ID,
-				localize('customSettings', "自定义设置"),
+				localize('manage', "Manage"),
 				'codicon-gear', // 使用与原设置相同的图标
 				true,
 				async () => this.instantiationService.invokeFunction(accessor => {

@@ -1,6 +1,6 @@
 import request from "request"
 
-import { Chunk } from "../../"
+import { Chunk } from "../.."
 
 export function getS3Filename(embeddingsProviderId: string, title: string): string {
 	return `_TransformersJsEmbeddingsProvider::all-MiniLM-L6-v2/${title}`

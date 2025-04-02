@@ -1,4 +1,4 @@
-import { SerializedContinueConfig } from "../"
+import { SerializedContinueConfig } from ".."
 
 import { FREE_TRIAL_MODELS } from "./default"
 

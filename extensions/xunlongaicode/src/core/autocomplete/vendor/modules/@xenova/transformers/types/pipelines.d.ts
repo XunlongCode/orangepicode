@@ -48,7 +48,7 @@ export function pipeline<T extends PipelineType>(
 		cache_dir,
 		local_files_only,
 		revision,
-	}?: import("./utils/hub.js").PretrainedOptions,
+	}?: import("../src/utils/hub.js").PretrainedOptions,
 ): Promise<AllTasks[T]>
 declare const Pipeline_base: new () => {
 	(...args: any[]): any
@@ -362,7 +362,7 @@ export class Text2TextGenerationPipeline extends Text2TextGenerationPipeline_bas
 	_key: "generated_text"
 	_call(
 		texts: string | string[],
-		options?: import("./utils/generation.js").GenerationConfigType,
+		options?: import("../src/utils/generation.js").GenerationConfigType,
 	): Promise<Text2TextGenerationOutput | Text2TextGenerationOutput[]>
 }
 declare const SummarizationPipeline_base: new (options: TextPipelineConstructorArgs) => SummarizationPipelineType
@@ -931,7 +931,7 @@ declare const ImageToTextPipeline_base: new (options: TextImagePipelineConstruct
 export class ImageToTextPipeline extends ImageToTextPipeline_base {
 	_call(
 		texts: ImagePipelineInputs,
-		options?: import("./utils/generation.js").GenerationConfigType,
+		options?: import("../src/utils/generation.js").GenerationConfigType,
 	): Promise<ImageToTextOutput | ImageToTextOutput[]>
 }
 declare const ImageClassificationPipeline_base: new (
@@ -1270,7 +1270,7 @@ export class DocumentQuestionAnsweringPipeline extends DocumentQuestionAnswering
 	_call(
 		image: ImageInput,
 		question: string,
-		options?: import("./utils/generation.js").GenerationConfigType,
+		options?: import("../src/utils/generation.js").GenerationConfigType,
 	): Promise<DocumentQuestionAnsweringOutput | DocumentQuestionAnsweringOutput[]>
 }
 declare const TextToAudioPipeline_base: new (options: TextToAudioPipelineConstructorArgs) => TextToAudioPipelineType
@@ -1721,7 +1721,7 @@ export type Text2TextGenerationOutput = Text2TextGenerationSingle[]
  */
 export type Text2TextGenerationPipelineCallback = (
 	texts: string | string[],
-	options?: import("./utils/generation.js").GenerationConfigType,
+	options?: import("../src/utils/generation.js").GenerationConfigType,
 ) => Promise<Text2TextGenerationOutput | Text2TextGenerationOutput[]>
 export type Text2TextGenerationPipelineType = TextPipelineConstructorArgs &
 	Text2TextGenerationPipelineCallback &
@@ -1738,7 +1738,7 @@ export type SummarizationOutput = SummarizationSingle[]
  */
 export type SummarizationPipelineCallback = (
 	texts: string | string[],
-	options?: import("./utils/generation.js").GenerationConfigType,
+	options?: import("../src/utils/generation.js").GenerationConfigType,
 ) => Promise<SummarizationOutput | SummarizationOutput[]>
 export type SummarizationPipelineType = TextPipelineConstructorArgs & SummarizationPipelineCallback & Disposable
 export type TranslationSingle = {
@@ -1753,7 +1753,7 @@ export type TranslationOutput = TranslationSingle[]
  */
 export type TranslationPipelineCallback = (
 	texts: string | string[],
-	options?: import("./utils/generation.js").GenerationConfigType,
+	options?: import("../src/utils/generation.js").GenerationConfigType,
 ) => Promise<TranslationOutput | TranslationOutput[]>
 export type TranslationPipelineType = TextPipelineConstructorArgs & TranslationPipelineCallback & Disposable
 export type TextGenerationSingle = {
@@ -1772,7 +1772,7 @@ export type TextGenerationSpecificParams = {
 	 */
 	add_special_tokens?: boolean
 }
-export type TextGenerationConfig = import("./utils/generation.js").GenerationConfigType & TextGenerationSpecificParams
+export type TextGenerationConfig = import("../src/utils/generation.js").GenerationConfigType & TextGenerationSpecificParams
 /**
  * Complete the prompt(s) given as inputs.
  */
@@ -1979,7 +1979,7 @@ export type AutomaticSpeechRecognitionSpecificParams = {
 	 */
 	num_frames?: number
 }
-export type AutomaticSpeechRecognitionConfig = import("./utils/generation.js").GenerationConfigType &
+export type AutomaticSpeechRecognitionConfig = import("../src/utils/generation.js").GenerationConfigType &
 	AutomaticSpeechRecognitionSpecificParams
 /**
  * Transcribe the audio sequence(s) given as inputs to text.
@@ -2003,7 +2003,7 @@ export type ImageToTextOutput = ImageToTextSingle[]
  */
 export type ImageToTextPipelineCallback = (
 	texts: ImagePipelineInputs,
-	options?: import("./utils/generation.js").GenerationConfigType,
+	options?: import("../src/utils/generation.js").GenerationConfigType,
 ) => Promise<ImageToTextOutput | ImageToTextOutput[]>
 export type ImageToTextPipelineType = TextImagePipelineConstructorArgs & ImageToTextPipelineCallback & Disposable
 export type ImageClassificationSingle = {
@@ -2215,7 +2215,7 @@ export type DocumentQuestionAnsweringOutput = DocumentQuestionAnsweringSingle[]
 export type DocumentQuestionAnsweringPipelineCallback = (
 	image: ImageInput,
 	question: string,
-	options?: import("./utils/generation.js").GenerationConfigType,
+	options?: import("../src/utils/generation.js").GenerationConfigType,
 ) => Promise<DocumentQuestionAnsweringOutput | DocumentQuestionAnsweringOutput[]>
 export type DocumentQuestionAnsweringPipelineType = TextImagePipelineConstructorArgs &
 	DocumentQuestionAnsweringPipelineCallback &
@@ -2276,11 +2276,11 @@ export type DepthEstimationPipelineCallback = (
 	images: ImagePipelineInputs,
 ) => Promise<DepthEstimationPipelineOutput | DepthEstimationPipelineOutput[]>
 export type DepthEstimationPipelineType = ImagePipelineConstructorArgs & DepthEstimationPipelineCallback & Disposable
-import { PreTrainedModel } from "./models.js"
-import { PreTrainedTokenizer } from "./tokenizers.js"
-import { Processor } from "./processors.js"
-import { Tensor } from "./utils/tensor.js"
-import { RawImage } from "./utils/image.js"
+import { PreTrainedModel } from "../src/models.js"
+import { PreTrainedTokenizer } from "../src/tokenizers.js"
+import { Processor } from "../src/processors.js"
+import { Tensor } from "../src/utils/tensor.js"
+import { RawImage } from "../src/utils/image.js"
 declare const SUPPORTED_TASKS: Readonly<{
 	"text-classification": {
 		tokenizer: typeof AutoTokenizer
@@ -2504,26 +2504,26 @@ declare const TASK_ALIASES: Readonly<{
 	"text-to-speech": "text-to-audio"
 	embeddings: "feature-extraction"
 }>
-import { AutoTokenizer } from "./tokenizers.js"
-import { AutoModelForSequenceClassification } from "./models.js"
-import { AutoModelForTokenClassification } from "./models.js"
-import { AutoModelForQuestionAnswering } from "./models.js"
-import { AutoModelForMaskedLM } from "./models.js"
-import { AutoModelForSeq2SeqLM } from "./models.js"
-import { AutoModelForCausalLM } from "./models.js"
-import { AutoModelForAudioClassification } from "./models.js"
-import { AutoProcessor } from "./processors.js"
-import { AutoModel } from "./models.js"
-import { AutoModelForSpeechSeq2Seq } from "./models.js"
-import { AutoModelForTextToSpectrogram } from "./models.js"
-import { AutoModelForTextToWaveform } from "./models.js"
-import { AutoModelForVision2Seq } from "./models.js"
-import { AutoModelForImageClassification } from "./models.js"
-import { AutoModelForImageSegmentation } from "./models.js"
-import { AutoModelForObjectDetection } from "./models.js"
-import { AutoModelForZeroShotObjectDetection } from "./models.js"
-import { AutoModelForDocumentQuestionAnswering } from "./models.js"
-import { AutoModelForImageToImage } from "./models.js"
-import { AutoModelForDepthEstimation } from "./models.js"
-export {}
+import { AutoTokenizer } from "../src/tokenizers.js"
+import { AutoModelForSequenceClassification } from "../src/models.js"
+import { AutoModelForTokenClassification } from "../src/models.js"
+import { AutoModelForQuestionAnswering } from "../src/models.js"
+import { AutoModelForMaskedLM } from "../src/models.js"
+import { AutoModelForSeq2SeqLM } from "../src/models.js"
+import { AutoModelForCausalLM } from "../src/models.js"
+import { AutoModelForAudioClassification } from "../src/models.js"
+import { AutoProcessor } from "../src/processors.js"
+import { AutoModel } from "../src/models.js"
+import { AutoModelForSpeechSeq2Seq } from "../src/models.js"
+import { AutoModelForTextToSpectrogram } from "../src/models.js"
+import { AutoModelForTextToWaveform } from "../src/models.js"
+import { AutoModelForVision2Seq } from "../src/models.js"
+import { AutoModelForImageClassification } from "../src/models.js"
+import { AutoModelForImageSegmentation } from "../src/models.js"
+import { AutoModelForObjectDetection } from "../src/models.js"
+import { AutoModelForZeroShotObjectDetection } from "../src/models.js"
+import { AutoModelForDocumentQuestionAnswering } from "../src/models.js"
+import { AutoModelForImageToImage } from "../src/models.js"
+import { AutoModelForDepthEstimation } from "../src/models.js"
+export { }
 //# sourceMappingURL=pipelines.d.ts.map

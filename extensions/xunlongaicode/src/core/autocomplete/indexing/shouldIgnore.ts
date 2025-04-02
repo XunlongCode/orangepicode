@@ -1,15 +1,15 @@
 import ignore from "ignore"
-import type { FileType, IDE } from "../"
+import type { FileType, IDE } from ".."
 import { findUriInDirs, getUriPathBasename } from "../util/uri"
 import { defaultIgnoreFileAndDir, getGlobalContinueIgArray } from "./ignore"
 import { getIgnoreContext } from "./walkDir"
 
 /*
-    Process:
-    1. Check global/default ignores
-    2. Walk UP tree from file, checking ignores at each level
+		Process:
+		1. Check global/default ignores
+		2. Walk UP tree from file, checking ignores at each level
 
-    TODO there might be issues with symlinks here
+		TODO there might be issues with symlinks here
 */
 export async function shouldIgnore(fileUri: string, ide: IDE, rootDirCandidates?: string[]): Promise<boolean> {
 	const rootDirUris = rootDirCandidates ?? (await ide.getWorkspaceDirs())

@@ -5,7 +5,7 @@ import {
 	ContextProviderExtras,
 	ContextSubmenuItem,
 	LoadSubmenuItemsArgs,
-} from "../../"
+} from "../.."
 import { walkDirs } from "../../indexing/walkDir"
 import generateRepoMap from "../../util/generateRepoMap"
 import { getShortestUniqueRelativeUriPaths, getUriPathBasename } from "../../util/uri"

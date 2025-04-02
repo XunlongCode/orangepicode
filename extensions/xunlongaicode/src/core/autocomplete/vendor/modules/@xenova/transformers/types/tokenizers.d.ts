@@ -339,28 +339,28 @@ export class PreTrainedTokenizer extends PreTrainedTokenizer_base {
  * BertTokenizer is a class used to tokenize text for BERT models.
  * @extends PreTrainedTokenizer
  */
-export class BertTokenizer extends PreTrainedTokenizer {}
+export class BertTokenizer extends PreTrainedTokenizer { }
 /**
  * Albert tokenizer
  * @extends PreTrainedTokenizer
  */
-export class AlbertTokenizer extends PreTrainedTokenizer {}
-export class MobileBertTokenizer extends PreTrainedTokenizer {}
-export class SqueezeBertTokenizer extends PreTrainedTokenizer {}
-export class DebertaTokenizer extends PreTrainedTokenizer {}
-export class DebertaV2Tokenizer extends PreTrainedTokenizer {}
-export class HerbertTokenizer extends PreTrainedTokenizer {}
-export class ConvBertTokenizer extends PreTrainedTokenizer {}
-export class RoFormerTokenizer extends PreTrainedTokenizer {}
-export class DistilBertTokenizer extends PreTrainedTokenizer {}
-export class CamembertTokenizer extends PreTrainedTokenizer {}
+export class AlbertTokenizer extends PreTrainedTokenizer { }
+export class MobileBertTokenizer extends PreTrainedTokenizer { }
+export class SqueezeBertTokenizer extends PreTrainedTokenizer { }
+export class DebertaTokenizer extends PreTrainedTokenizer { }
+export class DebertaV2Tokenizer extends PreTrainedTokenizer { }
+export class HerbertTokenizer extends PreTrainedTokenizer { }
+export class ConvBertTokenizer extends PreTrainedTokenizer { }
+export class RoFormerTokenizer extends PreTrainedTokenizer { }
+export class DistilBertTokenizer extends PreTrainedTokenizer { }
+export class CamembertTokenizer extends PreTrainedTokenizer { }
 export class XLMTokenizer extends PreTrainedTokenizer {
 	constructor(tokenizerJSON: any, tokenizerConfig: any)
 }
-export class ElectraTokenizer extends PreTrainedTokenizer {}
-export class T5Tokenizer extends PreTrainedTokenizer {}
-export class GPT2Tokenizer extends PreTrainedTokenizer {}
-export class BartTokenizer extends PreTrainedTokenizer {}
+export class ElectraTokenizer extends PreTrainedTokenizer { }
+export class T5Tokenizer extends PreTrainedTokenizer { }
+export class GPT2Tokenizer extends PreTrainedTokenizer { }
+export class BartTokenizer extends PreTrainedTokenizer { }
 export class MBartTokenizer extends PreTrainedTokenizer {
 	constructor(tokenizerJSON: any, tokenizerConfig: any)
 	languageRegex: RegExp
@@ -375,8 +375,8 @@ export class MBartTokenizer extends PreTrainedTokenizer {
 	 */
 	_build_translation_inputs(raw_inputs: string | string[], tokenizer_options: any, generate_kwargs: any): any
 }
-export class MBart50Tokenizer extends MBartTokenizer {}
-export class RobertaTokenizer extends PreTrainedTokenizer {}
+export class MBart50Tokenizer extends MBartTokenizer { }
+export class RobertaTokenizer extends PreTrainedTokenizer { }
 export class BloomTokenizer extends GPT2Tokenizer {
 	constructor(tokenizerJSON: any, tokenizerConfig: any)
 }
@@ -387,12 +387,12 @@ export class LlamaTokenizer extends PreTrainedTokenizer {
 	legacy: any
 	get default_chat_template(): any
 }
-export class CodeLlamaTokenizer extends LlamaTokenizer {}
-export class XLMRobertaTokenizer extends PreTrainedTokenizer {}
-export class MPNetTokenizer extends PreTrainedTokenizer {}
-export class FalconTokenizer extends PreTrainedTokenizer {}
-export class GPTNeoXTokenizer extends PreTrainedTokenizer {}
-export class EsmTokenizer extends PreTrainedTokenizer {}
+export class CodeLlamaTokenizer extends LlamaTokenizer { }
+export class XLMRobertaTokenizer extends PreTrainedTokenizer { }
+export class MPNetTokenizer extends PreTrainedTokenizer { }
+export class FalconTokenizer extends PreTrainedTokenizer { }
+export class GPTNeoXTokenizer extends PreTrainedTokenizer { }
+export class EsmTokenizer extends PreTrainedTokenizer { }
 /**
  * The NllbTokenizer class is used to tokenize text for NLLB ("No Language Left Behind") models.
  *
@@ -465,14 +465,14 @@ export class WhisperTokenizer extends PreTrainedTokenizer {
 	): (
 		| string
 		| {
-				chunks?:
-					| undefined
-					| Array<{
-							language: string | null
-							timestamp: Array<number | null>
-							text: string
-					  }>
-		  }
+			chunks?:
+			| undefined
+			| Array<{
+				language: string | null
+				timestamp: Array<number | null>
+				text: string
+			}>
+		}
 	)[]
 	/**
 	 * Finds the longest common sequence among the provided sequences.
@@ -559,9 +559,9 @@ export class WhisperTokenizer extends PreTrainedTokenizer {
 		no_timestamps?: boolean
 	}): number[][]
 }
-export class CodeGenTokenizer extends PreTrainedTokenizer {}
-export class CLIPTokenizer extends PreTrainedTokenizer {}
-export class SiglipTokenizer extends PreTrainedTokenizer {}
+export class CodeGenTokenizer extends PreTrainedTokenizer { }
+export class CLIPTokenizer extends PreTrainedTokenizer { }
+export class SiglipTokenizer extends PreTrainedTokenizer { }
 /**
  * @todo This model is not yet supported by Hugging Face's "fast" tokenizers library (https://github.com/huggingface/tokenizers).
  * Therefore, this implementation (which is based on fast tokenizers) may produce slightly inaccurate results.
@@ -579,11 +579,11 @@ export class MarianTokenizer extends PreTrainedTokenizer {
 	 */
 	_encode_text(text: string | null): any[]
 }
-export class Wav2Vec2CTCTokenizer extends PreTrainedTokenizer {}
-export class BlenderbotTokenizer extends PreTrainedTokenizer {}
-export class BlenderbotSmallTokenizer extends BlenderbotTokenizer {}
-export class SpeechT5Tokenizer extends PreTrainedTokenizer {}
-export class NougatTokenizer extends PreTrainedTokenizer {}
+export class Wav2Vec2CTCTokenizer extends PreTrainedTokenizer { }
+export class BlenderbotTokenizer extends PreTrainedTokenizer { }
+export class BlenderbotSmallTokenizer extends BlenderbotTokenizer { }
+export class SpeechT5Tokenizer extends PreTrainedTokenizer { }
+export class NougatTokenizer extends PreTrainedTokenizer { }
 export class VitsTokenizer extends PreTrainedTokenizer {
 	constructor(tokenizerJSON: any, tokenizerConfig: any)
 }
@@ -675,7 +675,7 @@ export type TokenizerProperties = {
 	 */
 	legacy?: boolean
 }
-export type PretrainedTokenizerOptions = import("./utils/hub.js").PretrainedOptions & TokenizerProperties
+export type PretrainedTokenizerOptions = import("../src/utils/hub.js").PretrainedOptions & TokenizerProperties
 export type BPENode = {
 	/**
 	 * The token associated with the node
@@ -938,6 +938,6 @@ declare class AddedToken {
 	special: boolean
 	normalized: boolean
 }
-import { Tensor } from "./utils/tensor.js"
-export {}
+import { Tensor } from "../src/utils/tensor.js"
+export { }
 //# sourceMappingURL=tokenizers.d.ts.map

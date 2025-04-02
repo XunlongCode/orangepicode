@@ -2,7 +2,7 @@ import { Anthropic } from "@anthropic-ai/sdk"
 import OpenAI from "openai"
 import axios from "axios"
 
-import { SingleCompletionHandler } from "../"
+import { SingleCompletionHandler } from ".."
 import { ApiHandlerOptions, ModelInfo, openAiModelInfoSaneDefaults } from "../../shared/api"
 import { convertToOpenAiMessages } from "../transform/openai-format"
 import { ApiStream } from "../transform/stream"

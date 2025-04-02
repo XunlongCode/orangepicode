@@ -1,6 +1,6 @@
 import { ConfigResult, ModelRole } from "@continuedev/config-yaml"
 
-import { AutocompleteInput } from "../../autocomplete/util/types"
+import { AutocompleteInput } from "../util/types"
 import { ProfileDescription } from "../config/ConfigHandler"
 import { OrganizationDescription } from "../config/ProfileLifecycleManager"
 import { SharedConfigSchema } from "../config/sharedConfig"
@@ -27,7 +27,7 @@ import type {
 	SessionMetadata,
 	SiteIndexingConfig,
 	ToolCall,
-} from "../"
+} from ".."
 import { GlobalContextModelSelections } from "../util/GlobalContext"
 
 export type OnboardingModes = "Local" | "Best" | "Custom" | "Quickstart"

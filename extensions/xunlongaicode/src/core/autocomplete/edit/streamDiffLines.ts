@@ -1,4 +1,4 @@
-import { ChatMessage, DiffLine, ILLM, Prediction } from "../"
+import { ChatMessage, DiffLine, ILLM, Prediction } from ".."
 import {
 	filterCodeBlockLines,
 	filterEnglishLinesAtEnd,
@@ -71,7 +71,7 @@ export async function* streamDiffLines(
 		highlighted.length > 0
 			? highlighted.split("\n")
 			: // When highlighted is empty, we need to combine last line of prefix and first line of suffix to determine the line being edited
-				[(prefix + suffix).split("\n")[prefix.split("\n").length - 1]]
+			[(prefix + suffix).split("\n")[prefix.split("\n").length - 1]]
 
 	// But if that line is empty, we can assume we are insertion-only
 	if (oldLines.length === 1 && oldLines[0].trim() === "") {
@@ -92,18 +92,18 @@ export async function* streamDiffLines(
 	const completion =
 		typeof prompt === "string"
 			? llm.streamComplete(prompt, new AbortController().signal, {
-					raw: true,
-					prediction,
-				})
+				raw: true,
+				prediction,
+			})
 			: llm.streamChat(prompt, new AbortController().signal, {
-					prediction,
-				})
+				prediction,
+			})
 
 	let lines = streamLines(completion)
 
 	lines = filterEnglishLinesAtStart(lines)
 	lines = filterCodeBlockLines(lines)
-	lines = stopAtLines(lines, () => {})
+	lines = stopAtLines(lines, () => { })
 	lines = skipLines(lines)
 	lines = removeTrailingWhitespace(lines)
 	if (inept) {

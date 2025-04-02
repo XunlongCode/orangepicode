@@ -1,4 +1,4 @@
-import { ChatHistoryItem, ChatMessage, MessagePart, ModelDescription } from "../"
+import { ChatHistoryItem, ChatMessage, MessagePart, ModelDescription } from ".."
 import { normalizeToMessageParts } from "../util/messageContent"
 
 import { modelSupportsTools } from "./autodetect"

@@ -106,9 +106,9 @@ export class ImageFeatureExtractor extends FeatureExtractor {
 		imgDims: number[],
 		padSize:
 			| {
-					width: number
-					height: number
-			  }
+				width: number
+				height: number
+			}
 			| number,
 		{
 			mode,
@@ -196,12 +196,12 @@ export class SegformerFeatureExtractor extends ImageFeatureExtractor {
 		labels: number[]
 	}[]
 }
-export class BitImageProcessor extends ImageFeatureExtractor {}
-export class DPTFeatureExtractor extends ImageFeatureExtractor {}
-export class GLPNFeatureExtractor extends ImageFeatureExtractor {}
-export class CLIPFeatureExtractor extends ImageFeatureExtractor {}
-export class ChineseCLIPFeatureExtractor extends ImageFeatureExtractor {}
-export class SiglipImageProcessor extends ImageFeatureExtractor {}
+export class BitImageProcessor extends ImageFeatureExtractor { }
+export class DPTFeatureExtractor extends ImageFeatureExtractor { }
+export class GLPNFeatureExtractor extends ImageFeatureExtractor { }
+export class CLIPFeatureExtractor extends ImageFeatureExtractor { }
+export class ChineseCLIPFeatureExtractor extends ImageFeatureExtractor { }
+export class SiglipImageProcessor extends ImageFeatureExtractor { }
 export class ConvNextFeatureExtractor extends ImageFeatureExtractor {
 	constructor(config: any)
 	/**
@@ -210,10 +210,10 @@ export class ConvNextFeatureExtractor extends ImageFeatureExtractor {
 	crop_pct: any
 	resize(image: any): Promise<any>
 }
-export class ConvNextImageProcessor extends ConvNextFeatureExtractor {}
-export class ViTFeatureExtractor extends ImageFeatureExtractor {}
-export class ViTImageProcessor extends ImageFeatureExtractor {}
-export class MobileViTFeatureExtractor extends ImageFeatureExtractor {}
+export class ConvNextImageProcessor extends ConvNextFeatureExtractor { }
+export class ViTFeatureExtractor extends ImageFeatureExtractor { }
+export class ViTImageProcessor extends ImageFeatureExtractor { }
+export class MobileViTFeatureExtractor extends ImageFeatureExtractor { }
 export class OwlViTFeatureExtractor extends ImageFeatureExtractor {
 	/**
 	 * Post-processes the outputs of the model (for object detection).
@@ -236,12 +236,12 @@ export class OwlViTFeatureExtractor extends ImageFeatureExtractor {
 		is_zero_shot?: boolean,
 	): any[]
 }
-export class DeiTFeatureExtractor extends ImageFeatureExtractor {}
-export class BeitFeatureExtractor extends ImageFeatureExtractor {}
+export class DeiTFeatureExtractor extends ImageFeatureExtractor { }
+export class BeitFeatureExtractor extends ImageFeatureExtractor { }
 export class DonutFeatureExtractor extends ImageFeatureExtractor {
 	pad_image(pixelData: any, imgDims: any, padSize: any, options?: {}): [Float32Array, number[]]
 }
-export class NougatImageProcessor extends DonutFeatureExtractor {}
+export class NougatImageProcessor extends DonutFeatureExtractor { }
 /**
  * @typedef {object} DetrFeatureExtractorResultProps
  * @property {Tensor} pixel_mask
@@ -330,13 +330,13 @@ export class DetrFeatureExtractor extends ImageFeatureExtractor {
 		label_ids_to_fuse?: Set<number>,
 		target_size?: number[],
 	): [
-		Tensor,
-		Array<{
-			id: number
-			label_id: number
-			score: number
-		}>,
-	]
+			Tensor,
+			Array<{
+				id: number
+				label_id: number
+				score: number
+			}>,
+		]
 	/**
 	 * Post-process the model output to generate the final panoptic segmentation.
 	 * @param {*} outputs The model output to post process
@@ -604,7 +604,7 @@ export class ClapFeatureExtractor extends FeatureExtractor {
 		input_features: Tensor
 	}>
 }
-export class SpeechT5FeatureExtractor extends FeatureExtractor {}
+export class SpeechT5FeatureExtractor extends FeatureExtractor { }
 declare const Processor_base: new () => {
 	(...args: any[]): any
 	_call(...args: any[]): any
@@ -670,7 +670,7 @@ export class SpeechT5Processor extends Processor {
 	 */
 	_call(input: any): Promise<any>
 }
-export class OwlViTProcessor extends Processor {}
+export class OwlViTProcessor extends Processor { }
 /**
  * Helper class which is used to instantiate pretrained processors with the `from_pretrained` function.
  * The chosen processor class is determined by the type specified in the processor config.
@@ -761,7 +761,7 @@ export class AutoProcessor {
 			cache_dir,
 			local_files_only,
 			revision,
-		}?: import("./utils/hub.js").PretrainedOptions,
+		}?: import("../src/utils/hub.js").PretrainedOptions,
 	): Promise<Processor>
 }
 /**
@@ -794,7 +794,7 @@ export type SamImageProcessorResult = {
 	input_points?: Tensor
 	input_labels?: Tensor
 }
-import { RawImage } from "./utils/image.js"
-import { Tensor } from "./utils/tensor.js"
-export {}
+import { RawImage } from "../src/utils/image.js"
+import { Tensor } from "../src/utils/tensor.js"
+export { }
 //# sourceMappingURL=processors.d.ts.map

@@ -1,7 +1,7 @@
 import { Anthropic } from "@anthropic-ai/sdk"
 import * as vscode from "vscode"
 
-import { SingleCompletionHandler } from "../"
+import { SingleCompletionHandler } from ".."
 import { calculateApiCostAnthropic } from "../../utils/cost"
 import { ApiStream } from "../transform/stream"
 import { convertToVsCodeLmMessages } from "../transform/vscode-lm-format"

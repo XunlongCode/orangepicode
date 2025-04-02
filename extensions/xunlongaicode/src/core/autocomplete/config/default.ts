@@ -1,4 +1,4 @@
-import { ContextProviderWithParams, ModelDescription, SerializedContinueConfig, SlashCommandDescription } from "../"
+import { ContextProviderWithParams, ModelDescription, SerializedContinueConfig, SlashCommandDescription } from ".."
 
 export const FREE_TRIAL_MODELS: ModelDescription[] = [
 	{

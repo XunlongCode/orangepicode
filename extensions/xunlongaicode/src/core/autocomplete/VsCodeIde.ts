@@ -9,7 +9,7 @@ import { editConfigJson, getConfigJsonPath } from "./util/paths"
 import * as vscode from "vscode"
 
 import * as URI from "uri-js"
-import { executeGotoProvider } from "../autocomplete/lsp"
+import { executeGotoProvider } from "./lsp"
 import { Repository } from "./otherExtensions/git"
 import { VsCodeIdeUtils } from "./util/ideUtils2"
 import { getExtensionUri, openEditorAndRevealRange } from "./util/vscode"
@@ -148,7 +148,7 @@ class VsCodeIde implements IDE {
 					.then(async (selection) => {
 						if (selection === "Use API key / local model") {
 							await vscode.commands.executeCommand("continue.continueGUIView.focus")
-							;(await this.vscodeWebviewProtocolPromise).request("openOnboardingCard", undefined)
+								; (await this.vscodeWebviewProtocolPromise).request("openOnboardingCard", undefined)
 
 							// Remove free trial models
 							editConfigJson((config) => {

@@ -1,7 +1,7 @@
 import { DataLogger } from "../data/log"
-import { COUNT_COMPLETION_REJECTED_AFTER } from "../util/parameters"
-import { Telemetry } from "../util/posthog"
-import { getUriFileExtension } from "../util/uri"
+import { COUNT_COMPLETION_REJECTED_AFTER } from "./parameters"
+import { Telemetry } from "./posthog"
+import { getUriFileExtension } from "./uri"
 
 import { AutocompleteOutcome } from "./types"
 

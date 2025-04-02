@@ -1,4 +1,4 @@
-import { IDE } from "../"
+import { IDE } from ".."
 import { AutocompleteCodeSnippet, AutocompleteSnippetType } from "../snippets/types"
 import { HelperVars } from "../util/HelperVars"
 

@@ -48,8 +48,8 @@ export class AutoConfig {
 			cache_dir,
 			local_files_only,
 			revision,
-		}?: import("./utils/hub.js").PretrainedOptions,
+		}?: import("../src/utils/hub.js").PretrainedOptions,
 	): Promise<PretrainedConfig>
 }
-export type PretrainedOptions = import("./utils/hub.js").PretrainedOptions
+export type PretrainedOptions = import("../src/utils/hub.js").PretrainedOptions
 //# sourceMappingURL=configs.d.ts.map

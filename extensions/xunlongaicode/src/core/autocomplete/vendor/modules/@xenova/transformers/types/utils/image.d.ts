@@ -32,7 +32,7 @@ export class RawImage {
 	 * Helper method to create a new Image from a tensor
 	 * @param {import('./tensor.js').Tensor} tensor
 	 */
-	static fromTensor(tensor: import("./tensor.js").Tensor, channel_format?: string): RawImage
+	static fromTensor(tensor: import("../../src/utils/tensor.js").Tensor, channel_format?: string): RawImage
 	/**
 	 * Create a new `RawImage` object.
 	 * @param {Uint8ClampedArray|Uint8Array} data The pixel data.

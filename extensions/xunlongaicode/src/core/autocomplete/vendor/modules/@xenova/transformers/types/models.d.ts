@@ -31,7 +31,7 @@ export class PreTrainedModel extends PreTrainedModel_base {
 			local_files_only,
 			revision,
 			model_file_name,
-		}?: import("./utils/hub.js").PretrainedOptions,
+		}?: import("../src/utils/hub.js").PretrainedOptions,
 	): Promise<PreTrainedModel>
 	/**
 	 * Creates a new instance of the `PreTrainedModel` class.
@@ -81,8 +81,8 @@ export class PreTrainedModel extends PreTrainedModel_base {
 	 * @returns {import('./utils/generation.js').GenerationConfigType} The final generation config object to be used by the model for text generation.
 	 */
 	_get_generation_config(
-		generation_config: import("./utils/generation.js").GenerationConfigType,
-	): import("./utils/generation.js").GenerationConfigType
+		generation_config: import("../src/utils/generation.js").GenerationConfigType,
+	): import("../src/utils/generation.js").GenerationConfigType
 	/**
 	 * @typedef {import('./utils/maths.js').TypedArray} TypedArray
 	 */
@@ -100,12 +100,12 @@ export class PreTrainedModel extends PreTrainedModel_base {
 	 * @throws {Error} Throws an error if the inputs array is empty.
 	 */
 	generate(
-		inputs: any[] | import("./transformers.js").TypedArray | Tensor,
+		inputs: any[] | import("../src/transformers.js").TypedArray | Tensor,
 		generation_config?:
 			| any
 			| (new (
-					kwargs?: import("./utils/generation.js").GenerationConfigType,
-			  ) => import("./utils/generation.js").GenerationConfigType)
+				kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+			) => import("../src/utils/generation.js").GenerationConfigType)
 			| null,
 		logits_processor?: any | null,
 		{
@@ -175,7 +175,7 @@ export class PreTrainedModel extends PreTrainedModel_base {
 	 */
 	private updateBeam
 }
-export class ModelOutput {}
+export class ModelOutput { }
 /**
  * Base class for model's outputs, with potential hidden states and attentions.
  */
@@ -199,8 +199,8 @@ export class BaseModelOutput extends ModelOutput {
 	hidden_states: Tensor
 	attentions: Tensor
 }
-export class BertPreTrainedModel extends PreTrainedModel {}
-export class BertModel extends BertPreTrainedModel {}
+export class BertPreTrainedModel extends PreTrainedModel { }
+export class BertModel extends BertPreTrainedModel { }
 /**
  * BertForMaskedLM is a class representing a BERT model for masked language modeling.
  */
@@ -249,11 +249,11 @@ export class BertForQuestionAnswering extends BertPreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<QuestionAnsweringModelOutput>
 }
-export class RoFormerPreTrainedModel extends PreTrainedModel {}
+export class RoFormerPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare RoFormer Model transformer outputting raw hidden-states without any specific head on top.
  */
-export class RoFormerModel extends RoFormerPreTrainedModel {}
+export class RoFormerModel extends RoFormerPreTrainedModel { }
 /**
  * RoFormer Model with a `language modeling` head on top.
  */
@@ -304,11 +304,11 @@ export class RoFormerForQuestionAnswering extends RoFormerPreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<QuestionAnsweringModelOutput>
 }
-export class ConvBertPreTrainedModel extends PreTrainedModel {}
+export class ConvBertPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare ConvBERT Model transformer outputting raw hidden-states without any specific head on top.
  */
-export class ConvBertModel extends ConvBertPreTrainedModel {}
+export class ConvBertModel extends ConvBertPreTrainedModel { }
 /**
  * ConvBERT Model with a language modeling head on top.
  */
@@ -359,13 +359,13 @@ export class ConvBertForQuestionAnswering extends ConvBertPreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<QuestionAnsweringModelOutput>
 }
-export class ElectraPreTrainedModel extends PreTrainedModel {}
+export class ElectraPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare Electra Model transformer outputting raw hidden-states without any specific head on top.
  * Identical to the BERT model except that it uses an additional linear layer between the embedding
  * layer and the encoder if the hidden size and embedding size are different.
  */
-export class ElectraModel extends ElectraPreTrainedModel {}
+export class ElectraModel extends ElectraPreTrainedModel { }
 /**
  * Electra model with a language modeling head on top.
  */
@@ -415,11 +415,11 @@ export class ElectraForQuestionAnswering extends ElectraPreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<QuestionAnsweringModelOutput>
 }
-export class CamembertPreTrainedModel extends PreTrainedModel {}
+export class CamembertPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare CamemBERT Model transformer outputting raw hidden-states without any specific head on top.
  */
-export class CamembertModel extends CamembertPreTrainedModel {}
+export class CamembertModel extends CamembertPreTrainedModel { }
 /**
  * CamemBERT Model with a `language modeling` head on top.
  */
@@ -468,11 +468,11 @@ export class CamembertForQuestionAnswering extends CamembertPreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<QuestionAnsweringModelOutput>
 }
-export class DebertaPreTrainedModel extends PreTrainedModel {}
+export class DebertaPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare DeBERTa Model transformer outputting raw hidden-states without any specific head on top.
  */
-export class DebertaModel extends DebertaPreTrainedModel {}
+export class DebertaModel extends DebertaPreTrainedModel { }
 /**
  * DeBERTa Model with a `language modeling` head on top.
  */
@@ -522,11 +522,11 @@ export class DebertaForQuestionAnswering extends DebertaPreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<QuestionAnsweringModelOutput>
 }
-export class DebertaV2PreTrainedModel extends PreTrainedModel {}
+export class DebertaV2PreTrainedModel extends PreTrainedModel { }
 /**
  * The bare DeBERTa-V2 Model transformer outputting raw hidden-states without any specific head on top.
  */
-export class DebertaV2Model extends DebertaV2PreTrainedModel {}
+export class DebertaV2Model extends DebertaV2PreTrainedModel { }
 /**
  * DeBERTa-V2 Model with a `language modeling` head on top.
  */
@@ -576,8 +576,8 @@ export class DebertaV2ForQuestionAnswering extends DebertaV2PreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<QuestionAnsweringModelOutput>
 }
-export class DistilBertPreTrainedModel extends PreTrainedModel {}
-export class DistilBertModel extends DistilBertPreTrainedModel {}
+export class DistilBertPreTrainedModel extends PreTrainedModel { }
+export class DistilBertModel extends DistilBertPreTrainedModel { }
 /**
  * DistilBertForSequenceClassification is a class representing a DistilBERT model for sequence classification.
  */
@@ -626,11 +626,11 @@ export class DistilBertForMaskedLM extends DistilBertPreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<MaskedLMOutput>
 }
-export class EsmPreTrainedModel extends PreTrainedModel {}
+export class EsmPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare ESM Model transformer outputting raw hidden-states without any specific head on top.
  */
-export class EsmModel extends EsmPreTrainedModel {}
+export class EsmModel extends EsmPreTrainedModel { }
 /**
  * ESM Model with a `language modeling` head on top.
  */
@@ -668,8 +668,8 @@ export class EsmForTokenClassification extends EsmPreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<TokenClassifierOutput>
 }
-export class MobileBertPreTrainedModel extends PreTrainedModel {}
-export class MobileBertModel extends MobileBertPreTrainedModel {}
+export class MobileBertPreTrainedModel extends PreTrainedModel { }
+export class MobileBertModel extends MobileBertPreTrainedModel { }
 /**
  * MobileBertForMaskedLM is a class representing a MobileBERT model for masking task.
  */
@@ -706,11 +706,11 @@ export class MobileBertForQuestionAnswering extends MobileBertPreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<QuestionAnsweringModelOutput>
 }
-export class MPNetPreTrainedModel extends PreTrainedModel {}
+export class MPNetPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare MPNet Model transformer outputting raw hidden-states without any specific head on top.
  */
-export class MPNetModel extends MPNetPreTrainedModel {}
+export class MPNetModel extends MPNetPreTrainedModel { }
 /**
  * MPNetForMaskedLM is a class representing a MPNet model for masked language modeling.
  */
@@ -759,8 +759,8 @@ export class MPNetForQuestionAnswering extends MPNetPreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<QuestionAnsweringModelOutput>
 }
-export class SqueezeBertPreTrainedModel extends PreTrainedModel {}
-export class SqueezeBertModel extends SqueezeBertPreTrainedModel {}
+export class SqueezeBertPreTrainedModel extends PreTrainedModel { }
+export class SqueezeBertModel extends SqueezeBertPreTrainedModel { }
 export class SqueezeBertForMaskedLM extends SqueezeBertPreTrainedModel {
 	/**
 	 * Calls the model on new inputs.
@@ -788,8 +788,8 @@ export class SqueezeBertForQuestionAnswering extends SqueezeBertPreTrainedModel 
 	 */
 	_call(model_inputs: any): Promise<QuestionAnsweringModelOutput>
 }
-export class AlbertPreTrainedModel extends PreTrainedModel {}
-export class AlbertModel extends AlbertPreTrainedModel {}
+export class AlbertPreTrainedModel extends PreTrainedModel { }
+export class AlbertModel extends AlbertPreTrainedModel { }
 export class AlbertForSequenceClassification extends AlbertPreTrainedModel {
 	/**
 	 * Calls the model on new inputs.
@@ -817,8 +817,8 @@ export class AlbertForMaskedLM extends AlbertPreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<MaskedLMOutput>
 }
-export class T5PreTrainedModel extends PreTrainedModel {}
-export class T5Model extends T5PreTrainedModel {}
+export class T5PreTrainedModel extends PreTrainedModel { }
+export class T5Model extends T5PreTrainedModel { }
 /**
  * T5Model is a class representing a T5 model for conditional generation.
  */
@@ -835,13 +835,13 @@ export class T5ForConditionalGeneration extends T5PreTrainedModel {
 		session: any,
 		decoder_merged_session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	decoder_merged_session: any
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_decoder_layers: any
 	num_decoder_heads: any
 	decoder_dim_kv: any
@@ -852,11 +852,11 @@ export class T5ForConditionalGeneration extends T5PreTrainedModel {
 /**
  * An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained models.
  */
-export class LongT5PreTrainedModel extends PreTrainedModel {}
+export class LongT5PreTrainedModel extends PreTrainedModel { }
 /**
  * The bare LONGT5 Model transformer outputting raw hidden-states without any specific head on top.
  */
-export class LongT5Model extends LongT5PreTrainedModel {}
+export class LongT5Model extends LongT5PreTrainedModel { }
 /**
  * LONGT5 Model with a `language modeling` head on top.
  */
@@ -873,13 +873,13 @@ export class LongT5ForConditionalGeneration extends LongT5PreTrainedModel {
 		session: any,
 		decoder_merged_session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	decoder_merged_session: any
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_decoder_layers: any
 	num_decoder_heads: any
 	decoder_dim_kv: any
@@ -887,8 +887,8 @@ export class LongT5ForConditionalGeneration extends LongT5PreTrainedModel {
 	num_encoder_heads: any
 	encoder_dim_kv: any
 }
-export class MT5PreTrainedModel extends PreTrainedModel {}
-export class MT5Model extends MT5PreTrainedModel {}
+export class MT5PreTrainedModel extends PreTrainedModel { }
+export class MT5Model extends MT5PreTrainedModel { }
 /**
  * A class representing a conditional sequence-to-sequence model based on the MT5 architecture.
  */
@@ -905,13 +905,13 @@ export class MT5ForConditionalGeneration extends MT5PreTrainedModel {
 		session: any,
 		decoder_merged_session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	decoder_merged_session: any
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_decoder_layers: any
 	num_decoder_heads: any
 	decoder_dim_kv: any
@@ -919,11 +919,11 @@ export class MT5ForConditionalGeneration extends MT5PreTrainedModel {
 	num_encoder_heads: any
 	encoder_dim_kv: any
 }
-export class BartPretrainedModel extends PreTrainedModel {}
+export class BartPretrainedModel extends PreTrainedModel { }
 /**
  * The bare BART Model outputting raw hidden-states without any specific head on top.
  */
-export class BartModel extends BartPretrainedModel {}
+export class BartModel extends BartPretrainedModel { }
 /**
  * The BART Model with a language modeling head. Can be used for summarization.
  */
@@ -957,11 +957,11 @@ export class BartForSequenceClassification extends BartPretrainedModel {
 	 */
 	_call(model_inputs: any): Promise<SequenceClassifierOutput>
 }
-export class MBartPreTrainedModel extends PreTrainedModel {}
+export class MBartPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare MBART Model outputting raw hidden-states without any specific head on top.
  */
-export class MBartModel extends MBartPreTrainedModel {}
+export class MBartModel extends MBartPreTrainedModel { }
 /**
  * The MBART Model with a language modeling head. Can be used for summarization, after fine-tuning the pretrained models.
  */
@@ -1011,11 +1011,11 @@ export class MBartForCausalLM extends MBartPreTrainedModel {
 	num_encoder_heads: any
 	encoder_dim_kv: number
 }
-export class BlenderbotPreTrainedModel extends PreTrainedModel {}
+export class BlenderbotPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare Blenderbot Model outputting raw hidden-states without any specific head on top.
  */
-export class BlenderbotModel extends BlenderbotPreTrainedModel {}
+export class BlenderbotModel extends BlenderbotPreTrainedModel { }
 /**
  * The Blenderbot Model with a language modeling head. Can be used for summarization.
  */
@@ -1032,13 +1032,13 @@ export class BlenderbotForConditionalGeneration extends BlenderbotPreTrainedMode
 		session: any,
 		decoder_merged_session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	decoder_merged_session: any
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_decoder_layers: any
 	num_decoder_heads: any
 	decoder_dim_kv: number
@@ -1046,11 +1046,11 @@ export class BlenderbotForConditionalGeneration extends BlenderbotPreTrainedMode
 	num_encoder_heads: any
 	encoder_dim_kv: number
 }
-export class BlenderbotSmallPreTrainedModel extends PreTrainedModel {}
+export class BlenderbotSmallPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare BlenderbotSmall Model outputting raw hidden-states without any specific head on top.
  */
-export class BlenderbotSmallModel extends BlenderbotSmallPreTrainedModel {}
+export class BlenderbotSmallModel extends BlenderbotSmallPreTrainedModel { }
 /**
  * The BlenderbotSmall Model with a language modeling head. Can be used for summarization.
  */
@@ -1067,13 +1067,13 @@ export class BlenderbotSmallForConditionalGeneration extends BlenderbotSmallPreT
 		session: any,
 		decoder_merged_session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	decoder_merged_session: any
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_decoder_layers: any
 	num_decoder_heads: any
 	decoder_dim_kv: number
@@ -1081,8 +1081,8 @@ export class BlenderbotSmallForConditionalGeneration extends BlenderbotSmallPreT
 	num_encoder_heads: any
 	encoder_dim_kv: number
 }
-export class RobertaPreTrainedModel extends PreTrainedModel {}
-export class RobertaModel extends RobertaPreTrainedModel {}
+export class RobertaPreTrainedModel extends PreTrainedModel { }
+export class RobertaModel extends RobertaPreTrainedModel { }
 /**
  * RobertaForMaskedLM class for performing masked language modeling on Roberta models.
  */
@@ -1134,11 +1134,11 @@ export class RobertaForQuestionAnswering extends RobertaPreTrainedModel {
 /**
  * An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained models.
  */
-export class XLMPreTrainedModel extends PreTrainedModel {}
+export class XLMPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare XLM Model transformer outputting raw hidden-states without any specific head on top.
  */
-export class XLMModel extends XLMPreTrainedModel {}
+export class XLMModel extends XLMPreTrainedModel { }
 /**
  * The XLM Model transformer with a language modeling head on top (linear layer with weights tied to the input embeddings).
  */
@@ -1187,8 +1187,8 @@ export class XLMForQuestionAnswering extends XLMPreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<QuestionAnsweringModelOutput>
 }
-export class XLMRobertaPreTrainedModel extends PreTrainedModel {}
-export class XLMRobertaModel extends XLMRobertaPreTrainedModel {}
+export class XLMRobertaPreTrainedModel extends PreTrainedModel { }
+export class XLMRobertaModel extends XLMRobertaPreTrainedModel { }
 /**
  * XLMRobertaForMaskedLM class for performing masked language modeling on XLMRoberta models.
  */
@@ -1237,21 +1237,21 @@ export class XLMRobertaForQuestionAnswering extends XLMRobertaPreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<QuestionAnsweringModelOutput>
 }
-export class ASTPreTrainedModel extends PreTrainedModel {}
+export class ASTPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare AST Model transformer outputting raw hidden-states without any specific head on top.
  */
-export class ASTModel extends ASTPreTrainedModel {}
+export class ASTModel extends ASTPreTrainedModel { }
 /**
  * Audio Spectrogram Transformer model with an audio classification head on top
  * (a linear layer on top of the pooled output) e.g. for datasets like AudioSet, Speech Commands v2.
  */
-export class ASTForAudioClassification extends ASTPreTrainedModel {}
-export class WhisperPreTrainedModel extends PreTrainedModel {}
+export class ASTForAudioClassification extends ASTPreTrainedModel { }
+export class WhisperPreTrainedModel extends PreTrainedModel { }
 /**
  * WhisperModel class for training Whisper models without a language model head.
  */
-export class WhisperModel extends WhisperPreTrainedModel {}
+export class WhisperModel extends WhisperPreTrainedModel { }
 /**
  * WhisperForConditionalGeneration class for generating conditional outputs from Whisper models.
  */
@@ -1338,7 +1338,7 @@ export class VisionEncoderDecoderModel extends PreTrainedModel {
 	num_heads: any
 	dim_kv: any
 }
-export class CLIPPreTrainedModel extends PreTrainedModel {}
+export class CLIPPreTrainedModel extends PreTrainedModel { }
 /**
  * CLIP Text and Vision Model with a projection layers on top
  *
@@ -1382,7 +1382,7 @@ export class CLIPPreTrainedModel extends PreTrainedModel {}
  * // }
  * ```
  */
-export class CLIPModel extends CLIPPreTrainedModel {}
+export class CLIPModel extends CLIPPreTrainedModel { }
 /**
  * CLIP Text Model with a projection layer on top (a linear layer on top of the pooled output)
  *
@@ -1409,7 +1409,7 @@ export class CLIPModel extends CLIPPreTrainedModel {}
  * // }
  * ```
  */
-export class CLIPTextModelWithProjection extends CLIPPreTrainedModel {}
+export class CLIPTextModelWithProjection extends CLIPPreTrainedModel { }
 /**
  * CLIP Vision Model with a projection layer on top (a linear layer on top of the pooled output)
  *
@@ -1436,8 +1436,8 @@ export class CLIPTextModelWithProjection extends CLIPPreTrainedModel {}
  * // }
  * ```
  */
-export class CLIPVisionModelWithProjection extends CLIPPreTrainedModel {}
-export class SiglipPreTrainedModel extends PreTrainedModel {}
+export class CLIPVisionModelWithProjection extends CLIPPreTrainedModel { }
+export class SiglipPreTrainedModel extends PreTrainedModel { }
 /**
  * SigLIP Text and Vision Model with a projection layers on top
  *
@@ -1481,7 +1481,7 @@ export class SiglipPreTrainedModel extends PreTrainedModel {}
  * // }
  * ```
  */
-export class SiglipModel extends SiglipPreTrainedModel {}
+export class SiglipModel extends SiglipPreTrainedModel { }
 /**
  * The text model from SigLIP without any head or projection on top.
  *
@@ -1508,7 +1508,7 @@ export class SiglipModel extends SiglipPreTrainedModel {}
  * // }
  * ```
  */
-export class SiglipTextModel extends SiglipPreTrainedModel {}
+export class SiglipTextModel extends SiglipPreTrainedModel { }
 /**
  * The vision model from SigLIP without any head or projection on top.
  *
@@ -1535,11 +1535,11 @@ export class SiglipTextModel extends SiglipPreTrainedModel {}
  * // }
  * ```
  */
-export class SiglipVisionModel extends CLIPPreTrainedModel {}
-export class ChineseCLIPPreTrainedModel extends PreTrainedModel {}
-export class ChineseCLIPModel extends ChineseCLIPPreTrainedModel {}
-export class CLIPSegPreTrainedModel extends PreTrainedModel {}
-export class CLIPSegModel extends CLIPSegPreTrainedModel {}
+export class SiglipVisionModel extends CLIPPreTrainedModel { }
+export class ChineseCLIPPreTrainedModel extends PreTrainedModel { }
+export class ChineseCLIPModel extends ChineseCLIPPreTrainedModel { }
+export class CLIPSegPreTrainedModel extends PreTrainedModel { }
+export class CLIPSegModel extends CLIPSegPreTrainedModel { }
 /**
  * CLIPSeg model with a Transformer-based decoder on top for zero-shot and one-shot image segmentation.
  *
@@ -1586,7 +1586,7 @@ export class CLIPSegModel extends CLIPSegPreTrainedModel {}
  * }
  * ```
  */
-export class CLIPSegForImageSegmentation extends CLIPSegPreTrainedModel {}
+export class CLIPSegForImageSegmentation extends CLIPSegPreTrainedModel { }
 export class GPT2PreTrainedModel extends PreTrainedModel {
 	/**
 	 * Creates a new instance of the `GPT2PreTrainedModel` class.
@@ -1598,21 +1598,21 @@ export class GPT2PreTrainedModel extends PreTrainedModel {
 		config: any,
 		session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_heads: any
 	num_layers: any
 	dim_kv: number
 }
-export class GPT2Model extends GPT2PreTrainedModel {}
+export class GPT2Model extends GPT2PreTrainedModel { }
 /**
  * GPT-2 language model head on top of the GPT-2 base model. This model is suitable for text generation tasks.
  */
-export class GPT2LMHeadModel extends GPT2PreTrainedModel {}
+export class GPT2LMHeadModel extends GPT2PreTrainedModel { }
 export class GPTNeoPreTrainedModel extends PreTrainedModel {
 	/**
 	 * Creates a new instance of the `GPTNeoPreTrainedModel` class.
@@ -1624,18 +1624,18 @@ export class GPTNeoPreTrainedModel extends PreTrainedModel {
 		config: any,
 		session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_heads: any
 	num_layers: any
 	dim_kv: number
 }
-export class GPTNeoModel extends GPTNeoPreTrainedModel {}
-export class GPTNeoForCausalLM extends GPTNeoPreTrainedModel {}
+export class GPTNeoModel extends GPTNeoPreTrainedModel { }
+export class GPTNeoForCausalLM extends GPTNeoPreTrainedModel { }
 export class GPTNeoXPreTrainedModel extends PreTrainedModel {
 	/**
 	 * Creates a new instance of the `GPTNeoXPreTrainedModel` class.
@@ -1647,18 +1647,18 @@ export class GPTNeoXPreTrainedModel extends PreTrainedModel {
 		config: any,
 		session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_heads: any
 	num_layers: any
 	dim_kv: number
 }
-export class GPTNeoXModel extends GPTNeoXPreTrainedModel {}
-export class GPTNeoXForCausalLM extends GPTNeoXPreTrainedModel {}
+export class GPTNeoXModel extends GPTNeoXPreTrainedModel { }
+export class GPTNeoXForCausalLM extends GPTNeoXPreTrainedModel { }
 export class GPTJPreTrainedModel extends PreTrainedModel {
 	/**
 	 * Creates a new instance of the `GPTJPreTrainedModel` class.
@@ -1670,18 +1670,18 @@ export class GPTJPreTrainedModel extends PreTrainedModel {
 		config: any,
 		session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_heads: any
 	num_layers: any
 	dim_kv: number
 }
-export class GPTJModel extends GPTJPreTrainedModel {}
-export class GPTJForCausalLM extends GPTJPreTrainedModel {}
+export class GPTJModel extends GPTJPreTrainedModel { }
+export class GPTJForCausalLM extends GPTJPreTrainedModel { }
 export class GPTBigCodePreTrainedModel extends PreTrainedModel {
 	/**
 	 * Creates a new instance of the `GPTBigCodePreTrainedModel` class.
@@ -1693,18 +1693,18 @@ export class GPTBigCodePreTrainedModel extends PreTrainedModel {
 		config: any,
 		session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_heads: any
 	num_layers: any
 	dim_kv: number
 }
-export class GPTBigCodeModel extends GPTBigCodePreTrainedModel {}
-export class GPTBigCodeForCausalLM extends GPTBigCodePreTrainedModel {}
+export class GPTBigCodeModel extends GPTBigCodePreTrainedModel { }
+export class GPTBigCodeForCausalLM extends GPTBigCodePreTrainedModel { }
 export class CodeGenPreTrainedModel extends PreTrainedModel {
 	/**
 	 * Creates a new instance of the `CodeGenPreTrainedModel` class.
@@ -1716,12 +1716,12 @@ export class CodeGenPreTrainedModel extends PreTrainedModel {
 		config: any,
 		session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_heads: any
 	num_layers: any
 	dim_kv: number
@@ -1729,11 +1729,11 @@ export class CodeGenPreTrainedModel extends PreTrainedModel {
 /**
  * CodeGenModel is a class representing a code generation model without a language model head.
  */
-export class CodeGenModel extends CodeGenPreTrainedModel {}
+export class CodeGenModel extends CodeGenPreTrainedModel { }
 /**
  * CodeGenForCausalLM is a class that represents a code generation model based on the GPT-2 architecture. It extends the `CodeGenPreTrainedModel` class.
  */
-export class CodeGenForCausalLM extends CodeGenPreTrainedModel {}
+export class CodeGenForCausalLM extends CodeGenPreTrainedModel { }
 /**
  * The bare LLama Model outputting raw hidden-states without any specific head on top.
  */
@@ -1748,12 +1748,12 @@ export class LlamaPreTrainedModel extends PreTrainedModel {
 		config: any,
 		session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_heads: any
 	num_layers: any
 	dim_kv: number
@@ -1761,8 +1761,8 @@ export class LlamaPreTrainedModel extends PreTrainedModel {
 /**
  * The bare LLaMA Model outputting raw hidden-states without any specific head on top.
  */
-export class LlamaModel extends LlamaPreTrainedModel {}
-export class LlamaForCausalLM extends LlamaPreTrainedModel {}
+export class LlamaModel extends LlamaPreTrainedModel { }
+export class LlamaForCausalLM extends LlamaPreTrainedModel { }
 export class PhiPreTrainedModel extends PreTrainedModel {
 	/**
 	 * Creates a new instance of the `PhiPreTrainedModel` class.
@@ -1774,12 +1774,12 @@ export class PhiPreTrainedModel extends PreTrainedModel {
 		config: any,
 		session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_heads: any
 	num_layers: any
 	dim_kv: number
@@ -1787,8 +1787,8 @@ export class PhiPreTrainedModel extends PreTrainedModel {
 /**
  * The bare Phi Model outputting raw hidden-states without any specific head on top.
  */
-export class PhiModel extends PhiPreTrainedModel {}
-export class PhiForCausalLM extends PhiPreTrainedModel {}
+export class PhiModel extends PhiPreTrainedModel { }
+export class PhiForCausalLM extends PhiPreTrainedModel { }
 /**
  * The Bloom Model transformer with a language modeling head on top (linear layer with weights tied to the input embeddings).
  */
@@ -1803,12 +1803,12 @@ export class BloomPreTrainedModel extends PreTrainedModel {
 		config: any,
 		session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_heads: any
 	num_layers: any
 	dim_kv: number
@@ -1816,11 +1816,11 @@ export class BloomPreTrainedModel extends PreTrainedModel {
 /**
  * The bare Bloom Model transformer outputting raw hidden-states without any specific head on top.
  */
-export class BloomModel extends BloomPreTrainedModel {}
+export class BloomModel extends BloomPreTrainedModel { }
 /**
  * The Bloom Model transformer with a language modeling head on top (linear layer with weights tied to the input embeddings).
  */
-export class BloomForCausalLM extends BloomPreTrainedModel {}
+export class BloomForCausalLM extends BloomPreTrainedModel { }
 export class MptPreTrainedModel extends PreTrainedModel {
 	/**
 	 * Creates a new instance of the `MptPreTrainedModel` class.
@@ -1832,12 +1832,12 @@ export class MptPreTrainedModel extends PreTrainedModel {
 		config: any,
 		session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_heads: any
 	num_layers: any
 	dim_kv: number
@@ -1845,11 +1845,11 @@ export class MptPreTrainedModel extends PreTrainedModel {
 /**
  * The bare Mpt Model transformer outputting raw hidden-states without any specific head on top.
  */
-export class MptModel extends MptPreTrainedModel {}
+export class MptModel extends MptPreTrainedModel { }
 /**
  * The MPT Model transformer with a language modeling head on top (linear layer with weights tied to the input embeddings).
  */
-export class MptForCausalLM extends MptPreTrainedModel {}
+export class MptForCausalLM extends MptPreTrainedModel { }
 export class OPTPreTrainedModel extends PreTrainedModel {
 	/**
 	 * Creates a new instance of the `OPTPreTrainedModel` class.
@@ -1861,12 +1861,12 @@ export class OPTPreTrainedModel extends PreTrainedModel {
 		config: any,
 		session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_heads: any
 	num_layers: any
 	dim_kv: number
@@ -1874,20 +1874,20 @@ export class OPTPreTrainedModel extends PreTrainedModel {
 /**
  * The bare OPT Model outputting raw hidden-states without any specific head on top.
  */
-export class OPTModel extends OPTPreTrainedModel {}
+export class OPTModel extends OPTPreTrainedModel { }
 /**
  * The OPT Model transformer with a language modeling head on top (linear layer with weights tied to the input embeddings).
  */
-export class OPTForCausalLM extends OPTPreTrainedModel {}
-export class ViTPreTrainedModel extends PreTrainedModel {}
-export class ViTModel extends ViTPreTrainedModel {}
+export class OPTForCausalLM extends OPTPreTrainedModel { }
+export class ViTPreTrainedModel extends PreTrainedModel { }
+export class ViTModel extends ViTPreTrainedModel { }
 export class ViTForImageClassification extends ViTPreTrainedModel {
 	/**
 	 * @param {any} model_inputs
 	 */
 	_call(model_inputs: any): Promise<SequenceClassifierOutput>
 }
-export class VitMattePreTrainedModel extends PreTrainedModel {}
+export class VitMattePreTrainedModel extends PreTrainedModel { }
 /**
  * ViTMatte framework leveraging any vision backbone e.g. for ADE20k, CityScapes.
  *
@@ -1949,27 +1949,27 @@ export class VitMatteForImageMatting extends VitMattePreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<ImageMattingOutput>
 }
-export class MobileViTPreTrainedModel extends PreTrainedModel {}
-export class MobileViTModel extends MobileViTPreTrainedModel {}
+export class MobileViTPreTrainedModel extends PreTrainedModel { }
+export class MobileViTModel extends MobileViTPreTrainedModel { }
 export class MobileViTForImageClassification extends MobileViTPreTrainedModel {
 	/**
 	 * @param {any} model_inputs
 	 */
 	_call(model_inputs: any): Promise<SequenceClassifierOutput>
 }
-export class OwlViTPreTrainedModel extends PreTrainedModel {}
-export class OwlViTModel extends OwlViTPreTrainedModel {}
-export class OwlViTForObjectDetection extends OwlViTPreTrainedModel {}
-export class BeitPreTrainedModel extends PreTrainedModel {}
-export class BeitModel extends BeitPreTrainedModel {}
+export class OwlViTPreTrainedModel extends PreTrainedModel { }
+export class OwlViTModel extends OwlViTPreTrainedModel { }
+export class OwlViTForObjectDetection extends OwlViTPreTrainedModel { }
+export class BeitPreTrainedModel extends PreTrainedModel { }
+export class BeitModel extends BeitPreTrainedModel { }
 export class BeitForImageClassification extends BeitPreTrainedModel {
 	/**
 	 * @param {any} model_inputs
 	 */
 	_call(model_inputs: any): Promise<SequenceClassifierOutput>
 }
-export class DetrPreTrainedModel extends PreTrainedModel {}
-export class DetrModel extends DetrPreTrainedModel {}
+export class DetrPreTrainedModel extends PreTrainedModel { }
+export class DetrModel extends DetrPreTrainedModel { }
 export class DetrForObjectDetection extends DetrPreTrainedModel {
 	/**
 	 * @param {any} model_inputs
@@ -2007,12 +2007,12 @@ export class DetrSegmentationOutput extends ModelOutput {
 	pred_boxes: Tensor
 	pred_masks: Tensor
 }
-export class TableTransformerPreTrainedModel extends PreTrainedModel {}
+export class TableTransformerPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare Table Transformer Model (consisting of a backbone and encoder-decoder Transformer)
  * outputting raw hidden-states without any specific head on top.
  */
-export class TableTransformerModel extends TableTransformerPreTrainedModel {}
+export class TableTransformerModel extends TableTransformerPreTrainedModel { }
 /**
  * Table Transformer Model (consisting of a backbone and encoder-decoder Transformer)
  * with object detection heads on top, for tasks such as COCO detection.
@@ -2023,9 +2023,9 @@ export class TableTransformerForObjectDetection extends TableTransformerPreTrain
 	 */
 	_call(model_inputs: any): Promise<TableTransformerObjectDetectionOutput>
 }
-export class TableTransformerObjectDetectionOutput extends DetrObjectDetectionOutput {}
-export class DeiTPreTrainedModel extends PreTrainedModel {}
-export class DeiTModel extends DeiTPreTrainedModel {}
+export class TableTransformerObjectDetectionOutput extends DetrObjectDetectionOutput { }
+export class DeiTPreTrainedModel extends PreTrainedModel { }
+export class DeiTModel extends DeiTPreTrainedModel { }
 export class DeiTForImageClassification extends DeiTPreTrainedModel {
 	/**
 	 * @param {any} model_inputs
@@ -2035,11 +2035,11 @@ export class DeiTForImageClassification extends DeiTPreTrainedModel {
 /**
  * An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained models.
  */
-export class ResNetPreTrainedModel extends PreTrainedModel {}
+export class ResNetPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare ResNet model outputting raw features without any specific head on top.
  */
-export class ResNetModel extends ResNetPreTrainedModel {}
+export class ResNetModel extends ResNetPreTrainedModel { }
 /**
  * ResNet Model with an image classification head on top (a linear layer on top of the pooled features), e.g. for ImageNet.
  */
@@ -2049,19 +2049,19 @@ export class ResNetForImageClassification extends ResNetPreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<SequenceClassifierOutput>
 }
-export class SwinPreTrainedModel extends PreTrainedModel {}
-export class SwinModel extends SwinPreTrainedModel {}
+export class SwinPreTrainedModel extends PreTrainedModel { }
+export class SwinModel extends SwinPreTrainedModel { }
 export class SwinForImageClassification extends SwinPreTrainedModel {
 	/**
 	 * @param {any} model_inputs
 	 */
 	_call(model_inputs: any): Promise<SequenceClassifierOutput>
 }
-export class Swin2SRPreTrainedModel extends PreTrainedModel {}
+export class Swin2SRPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare Swin2SR Model transformer outputting raw hidden-states without any specific head on top.
  */
-export class Swin2SRModel extends Swin2SRPreTrainedModel {}
+export class Swin2SRModel extends Swin2SRPreTrainedModel { }
 /**
  * Swin2SR Model transformer with an upsampler head on top for image super resolution and restoration.
  *
@@ -2094,12 +2094,12 @@ export class Swin2SRModel extends Swin2SRPreTrainedModel {}
  * // }
  * ```
  */
-export class Swin2SRForImageSuperResolution extends Swin2SRPreTrainedModel {}
-export class DPTPreTrainedModel extends PreTrainedModel {}
+export class Swin2SRForImageSuperResolution extends Swin2SRPreTrainedModel { }
+export class DPTPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare DPT Model transformer outputting raw hidden-states without any specific head on top.
  */
-export class DPTModel extends DPTPreTrainedModel {}
+export class DPTModel extends DPTPreTrainedModel { }
 /**
  * DPT Model with a depth estimation head on top (consisting of 3 convolutional layers) e.g. for KITTI, NYUv2.
  *
@@ -2136,12 +2136,12 @@ export class DPTModel extends DPTPreTrainedModel {}
  * // }
  * ```
  */
-export class DPTForDepthEstimation extends DPTPreTrainedModel {}
-export class GLPNPreTrainedModel extends PreTrainedModel {}
+export class DPTForDepthEstimation extends DPTPreTrainedModel { }
+export class GLPNPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare GLPN encoder (Mix-Transformer) outputting raw hidden-states without any specific head on top.
  */
-export class GLPNModel extends GLPNPreTrainedModel {}
+export class GLPNModel extends GLPNPreTrainedModel { }
 /**
  * GLPN Model transformer with a lightweight depth estimation head on top e.g. for KITTI, NYUv2.
  *
@@ -2178,8 +2178,8 @@ export class GLPNModel extends GLPNPreTrainedModel {}
  * // }
  * ```
  */
-export class GLPNForDepthEstimation extends GLPNPreTrainedModel {}
-export class DonutSwinPreTrainedModel extends PreTrainedModel {}
+export class GLPNForDepthEstimation extends GLPNPreTrainedModel { }
+export class DonutSwinPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare Donut Swin Model transformer outputting raw hidden-states without any specific head on top.
  *
@@ -2254,12 +2254,12 @@ export class DonutSwinPreTrainedModel extends PreTrainedModel {}
  * // <s_docvqa><s_question> What is the invoice number?</s_question><s_answer> us-001</s_answer></s>
  * ```
  */
-export class DonutSwinModel extends DonutSwinPreTrainedModel {}
-export class ConvNextPreTrainedModel extends PreTrainedModel {}
+export class DonutSwinModel extends DonutSwinPreTrainedModel { }
+export class ConvNextPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare ConvNext model outputting raw features without any specific head on top.
  */
-export class ConvNextModel extends ConvNextPreTrainedModel {}
+export class ConvNextModel extends ConvNextPreTrainedModel { }
 /**
  * ConvNext Model with an image classification head on top (a linear layer on top of the pooled features), e.g. for ImageNet.
  */
@@ -2269,11 +2269,11 @@ export class ConvNextForImageClassification extends ConvNextPreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<SequenceClassifierOutput>
 }
-export class ConvNextV2PreTrainedModel extends PreTrainedModel {}
+export class ConvNextV2PreTrainedModel extends PreTrainedModel { }
 /**
  * The bare ConvNextV2 model outputting raw features without any specific head on top.
  */
-export class ConvNextV2Model extends ConvNextV2PreTrainedModel {}
+export class ConvNextV2Model extends ConvNextV2PreTrainedModel { }
 /**
  * ConvNextV2 Model with an image classification head on top (a linear layer on top of the pooled features), e.g. for ImageNet.
  */
@@ -2283,11 +2283,11 @@ export class ConvNextV2ForImageClassification extends ConvNextV2PreTrainedModel 
 	 */
 	_call(model_inputs: any): Promise<SequenceClassifierOutput>
 }
-export class Dinov2PreTrainedModel extends PreTrainedModel {}
+export class Dinov2PreTrainedModel extends PreTrainedModel { }
 /**
  * The bare DINOv2 Model transformer outputting raw hidden-states without any specific head on top.
  */
-export class Dinov2Model extends Dinov2PreTrainedModel {}
+export class Dinov2Model extends Dinov2PreTrainedModel { }
 /**
  * Dinov2 Model transformer with an image classification head on top (a linear layer on top of the final hidden state of the [CLS] token) e.g. for ImageNet.
  */
@@ -2297,8 +2297,8 @@ export class Dinov2ForImageClassification extends Dinov2PreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<SequenceClassifierOutput>
 }
-export class YolosPreTrainedModel extends PreTrainedModel {}
-export class YolosModel extends YolosPreTrainedModel {}
+export class YolosPreTrainedModel extends PreTrainedModel { }
+export class YolosModel extends YolosPreTrainedModel { }
 export class YolosForObjectDetection extends YolosPreTrainedModel {
 	/**
 	 * @param {any} model_inputs
@@ -2316,7 +2316,7 @@ export class YolosObjectDetectionOutput extends ModelOutput {
 	logits: Tensor
 	pred_boxes: Tensor
 }
-export class SamPreTrainedModel extends PreTrainedModel {}
+export class SamPreTrainedModel extends PreTrainedModel { }
 /**
  * Segment Anything Model (SAM) for generating segmentation masks, given an input image
  * and optional 2D location and bounding boxes.
@@ -2444,8 +2444,8 @@ export class SamImageSegmentationOutput extends ModelOutput {
 	iou_scores: Tensor
 	pred_masks: Tensor
 }
-export class MarianPreTrainedModel extends PreTrainedModel {}
-export class MarianModel extends MarianPreTrainedModel {}
+export class MarianPreTrainedModel extends PreTrainedModel { }
+export class MarianModel extends MarianPreTrainedModel { }
 export class MarianMTModel extends MarianPreTrainedModel {
 	/**
 	 * Creates a new instance of the `MarianMTModel` class.
@@ -2464,8 +2464,8 @@ export class MarianMTModel extends MarianPreTrainedModel {
 	num_encoder_heads: any
 	encoder_dim_kv: number
 }
-export class M2M100PreTrainedModel extends PreTrainedModel {}
-export class M2M100Model extends M2M100PreTrainedModel {}
+export class M2M100PreTrainedModel extends PreTrainedModel { }
+export class M2M100Model extends M2M100PreTrainedModel { }
 export class M2M100ForConditionalGeneration extends M2M100PreTrainedModel {
 	/**
 	 * Creates a new instance of the `M2M100ForConditionalGeneration` class.
@@ -2484,7 +2484,7 @@ export class M2M100ForConditionalGeneration extends M2M100PreTrainedModel {
 	num_encoder_heads: any
 	encoder_dim_kv: number
 }
-export class Wav2Vec2PreTrainedModel extends PreTrainedModel {}
+export class Wav2Vec2PreTrainedModel extends PreTrainedModel { }
 /**
  * The bare Wav2Vec2 Model transformer outputting raw hidden-states without any specific head on top.
  *
@@ -2511,7 +2511,7 @@ export class Wav2Vec2PreTrainedModel extends PreTrainedModel {}
  * // }
  * ```
  */
-export class Wav2Vec2Model extends Wav2Vec2PreTrainedModel {}
+export class Wav2Vec2Model extends Wav2Vec2PreTrainedModel { }
 export class Wav2Vec2ForCTC extends Wav2Vec2PreTrainedModel {
 	/**
 	 * @param {Object} model_inputs
@@ -2528,7 +2528,7 @@ export class Wav2Vec2ForSequenceClassification extends Wav2Vec2PreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<SequenceClassifierOutput>
 }
-export class HubertPreTrainedModel extends PreTrainedModel {}
+export class HubertPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare Hubert Model transformer outputting raw hidden-states without any specific head on top.
  *
@@ -2555,7 +2555,7 @@ export class HubertPreTrainedModel extends PreTrainedModel {}
  * // }
  * ```
  */
-export class HubertModel extends Wav2Vec2PreTrainedModel {}
+export class HubertModel extends Wav2Vec2PreTrainedModel { }
 /**
  * Hubert Model with a `language modeling` head on top for Connectionist Temporal Classification (CTC).
  */
@@ -2581,7 +2581,7 @@ export class HubertForSequenceClassification extends Wav2Vec2PreTrainedModel {
 /**
  * An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained models.
  */
-export class WavLMPreTrainedModel extends PreTrainedModel {}
+export class WavLMPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare WavLM Model transformer outputting raw hidden-states without any specific head on top.
  *
@@ -2608,7 +2608,7 @@ export class WavLMPreTrainedModel extends PreTrainedModel {}
  * // }
  * ```
  */
-export class WavLMModel extends WavLMPreTrainedModel {}
+export class WavLMModel extends WavLMPreTrainedModel { }
 /**
  * WavLM Model with a `language modeling` head on top for Connectionist Temporal Classification (CTC).
  */
@@ -2634,11 +2634,11 @@ export class WavLMForSequenceClassification extends WavLMPreTrainedModel {
 /**
  * An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained models.
  */
-export class SpeechT5PreTrainedModel extends PreTrainedModel {}
+export class SpeechT5PreTrainedModel extends PreTrainedModel { }
 /**
  * The bare SpeechT5 Encoder-Decoder Model outputting raw hidden-states without any specific pre- or post-nets.
  */
-export class SpeechT5Model extends SpeechT5PreTrainedModel {}
+export class SpeechT5Model extends SpeechT5PreTrainedModel { }
 /**
  * SpeechT5 Model with a speech encoder and a text decoder.
  *
@@ -2679,7 +2679,7 @@ export class SpeechT5Model extends SpeechT5PreTrainedModel {}
  * // }
  * ```
  */
-export class SpeechT5ForSpeechToText extends SpeechT5PreTrainedModel {}
+export class SpeechT5ForSpeechToText extends SpeechT5PreTrainedModel { }
 /**
  * SpeechT5 Model with a text encoder and a speech decoder.
  */
@@ -2696,13 +2696,13 @@ export class SpeechT5ForTextToSpeech extends SpeechT5PreTrainedModel {
 		session: any,
 		decoder_merged_session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	decoder_merged_session: any
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_decoder_layers: any
 	num_decoder_heads: any
 	decoder_dim_kv: number
@@ -2766,7 +2766,7 @@ export class SpeechT5ForTextToSpeech extends SpeechT5PreTrainedModel {
  *
  * See [SpeechT5ForSpeechToText](./models#module_models.SpeechT5ForSpeechToText) for example usage.
  */
-export class SpeechT5HifiGan extends PreTrainedModel {}
+export class SpeechT5HifiGan extends PreTrainedModel { }
 export class TrOCRPreTrainedModel extends PreTrainedModel {
 	/**
 	 * Creates a new instance of the `TrOCRPreTrainedModel` class.
@@ -2778,12 +2778,12 @@ export class TrOCRPreTrainedModel extends PreTrainedModel {
 		config: any,
 		session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_encoder_layers: any
 	num_decoder_layers: any
 	num_encoder_heads: any
@@ -2794,7 +2794,7 @@ export class TrOCRPreTrainedModel extends PreTrainedModel {
 /**
  * The TrOCR Decoder with a language modeling head.
  */
-export class TrOCRForCausalLM extends TrOCRPreTrainedModel {}
+export class TrOCRForCausalLM extends TrOCRPreTrainedModel { }
 /**
  * The bare Mistral Model outputting raw hidden-states without any specific head on top.
  */
@@ -2809,18 +2809,18 @@ export class MistralPreTrainedModel extends PreTrainedModel {
 		config: any,
 		session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_heads: any
 	num_layers: any
 	dim_kv: number
 }
-export class MistralModel extends MistralPreTrainedModel {}
-export class MistralForCausalLM extends MistralPreTrainedModel {}
+export class MistralModel extends MistralPreTrainedModel { }
+export class MistralForCausalLM extends MistralPreTrainedModel { }
 /**
  * The bare Falcon Model outputting raw hidden-states without any specific head on top.
  */
@@ -2835,20 +2835,20 @@ export class FalconPreTrainedModel extends PreTrainedModel {
 		config: any,
 		session: any,
 		generation_config: new (
-			kwargs?: import("./utils/generation.js").GenerationConfigType,
-		) => import("./utils/generation.js").GenerationConfigType,
+			kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+		) => import("../src/utils/generation.js").GenerationConfigType,
 	)
 	generation_config: new (
-		kwargs?: import("./utils/generation.js").GenerationConfigType,
-	) => import("./utils/generation.js").GenerationConfigType
+		kwargs?: import("../src/utils/generation.js").GenerationConfigType,
+	) => import("../src/utils/generation.js").GenerationConfigType
 	num_heads: any
 	num_layers: any
 	dim_kv: number
 }
-export class FalconModel extends FalconPreTrainedModel {}
-export class FalconForCausalLM extends FalconPreTrainedModel {}
-export class ClapPreTrainedModel extends PreTrainedModel {}
-export class ClapModel extends ClapPreTrainedModel {}
+export class FalconModel extends FalconPreTrainedModel { }
+export class FalconForCausalLM extends FalconPreTrainedModel { }
+export class ClapPreTrainedModel extends PreTrainedModel { }
+export class ClapModel extends ClapPreTrainedModel { }
 /**
  * CLAP Text Model with a projection layer on top (a linear layer on top of the pooled output).
  *
@@ -2875,7 +2875,7 @@ export class ClapModel extends ClapPreTrainedModel {}
  * // }
  * ```
  */
-export class ClapTextModelWithProjection extends ClapPreTrainedModel {}
+export class ClapTextModelWithProjection extends ClapPreTrainedModel { }
 /**
  * CLAP Audio Model with a projection layer on top (a linear layer on top of the pooled output).
  *
@@ -2902,8 +2902,8 @@ export class ClapTextModelWithProjection extends ClapPreTrainedModel {}
  * // }
  * ```
  */
-export class ClapAudioModelWithProjection extends ClapPreTrainedModel {}
-export class VitsPreTrainedModel extends PreTrainedModel {}
+export class ClapAudioModelWithProjection extends ClapPreTrainedModel { }
+export class VitsPreTrainedModel extends PreTrainedModel { }
 /**
  * The complete VITS model, for text-to-speech synthesis.
  *
@@ -2936,19 +2936,19 @@ export class VitsModel extends VitsPreTrainedModel {
 	 */
 	_call(model_inputs: any): Promise<VitsModelOutput>
 }
-export class SegformerPreTrainedModel extends PreTrainedModel {}
+export class SegformerPreTrainedModel extends PreTrainedModel { }
 /**
  * The bare SegFormer encoder (Mix-Transformer) outputting raw hidden-states without any specific head on top.
  */
-export class SegformerModel extends SegformerPreTrainedModel {}
+export class SegformerModel extends SegformerPreTrainedModel { }
 /**
  * SegFormer Model transformer with an image classification head on top (a linear layer on top of the final hidden states) e.g. for ImageNet.
  */
-export class SegformerForImageClassification extends SegformerPreTrainedModel {}
+export class SegformerForImageClassification extends SegformerPreTrainedModel { }
 /**
  * SegFormer Model transformer with an all-MLP decode head on top e.g. for ADE20k, CityScapes.
  */
-export class SegformerForSemanticSegmentation extends SegformerPreTrainedModel {}
+export class SegformerForSemanticSegmentation extends SegformerPreTrainedModel { }
 /**
  * Base class of all AutoModels. Contains the `from_pretrained` function
  * which is used to instantiate pretrained models.
@@ -2989,7 +2989,7 @@ export class PretrainedMixin {
 			local_files_only,
 			revision,
 			model_file_name,
-		}?: import("./utils/hub.js").PretrainedOptions,
+		}?: import("../src/utils/hub.js").PretrainedOptions,
 	): Promise<PreTrainedModel>
 }
 /**
@@ -2999,7 +2999,7 @@ export class PretrainedMixin {
  * @example
  * let model = await AutoModel.from_pretrained('bert-base-uncased');
  */
-export class AutoModel extends PretrainedMixin {}
+export class AutoModel extends PretrainedMixin { }
 /**
  * Helper class which is used to instantiate pretrained sequence classification models with the `from_pretrained` function.
  * The chosen model class is determined by the type specified in the model config.
@@ -3357,6 +3357,6 @@ declare function decoderUpdatebeam(beam: any, newTokenId: number): void
  * @private
  */
 declare function encoderForward(self: any, model_inputs: any): Promise<any>
-import { Tensor } from "./utils/tensor.js"
-export {}
+import { Tensor } from "../src/utils/tensor.js"
+export { }
 //# sourceMappingURL=models.d.ts.map

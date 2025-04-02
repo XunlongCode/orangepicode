@@ -15,7 +15,7 @@ import type {
 	RangeInFile,
 	TerminalOptions,
 	Thread,
-} from "../"
+} from ".."
 
 export interface GetGhTokenArgs {
 	force?: boolean
@@ -51,10 +51,10 @@ export type ToIdeFromWebviewOrCoreProtocol = {
 		(
 			| undefined
 			| {
-					isUntitled: boolean
-					path: string
-					contents: string
-			  }
+				isUntitled: boolean
+				path: string
+				contents: string
+			}
 		),
 	]
 	getPinnedFiles: [undefined, string[]]

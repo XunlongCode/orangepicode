@@ -1,7 +1,7 @@
 import fs from "fs"
 import os from "os"
 
-import { ContextProviderWithParams, ContinueConfig, IDE, ILLM, ModelDescription, ExperimentalModelRoles } from "../"
+import { ContextProviderWithParams, ContinueConfig, IDE, ILLM, ModelDescription, ExperimentalModelRoles } from ".."
 import { GlobalContext } from "../util/GlobalContext"
 import { editConfigJson } from "../util/paths"
 

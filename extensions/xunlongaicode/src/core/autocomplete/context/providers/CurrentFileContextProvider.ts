@@ -1,5 +1,5 @@
-import { BaseContextProvider } from "./"
-import { ContextItem, ContextProviderDescription, ContextProviderExtras } from "../../"
+import { BaseContextProvider } from "."
+import { ContextItem, ContextProviderDescription, ContextProviderExtras } from "../.."
 import { getUriDescription } from "../../util/uri"
 
 class CurrentFileContextProvider extends BaseContextProvider {

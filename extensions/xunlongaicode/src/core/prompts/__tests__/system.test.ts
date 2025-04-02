@@ -1,8 +1,8 @@
 import { SYSTEM_PROMPT } from "../system"
 import { McpHub } from "../../../services/mcp/McpHub"
 import { McpServer } from "../../../shared/mcp"
-import { ClineProvider } from "../../../core/webview/ClineProvider"
-import { SearchReplaceDiffStrategy } from "../../../core/diff/strategies/search-replace"
+import { ClineProvider } from "../../webview/ClineProvider"
+import { SearchReplaceDiffStrategy } from "../../diff/strategies/search-replace"
 import * as vscode from "vscode"
 import fs from "fs/promises"
 import os from "os"
@@ -111,7 +111,7 @@ const mockContext = {
 	globalState: {
 		get: () => undefined,
 		update: () => Promise.resolve(),
-		setKeysForSync: () => {},
+		setKeysForSync: () => { },
 	},
 	extensionUri: { fsPath: "/mock/extension/path" },
 	globalStorageUri: { fsPath: "/mock/settings/path" },
@@ -127,7 +127,7 @@ const mockContext = {
 const mockProvider = {
 	ensureMcpServersDirectoryExists: async () => "/mock/mcp/path",
 	ensureSettingsDirectoryExists: async () => "/mock/settings/path",
-	postMessageToWebview: async () => {},
+	postMessageToWebview: async () => { },
 	context: mockContext,
 } as unknown as ClineProvider
 
@@ -137,13 +137,13 @@ const createMockMcpHub = (): McpHub =>
 		getServers: () => [],
 		getMcpServersPath: async () => "/mock/mcp/path",
 		getMcpSettingsFilePath: async () => "/mock/settings/path",
-		dispose: async () => {},
+		dispose: async () => { },
 		// Add other required public methods with no-op implementations
-		restartConnection: async () => {},
+		restartConnection: async () => { },
 		readResource: async () => ({ contents: [] }),
 		callTool: async () => ({ content: [] }),
-		toggleServerDisabled: async () => {},
-		toggleToolAlwaysAllow: async () => {},
+		toggleServerDisabled: async () => { },
+		toggleToolAlwaysAllow: async () => { },
 		isConnecting: false,
 		connections: [],
 	}) as unknown as McpHub

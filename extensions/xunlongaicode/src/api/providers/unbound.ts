@@ -5,7 +5,7 @@ import OpenAI from "openai"
 import { ApiHandlerOptions, ModelInfo, unboundDefaultModelId, unboundDefaultModelInfo } from "../../shared/api"
 import { convertToOpenAiMessages } from "../transform/openai-format"
 import { ApiStream, ApiStreamUsageChunk } from "../transform/stream"
-import { SingleCompletionHandler } from "../"
+import { SingleCompletionHandler } from ".."
 import { BaseProvider } from "./base-provider"
 import { CompletionOptions } from "../../core/autocomplete"
 

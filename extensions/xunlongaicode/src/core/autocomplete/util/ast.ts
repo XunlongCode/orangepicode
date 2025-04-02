@@ -1,7 +1,7 @@
 import Parser from "web-tree-sitter"
 
-import { RangeInFileWithContents } from "../"
-import { getParserForFile } from "../util/treeSitter"
+import { RangeInFileWithContents } from ".."
+import { getParserForFile } from "./treeSitter"
 
 export type AstPath = Parser.SyntaxNode[]
 

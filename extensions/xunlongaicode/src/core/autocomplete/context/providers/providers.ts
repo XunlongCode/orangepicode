@@ -1,4 +1,4 @@
-import { BaseContextProvider } from "./"
+import { BaseContextProvider } from "."
 import { ContextProviderName } from "../.."
 
 import ClipboardContextProvider from "./ClipboardContextProvider"

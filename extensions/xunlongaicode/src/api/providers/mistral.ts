@@ -1,6 +1,6 @@
 import { Anthropic } from "@anthropic-ai/sdk"
 import { Mistral } from "@mistralai/mistralai"
-import { SingleCompletionHandler } from "../"
+import { SingleCompletionHandler } from ".."
 import {
 	ApiHandlerOptions,
 	mistralDefaultModelId,

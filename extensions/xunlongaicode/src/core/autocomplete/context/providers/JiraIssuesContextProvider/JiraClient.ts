@@ -1,7 +1,7 @@
 //@ts-ignore
 import adf2md from "adf-to-md"
 
-import { RequestOptions } from "../../../"
+import { RequestOptions } from "../../.."
 
 interface JiraClientOptions {
 	domain: string
@@ -77,11 +77,11 @@ export class JiraClient {
 		this.baseUrl = `https://${this.options.domain}/rest/api/${this.options.apiVersion}`
 		this.authHeader = this.options.username
 			? {
-					Authorization: `Basic ${btoa(`${this.options.username}:${this.options.password}`)}`,
-				}
+				Authorization: `Basic ${btoa(`${this.options.username}:${this.options.password}`)}`,
+			}
 			: {
-					Authorization: `Bearer ${this.options.password}`,
-				}
+				Authorization: `Bearer ${this.options.password}`,
+			}
 	}
 
 	async issue(issueId: string, customFetch: (url: string | URL, init: any) => Promise<any>): Promise<Issue> {
@@ -130,10 +130,9 @@ export class JiraClient {
 		const response = await customFetch(
 			new URL(
 				this.baseUrl +
-					`/search?fields=summary&jql=${
-						this.options.issueQuery ??
-						"assignee = currentUser() AND resolution = Unresolved order by updated DESC"
-					}`,
+				`/search?fields=summary&jql=${this.options.issueQuery ??
+				"assignee = currentUser() AND resolution = Unresolved order by updated DESC"
+				}`,
 			),
 			{
 				method: "GET",

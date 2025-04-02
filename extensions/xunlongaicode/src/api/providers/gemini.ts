@@ -1,6 +1,6 @@
 import { Anthropic } from "@anthropic-ai/sdk"
 import { FunctionDeclaration, GoogleGenerativeAI, Tool } from "@google/generative-ai"
-import { SingleCompletionHandler } from "../"
+import { SingleCompletionHandler } from ".."
 import { ApiHandlerOptions, geminiDefaultModelId, GeminiModelId, geminiModels, ModelInfo } from "../../shared/api"
 import { convertAnthropicMessageToGemini } from "../transform/gemini-format"
 import { ApiStream } from "../transform/stream"

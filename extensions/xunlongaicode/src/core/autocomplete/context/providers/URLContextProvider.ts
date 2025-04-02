@@ -2,7 +2,7 @@ import { Readability } from "@mozilla/readability"
 import { JSDOM } from "jsdom"
 import { NodeHtmlMarkdown } from "node-html-markdown"
 
-import { BaseContextProvider } from "./"
+import { BaseContextProvider } from "."
 import { ContextItem, ContextProviderDescription, ContextProviderExtras } from "../../index.js"
 import { fetchFavicon } from "../../util/fetchFavicon"
 

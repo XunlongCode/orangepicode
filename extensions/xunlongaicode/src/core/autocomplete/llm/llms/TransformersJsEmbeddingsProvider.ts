@@ -1,7 +1,7 @@
 import path from "path"
 
 import { LLMOptions } from "../../index.js"
-import { BaseLLM } from "../../llm/index.js"
+import { BaseLLM } from "../index.js"
 // @ts-ignore
 // prettier-ignore
 import { type PipelineType } from "../../vendor/modules/@xenova/transformers/src/transformers.js";
@@ -22,7 +22,7 @@ class EmbeddingsPipeline {
 			env.localModelPath = path.join(
 				typeof __dirname === "undefined"
 					? // @ts-ignore
-						path.dirname(new URL(import.meta.url).pathname)
+					path.dirname(new URL(import.meta.url).pathname)
 					: __dirname,
 				"..",
 				"models",

@@ -1,6 +1,6 @@
 import { Anthropic } from "@anthropic-ai/sdk"
 import OpenAI from "openai"
-import { SingleCompletionHandler } from "../"
+import { SingleCompletionHandler } from ".."
 import {
 	ApiHandlerOptions,
 	ModelInfo,

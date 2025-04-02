@@ -5,7 +5,7 @@ import {
 	ContextProviderExtras,
 	ContextSubmenuItem,
 	LoadSubmenuItemsArgs,
-} from "../../"
+} from "../.."
 import { getAllPromptFiles } from "../../promptFiles/v2/getPromptFiles"
 import { parsePreamble } from "../../promptFiles/v2/parse"
 import { renderPromptFileV2 } from "../../promptFiles/v2/renderPromptFile"

@@ -1,6 +1,6 @@
 import ignore from "ignore"
 
-import { IDE } from "../"
+import { IDE } from ".."
 import { getConfigJsonPath } from "../util/paths"
 import { findUriInDirs } from "../util/uri"
 import { HelperVars } from "../util/HelperVars"

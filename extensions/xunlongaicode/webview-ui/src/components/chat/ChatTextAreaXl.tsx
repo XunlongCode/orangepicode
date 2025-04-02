@@ -26,7 +26,7 @@ import Thumbnails from "../common/Thumbnails"
 import { MAX_IMAGES_PER_MESSAGE } from "./ChatView"
 import ContextMenu from "./ContextMenu"
 import { VolumeX } from "lucide-react"
-import { svgImage } from "@/svgImage"
+import { SvgImage } from "@/svgImage"
 
 interface ChatTextAreaProps {
 	inputValue: string
@@ -709,7 +709,7 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 						<span
 							className={`input-icon-button ${textAreaDisabled ? "disabled" : ""}`}
 							title={t("chat:referenceImage")}
-							onClick={() => {}}>
+							onClick={() => { }}>
 							<span style={{ fontSize: "var(--vscode-editor-font-size)" }}>自动允许</span>
 						</span>
 					</div>
@@ -725,31 +725,15 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 						<span
 							className={`input-icon-button ${textAreaDisabled ? "disabled" : ""}`}
 							title={t("chat:referenceImage")}
-							onClick={() => {}}>
-							{/* <span style={{ fontSize: "var(--vscode-editor-font-size)" }}>图片</span> */}
-							<span
-								dangerouslySetInnerHTML={{ __html: svgImage.changeButton }}
-								style={{
-									color: "var(--vscode-input-foreground)",
-									// "--svg-color": "var(--vscode-input-foreground)",
-								}}
-								className="svg-icon-container"
-							/>
+							onClick={() => { }}>
+							<SvgImage.changeButton />
 						</span>
 						{/* 展开 */}
 						<span
 							className={`input-icon-button ${textAreaDisabled ? "disabled" : ""}`}
 							title={t("chat:referenceImage")}
-							onClick={() => {}}>
-							{/* <span style={{ fontSize: "var(--vscode-editor-font-size)" }}>图片</span> */}
-							<span
-								dangerouslySetInnerHTML={{ __html: svgImage.expenButton }}
-								style={{
-									color: "var(--vscode-input-foreground)",
-									// "--svg-color": "var(--vscode-input-foreground)",
-								}}
-								className="svg-icon-container"
-							/>
+							onClick={() => { }}>
+							<SvgImage.expenButton />
 						</span>
 					</div>
 				</div>
@@ -904,14 +888,7 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 								color: "var(--vscode-input-foreground)",
 							}}>
 							<span style={{ fontSize: "var(--vscode-editor-font-size)" }}>引用</span>
-							<span
-								dangerouslySetInnerHTML={{ __html: svgImage.otherUse }}
-								style={{
-									color: "var(--vscode-input-foreground)",
-									// "--svg-color": "var(--vscode-input-foreground)",
-								}}
-								className="svg-icon-container"
-							/>
+							<SvgImage.beautify />
 						</span>
 						{/* 图片上传按钮 */}
 						<span
@@ -925,14 +902,7 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 								color: "var(--vscode-input-foreground)",
 							}}>
 							<span style={{ fontSize: "var(--vscode-editor-font-size)" }}>图片</span>
-							<span
-								dangerouslySetInnerHTML={{ __html: svgImage.postPicture }}
-								style={{
-									color: "var(--vscode-input-foreground)",
-									// "--svg-color": "var(--vscode-input-foreground)",
-								}}
-								className="svg-icon-container"
-							/>
+							<SvgImage.postPicture />
 						</span>
 
 						{/* 美化按钮 */}
@@ -962,14 +932,7 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 										color: "var(--vscode-input-foreground)",
 									}}>
 									<span style={{ fontSize: "var(--vscode-editor-font-size)" }}>美化</span>
-									<span
-										dangerouslySetInnerHTML={{ __html: svgImage.beautify }}
-										style={{
-											color: "var(--vscode-input-foreground)",
-											// "--svg-color": "var(--vscode-input-foreground)",
-										}}
-										className="svg-icon-container"
-									/>
+									<SvgImage.beautify />
 								</span>
 							)}
 						</div>
@@ -1110,14 +1073,7 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							title={t("chat:sendMessage")}
 							onClick={() => !textAreaDisabled && onSend()}
 							style={{ fontSize: 15 }}>
-							<span
-								dangerouslySetInnerHTML={{ __html: svgImage.postButton }}
-								style={{
-									color: "var(--vscode-input-foreground)",
-									// "--svg-color": "var(--vscode-input-foreground)",
-								}}
-								className="svg-icon-container"
-							/>
+							<SvgImage.postButton />
 						</span>
 					</div>
 				</div>

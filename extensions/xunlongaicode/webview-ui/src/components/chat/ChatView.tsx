@@ -32,6 +32,7 @@ import { getAllModes } from "../../../../src/shared/modes"
 import TelemetryBanner from "../common/TelemetryBanner"
 import { useAppTranslation } from "@/i18n/TranslationContext"
 import removeMd from "remove-markdown"
+import ChatTextAreaXl from "./ChatTextAreaXl"
 
 interface ChatViewProps {
 	isHidden: boolean
@@ -68,6 +69,14 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 		customModes,
 		telemetrySetting,
 	} = useExtensionState()
+
+	// 添加一个状态来控制 AutoApproveMenu 的展开状态
+	const [isAutoApproveMenuExpanded, setIsAutoApproveMenuExpanded] = useState(false)
+
+	// 处理 AutoApproveMenu 展开状态变化的回调
+	const handleAutoApproveMenuExpandChange = useCallback((expanded: boolean) => {
+		setIsAutoApproveMenuExpanded(expanded)
+	}, [])
 
 	//const task = messages.length > 0 ? (messages[0].say === "task" ? messages[0] : undefined) : undefined) : undefined
 	const task = useMemo(() => messages.at(0), [messages]) // leaving this less safe version here since if the first message is not a task, then the extension is in a bad state and needs to be debugged (see Cline.abort)
@@ -1144,23 +1153,25 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 				</div>
 			)}
 
-			{/* 
+			{/*
 			// Flex layout explanation:
 			// 1. Content div above uses flex: "1 1 0" to:
-			//    - Grow to fill available space (flex-grow: 1) 
+			//    - Grow to fill available space (flex-grow: 1)
 			//    - Shrink when AutoApproveMenu needs space (flex-shrink: 1)
 			//    - Start from zero size (flex-basis: 0) to ensure proper distribution
 			//    minHeight: 0 allows it to shrink below its content height
 			//
 			// 2. AutoApproveMenu uses flex: "0 1 auto" to:
 			//    - Not grow beyond its content (flex-grow: 0)
-			//    - Shrink when viewport is small (flex-shrink: 1) 
+			//    - Shrink when viewport is small (flex-shrink: 1)
 			//    - Use its content size as basis (flex-basis: auto)
 			//    This ensures it takes its natural height when there's space
 			//    but becomes scrollable when the viewport is too small
 			*/}
 			{!task && (
 				<AutoApproveMenu
+					isExpandedExternal={isAutoApproveMenuExpanded}
+					onExpandChange={handleAutoApproveMenuExpandChange}
 					style={{
 						marginBottom: -2,
 						flex: "0 1 auto", // flex-grow: 0, flex-shrink: 1, flex-basis: auto
@@ -1286,7 +1297,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 				</>
 			)}
 
-			<ChatTextArea
+			{/* <ChatTextArea
 				ref={textAreaRef}
 				inputValue={inputValue}
 				setInputValue={setInputValue}
@@ -1305,6 +1316,28 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 				mode={mode}
 				setMode={setMode}
 				modeShortcutText={modeShortcutText}
+			/> */}
+			{/* 上面的是插件的原始的代码 ,下面是提供给IDE使用的页面*/}
+			<ChatTextAreaXl
+				ref={textAreaRef}
+				inputValue={inputValue}
+				setInputValue={setInputValue}
+				textAreaDisabled={textAreaDisabled}
+				placeholderText={placeholderText}
+				selectedImages={selectedImages}
+				setSelectedImages={setSelectedImages}
+				onSend={() => handleSendMessage(inputValue, selectedImages)}
+				onSelectImages={selectImages}
+				shouldDisableImages={shouldDisableImages}
+				onHeightChange={() => {
+					if (isAtBottom) {
+						scrollToBottomAuto()
+					}
+				}}
+				mode={mode}
+				setMode={setMode}
+				modeShortcutText={modeShortcutText}
+				onToggleAutoApproveMenu={() => setIsAutoApproveMenuExpanded((prev) => !prev)}
 			/>
 
 			<div id="roo-portal" />

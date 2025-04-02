@@ -27,6 +27,12 @@
         "category": "Core",
 				"title": "Hide Usermenu",
 				"command": "orangepicode-core.hideUsermenu"
+			},
+			{
+				"icon": "$(gear)",
+        "category": "Core",
+				"title": "Toggle Usermenu",
+				"command": "orangepicode-core.toggleUsermenu"
 			}
     ],
     "viewsContainers": {

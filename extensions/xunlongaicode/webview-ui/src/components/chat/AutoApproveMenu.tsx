@@ -14,10 +14,29 @@ interface AutoApproveAction {
 
 interface AutoApproveMenuProps {
 	style?: React.CSSProperties
+	// 添加一个新的属性用于控制展开状态
+	isExpandedExternal?: boolean
+	// 添加一个回调函数，当内部状态变化时通知外部
+	onExpandChange?: (expanded: boolean) => void
 }
 
-const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
-	const [isExpanded, setIsExpanded] = useState(false)
+const AutoApproveMenu = ({ style, isExpandedExternal, onExpandChange }: AutoApproveMenuProps) => {
+	// const [isExpanded, setIsExpanded] = useState(false)
+	// 使用内部状态，但当外部属性存在时会被覆盖
+	const [isExpandedInternal, setIsExpandedInternal] = useState(false)
+
+	// 实际使用的展开状态，优先使用外部控制的状态
+	const isExpanded = isExpandedExternal !== undefined ? isExpandedExternal : isExpandedInternal
+
+	const toggleExpanded = useCallback(() => {
+		const newExpandedState = !isExpanded
+		// 更新内部状态
+		setIsExpandedInternal(newExpandedState)
+		// 通知外部状态变化
+		if (onExpandChange) {
+			onExpandChange(newExpandedState)
+		}
+	}, [isExpanded, onExpandChange])
 	const {
 		alwaysAllowReadOnly,
 		setAlwaysAllowReadOnly,
@@ -100,9 +119,9 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 		},
 	]
 
-	const toggleExpanded = useCallback(() => {
-		setIsExpanded((prev) => !prev)
-	}, [])
+	// const toggleExpanded = useCallback(() => {
+	// 	setIsExpanded((prev) => !prev)
+	// }, [])
 
 	const enabledActionsList = actions
 		.filter((action) => action.enabled)

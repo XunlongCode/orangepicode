@@ -27,6 +27,7 @@ import { MAX_IMAGES_PER_MESSAGE } from "./ChatView"
 import ContextMenu from "./ContextMenu"
 import { VolumeX } from "lucide-react"
 import { SvgImage } from "@/svgImage"
+import { VSCodeCheckbox } from "@vscode/webview-ui-toolkit/react"
 
 interface ChatTextAreaProps {
 	inputValue: string
@@ -42,6 +43,8 @@ interface ChatTextAreaProps {
 	mode: Mode
 	setMode: (value: Mode) => void
 	modeShortcutText: string
+	// 添加新的回调函数属性
+	onToggleAutoApproveMenu?: () => void
 }
 
 const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
@@ -60,11 +63,21 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 			mode,
 			setMode,
 			modeShortcutText,
+			onToggleAutoApproveMenu,
 		},
 		ref,
 	) => {
 		const { t } = useAppTranslation()
-		const { filePaths, openedTabs, currentApiConfigName, listApiConfigMeta, customModes, cwd } = useExtensionState()
+		const {
+			filePaths,
+			openedTabs,
+			currentApiConfigName,
+			listApiConfigMeta,
+			customModes,
+			cwd,
+			setAutoApprovalEnabled,
+			autoApprovalEnabled,
+		} = useExtensionState()
 		const [gitCommits, setGitCommits] = useState<any[]>([])
 		const [showDropdown, setShowDropdown] = useState(false)
 
@@ -106,6 +119,13 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 			window.addEventListener("message", messageHandler)
 			return () => window.removeEventListener("message", messageHandler)
 		}, [setInputValue])
+
+		// 在点击事件处理函数中调用回调
+		const handleToggleAutoApproveMenu = useCallback(() => {
+			if (onToggleAutoApproveMenu) {
+				onToggleAutoApproveMenu()
+			}
+		}, [onToggleAutoApproveMenu])
 
 		const [thumbnailsHeight, setThumbnailsHeight] = useState(0)
 		const [textAreaBaseHeight, setTextAreaBaseHeight] = useState<number | undefined>(undefined)
@@ -696,7 +716,8 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 						alignItems: "center",
 						marginTop: "auto",
 						paddingTop: "2px",
-					}}>
+					}}
+					onClick={handleToggleAutoApproveMenu}>
 					{/* 顶部左边的按钮 */}
 					<div
 						style={{
@@ -706,10 +727,20 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							marginTop: "auto",
 							paddingTop: "2px",
 						}}>
+						<div onClick={(e) => e.stopPropagation()}>
+							<VSCodeCheckbox
+								checked={autoApprovalEnabled ?? false}
+								onChange={() => {
+									const newValue = !(autoApprovalEnabled ?? false)
+									setAutoApprovalEnabled(newValue)
+									vscode.postMessage({ type: "autoApprovalEnabled", bool: newValue })
+								}}
+							/>
+						</div>
 						<span
 							className={`input-icon-button ${textAreaDisabled ? "disabled" : ""}`}
 							title={t("chat:referenceImage")}
-							onClick={() => { }}>
+							onClick={() => {}}>
 							<span style={{ fontSize: "var(--vscode-editor-font-size)" }}>自动允许</span>
 						</span>
 					</div>
@@ -725,14 +756,14 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 						<span
 							className={`input-icon-button ${textAreaDisabled ? "disabled" : ""}`}
 							title={t("chat:referenceImage")}
-							onClick={() => { }}>
+							onClick={() => {}}>
 							<SvgImage.changeButton />
 						</span>
 						{/* 展开 */}
 						<span
 							className={`input-icon-button ${textAreaDisabled ? "disabled" : ""}`}
 							title={t("chat:referenceImage")}
-							onClick={() => { }}>
+							onClick={() => {}}>
 							<SvgImage.expenButton />
 						</span>
 					</div>

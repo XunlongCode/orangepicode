@@ -18,17 +18,26 @@ export const Usermenu: FC = () => {
 		}
 	}, [dropdownContiainerRef.current])
 
+	// 点击遮罩，关闭菜单
 	const onUsermenuMaskClick = () => {
 		vscode.postMessage({
 			type: "hideUsermenu"
 		})
 	}
 
+	// 选择语言
 	const onSelectLanguage = (lang: string) => {
 		i18n.changeLanguage(lang)
 		vscode.postMessage({
 			type: "setLanguage",
 			language: lang
+		})
+	}
+
+	// 点击设置
+	const onSettingClick = () => {
+		vscode.postMessage({
+			type: "openSettings"
 		})
 	}
 
@@ -100,31 +109,31 @@ export const Usermenu: FC = () => {
 
 							<DropdownMenuSeparator className='m-0' />
 
-							<DropdownMenuItem className='h-[48px] cursor-pointer'>
-								{t("settings", { ns: "usermenu" })}
-							</DropdownMenuItem>
-							<DropdownMenuItem className='h-[48px] cursor-pointer'>
-								{t("keyboardShortcuts", { ns: "usermenu" })}
-							</DropdownMenuItem>
-							<DropdownMenuItem className='h-[48px] cursor-pointer'>
-								{t("checkUpdate", { ns: "usermenu" })}
-							</DropdownMenuItem>
-							<DropdownMenuItem className='h-[48px] cursor-pointer'>
-								{t("helpDocumentation", { ns: "usermenu" })}
-							</DropdownMenuItem>
-							<DropdownMenuItem className='h-[48px] cursor-pointer'>
-								{t("contactUs", { ns: "usermenu" })}
-							</DropdownMenuItem>
+							<DropdownMenuItem className='h-[48px] cursor-pointer' onClick={onSettingClick}>
+							{t("settings", { ns: "usermenu" })}
+						</DropdownMenuItem>
+						<DropdownMenuItem className='h-[48px] cursor-pointer'>
+							{t("keyboardShortcuts", { ns: "usermenu" })}
+						</DropdownMenuItem>
+						<DropdownMenuItem className='h-[48px] cursor-pointer'>
+							{t("checkUpdate", { ns: "usermenu" })}
+						</DropdownMenuItem>
+						<DropdownMenuItem className='h-[48px] cursor-pointer'>
+							{t("helpDocumentation", { ns: "usermenu" })}
+						</DropdownMenuItem>
+						<DropdownMenuItem className='h-[48px] cursor-pointer'>
+							{t("contactUs", { ns: "usermenu" })}
+						</DropdownMenuItem>
 
-							<DropdownMenuSeparator className='m-0' />
+						<DropdownMenuSeparator className='m-0' />
 
-							<DropdownMenuItem className='h-[48px] cursor-pointer'>
-								{t("logout", { ns: "usermenu" })}
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
-				</div>
-			</VscodeTheme>
+						<DropdownMenuItem className='h-[48px] cursor-pointer'>
+							{t("logout", { ns: "usermenu" })}
+						</DropdownMenuItem>
+					</DropdownMenuContent>
+				</DropdownMenu>
 		</div>
-	</div>
+	</VscodeTheme>
+		</div >
+	</div >
 }

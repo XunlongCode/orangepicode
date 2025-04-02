@@ -16,24 +16,30 @@
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
-			{
-				"icon": "$(gear)",
+      {
+        "icon": "$(gear)",
         "category": "Core",
-				"title": "Show Usermenu",
-				"command": "orangepicode-core.showUsermenu"
-			},
-			{
-				"icon": "$(gear)",
+        "title": "Show Usermenu",
+        "command": "orangepicode-core.showUsermenu"
+      },
+      {
+        "icon": "$(gear)",
         "category": "Core",
-				"title": "Hide Usermenu",
-				"command": "orangepicode-core.hideUsermenu"
-			},
-			{
-				"icon": "$(gear)",
+        "title": "Hide Usermenu",
+        "command": "orangepicode-core.hideUsermenu"
+      },
+      {
+        "icon": "$(gear)",
         "category": "Core",
-				"title": "Toggle Usermenu",
-				"command": "orangepicode-core.toggleUsermenu"
-			}
+        "title": "Toggle Usermenu",
+        "command": "orangepicode-core.toggleUsermenu"
+      },
+      {
+        "icon": "$(gear)",
+        "category": "Core",
+        "title": "Open Settings In New Tab",
+        "command": "orangepicode-core.openSettingsInNewTab"
+      }
     ],
     "viewsContainers": {
       "core": [

@@ -12,6 +12,7 @@ export interface WebviewMessage {
 	| "importUserSettingsFromCursor"
 	| "setLanguage"
 	| "hideUsermenu"
+	| "openSettings"
 	messageId?: string
 	theme?: string
 	themeType?: string

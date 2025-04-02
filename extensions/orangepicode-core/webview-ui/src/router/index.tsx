@@ -3,9 +3,11 @@ import Layout from "../layout";
 import Index from "../pages/index";
 import Welcome from "../pages/welcome";
 import { Usermenu } from '../pages/usermenu';
+import Settings from '../pages/settings';
 
 export const ORANGEPICODE_ONBOARDING_VIEWID = "onboarding_view";
 export const ORANGEPICODE_USERMENU_VIEWID = "usermenu_view";
+export const ORANGEPICODE_SETTINGS_VIEWID = "settings_view";
 
 export const getInitialEntries = () => {
 	switch (window.viewId) {
@@ -17,6 +19,11 @@ export const getInitialEntries = () => {
 		case ORANGEPICODE_USERMENU_VIEWID:
 			return [
 				"/usermenu",
+			]
+
+		case ORANGEPICODE_SETTINGS_VIEWID:
+			return [
+				"/settings"
 			]
 
 		default:
@@ -43,6 +50,10 @@ export const router = createMemoryRouter(
 				{
 					path: "/usermenu",
 					element: <Usermenu />,
+				},
+				{
+					path: "/settings",
+					element: <Settings />
 				}
 			],
 		},

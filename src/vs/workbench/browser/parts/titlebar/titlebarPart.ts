@@ -53,7 +53,7 @@ import { IEditorCommandsContext, IEditorPartOptionsChangeEvent, IToolbarActions 
 import { CodeWindow, mainWindow } from '../../../../base/browser/window.js';
 import {
 	// ACCOUNTS_ACTIVITY_TILE_ACTION,
-	GLOBAL_ACTIVITY_TITLE_ACTION
+	// GLOBAL_ACTIVITY_TITLE_ACTION
 } from './titlebarActions.js';
 import { IView } from '../../../../base/browser/ui/grid/grid.js';
 import { createInstantHoverDelegate } from '../../../../base/browser/ui/hover/hoverDelegateFactory.js';

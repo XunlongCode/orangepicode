@@ -25,7 +25,7 @@ import { API } from "./exports/api"
 
 import { handleUri, registerCommands, registerCodeActions, registerTerminalActions } from "./activate"
 import { formatLanguage } from "./shared/language"
-
+import { monitorLanguageChange } from "./languageMonitor"
 /**
  * Built using https://github.com/microsoft/vscode-webview-ui-toolkit
  *
@@ -51,8 +51,8 @@ export function activate(context: vscode.ExtensionContext) {
 	telemetryService.initialize()
 
 	// Initialize i18n for internationalization support
-	initializeI18n(context.globalState.get("language") ?? formatLanguage(vscode.env.language))
-
+	// initializeI18n(context.globalState.get("language") ?? formatLanguage(vscode.env.language))
+	initializeI18n(formatLanguage(vscode.env.language))
 	// Initialize terminal shell execution handlers.
 	TerminalRegistry.initialize()
 
@@ -117,6 +117,26 @@ export function activate(context: vscode.ExtensionContext) {
 
 	registerCodeActions(context)
 	registerTerminalActions(context)
+
+
+	// 监听语言变化 目前不需要(不需要)
+	// const languageMonitor = monitorLanguageChange((newLocale) => {
+	// 	console.log(`VSCode 语言已更改为: ${newLocale}`);
+
+	// 	// 在这里处理语言变化后的逻辑
+	// 	// 例如更新 WebView 的语言、重新加载翻译资源等
+	// 	if (newLocale.startsWith('zh')) {
+	// 		// 处理切换到中文的逻辑
+
+
+	// 	} else if (newLocale.startsWith('en')) {
+	// 		// 处理切换到英文的逻辑
+	// 	}
+	// 	// 可以添加其他语言的处理...
+	// });
+
+	// 将监听器添加到订阅列表，以便在扩展停用时自动清理
+	// context.subscriptions.push(languageMonitor);
 
 	// Implements the `RooCodeAPI` interface.
 	return new API(outputChannel, provider)

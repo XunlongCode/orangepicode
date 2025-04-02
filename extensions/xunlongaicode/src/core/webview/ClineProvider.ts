@@ -2720,7 +2720,8 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			terminalShellIntegrationTimeout:
 				stateValues.terminalShellIntegrationTimeout ?? TERMINAL_SHELL_INTEGRATION_TIMEOUT,
 			mode: stateValues.mode ?? defaultModeSlug,
-			language: stateValues.language ?? formatLanguage(vscode.env.language),
+			// language: stateValues.language ?? formatLanguage(vscode.env.language),
+			language: formatLanguage(vscode.env.language),
 			mcpEnabled: stateValues.mcpEnabled ?? true,
 			enableMcpServerCreation: stateValues.enableMcpServerCreation ?? true,
 			alwaysApproveResubmit: stateValues.alwaysApproveResubmit ?? false,

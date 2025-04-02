@@ -1,0 +1,9 @@
+.svg-icon-container svg {
+    fill: var(--svg-color, currentColor);
+    stroke: var(--svg-color, currentColor);
+  }
+  
+  .svg-icon-container svg path {
+    fill: var(--svg-color, currentColor);
+    stroke: var(--svg-color, currentColor);
+  }

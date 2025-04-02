@@ -83,7 +83,7 @@ const Settings: FC = () => {
 			</div>
 
 			{/* 间距 */}
-			<div className='w-[24px]'></div>
+			<div className='w-[24px] shrink-0'></div>
 
 			{/* 右侧内容 */}
 			<div className='pt-[16px] pr-[16px] text-foreground max-h-screen overflow-auto'>

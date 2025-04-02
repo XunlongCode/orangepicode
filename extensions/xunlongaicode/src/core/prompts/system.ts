@@ -67,15 +67,15 @@ async function generatePrompt(
 ${getSharedToolUseSection()}
 
 ${getToolDescriptionsForMode(
-	mode,
-	cwd,
-	supportsComputerUse,
-	effectiveDiffStrategy,
-	browserViewportSize,
-	mcpHub,
-	customModeConfigs,
-	experiments,
-)}
+		mode,
+		cwd,
+		supportsComputerUse,
+		effectiveDiffStrategy,
+		browserViewportSize,
+		mcpHub,
+		customModeConfigs,
+		experiments,
+	)}
 
 ${getToolUseGuidelinesSection()}
 
@@ -91,10 +91,13 @@ ${getSystemInfoSection(cwd, mode, customModeConfigs)}
 
 ${getObjectiveSection()}
 
-${await addCustomInstructions(promptComponent?.customInstructions || modeConfig.customInstructions || "", globalCustomInstructions || "", cwd, mode, { language: language ?? formatLanguage(vscode.env.language), rooIgnoreInstructions })}`
+${await addCustomInstructions(promptComponent?.customInstructions || modeConfig.customInstructions || "", globalCustomInstructions || "", cwd, mode, { language: formatLanguage(vscode.env.language), rooIgnoreInstructions })}`
+	// ${await addCustomInstructions(promptComponent?.customInstructions || modeConfig.customInstructions || "", globalCustomInstructions || "", cwd, mode, { language: language ?? formatLanguage(vscode.env.language), rooIgnoreInstructions })}`
 
 	return basePrompt
 }
+
+
 
 export const SYSTEM_PROMPT = async (
 	context: vscode.ExtensionContext,
@@ -141,7 +144,8 @@ export const SYSTEM_PROMPT = async (
 			globalCustomInstructions || "",
 			cwd,
 			mode,
-			{ language: language ?? formatLanguage(vscode.env.language), rooIgnoreInstructions },
+			// { language: language ?? formatLanguage(vscode.env.language), rooIgnoreInstructions },
+			{ language: formatLanguage(vscode.env.language), rooIgnoreInstructions },
 		)
 		// For file-based prompts, don't include the tool sections
 		return `${roleDefinition}

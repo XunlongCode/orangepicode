@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import tw from "twin.macro";
 
 export const Usermenu: FC = () => {
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 	const dropdownContiainerRef = useRef<HTMLDivElement>(null);
 	const [open, setOpen] = useState(false)
 
@@ -24,9 +24,17 @@ export const Usermenu: FC = () => {
 		})
 	}
 
+	const onSelectLanguage = (lang: string) => {
+		i18n.changeLanguage(lang)
+		vscode.postMessage({
+			type: "setLanguage",
+			language: lang
+		})
+	}
+
 	return <div className='absolute inset-0'>
 		<div className='absolute inset-0' onClick={onUsermenuMaskClick}></div>
-		<div className='absolute w-[240px] h-[464px] right-[24px] top-[45px]'>
+		<div className='absolute w-[240px] h-[460px] right-[24px] top-[45px]'>
 			<VscodeTheme
 				style={{
 					boxShadow: "0px 0px 30px 0px rgba(0, 0, 0, 0.25)"
@@ -47,9 +55,13 @@ export const Usermenu: FC = () => {
 						ref={dropdownContiainerRef}
 						className={css`
 							div[data-radix-popper-content-wrapper] {
-								/* position: relative !important;
-								transform: none !important; */
-								div[role=menuitem][data-highlighted] {
+								&:first-of-type {
+									position: relative !important;
+									transform: none !important;
+								}
+
+								div[role="menuitem"][data-highlighted],
+								div[role="menuitem"][data-state="open"] {
 									${tw`text-background`}
 								}
 							}
@@ -66,10 +78,10 @@ export const Usermenu: FC = () => {
 									{t("theme", { ns: "usermenu" })}
 								</DropdownMenuSubTrigger>
 								<DropdownMenuPortal container={dropdownContiainerRef.current!}>
-									<DropdownMenuSubContent>
-										<DropdownMenuItem>{t("darkTheme", { ns: "theme" })}</DropdownMenuItem>
-										<DropdownMenuItem>{t("lightTheme", { ns: "theme" })}</DropdownMenuItem>
-										<DropdownMenuItem>{t("orangeTheme", { ns: "theme" })}</DropdownMenuItem>
+									<DropdownMenuSubContent className='!animate-none'>
+										<DropdownMenuItem className='cursor-pointer'>{t("darkTheme", { ns: "theme" })}</DropdownMenuItem>
+										<DropdownMenuItem className='cursor-pointer'>{t("lightTheme", { ns: "theme" })}</DropdownMenuItem>
+										<DropdownMenuItem className='cursor-pointer'>{t("orangeTheme", { ns: "theme" })}</DropdownMenuItem>
 									</DropdownMenuSubContent>
 								</DropdownMenuPortal>
 							</DropdownMenuSub>
@@ -79,9 +91,9 @@ export const Usermenu: FC = () => {
 									{t("language", { ns: "usermenu" })}
 								</DropdownMenuSubTrigger>
 								<DropdownMenuPortal container={dropdownContiainerRef.current!}>
-									<DropdownMenuSubContent>
-										<DropdownMenuItem>English</DropdownMenuItem>
-										<DropdownMenuItem>简体中文</DropdownMenuItem>
+									<DropdownMenuSubContent className='!animate-none'>
+										<DropdownMenuItem className='cursor-pointer' onClick={() => onSelectLanguage("en")}>English</DropdownMenuItem>
+										<DropdownMenuItem className='cursor-pointer' onClick={() => onSelectLanguage("zh-CN")}>简体中文</DropdownMenuItem>
 									</DropdownMenuSubContent>
 								</DropdownMenuPortal>
 							</DropdownMenuSub>

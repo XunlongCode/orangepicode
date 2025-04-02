@@ -19,9 +19,10 @@ const convertToHslValue = (value?: string, defaultValue?: string) => {
 	return `${round(h, 1)} ${round(s * 100, 1)}% ${round(l * 100, 1)}%`;
 }
 
-const VscodeTheme: FC<PropsWithChildren & { className?: string }> = ({
+const VscodeTheme: FC<PropsWithChildren & { className?: string, style?: React.CSSProperties }> = ({
 	children,
 	className,
+	style,
 }) => {
 	const background = useCssVar({ name: "--vscode-editor-background" });
 	const foreground = useCssVar({ name: "--vscode-editor-foreground" });
@@ -127,7 +128,7 @@ const VscodeTheme: FC<PropsWithChildren & { className?: string }> = ({
 	]);
 
 	return (
-		<div style={themeVariables} className={cn(className, "h-full w-full")}>
+		<div style={{ ...themeVariables, ...style }} className={cn(className, "h-full w-full")}>
 			{children}
 		</div>
 	);

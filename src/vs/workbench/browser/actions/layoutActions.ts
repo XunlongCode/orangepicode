@@ -1386,7 +1386,7 @@ ToggleVisibilityActions.push(...[
 	CreateToggleLayoutItem(ToggleAuxiliaryBarAction.ID, AuxiliaryBarVisibleContext, localize('secondarySideBar', "Secondary Side Bar"), { whenA: ContextKeyExpr.equals('config.workbench.sideBar.location', 'left'), iconA: panelRightIcon, iconB: panelLeftIcon }),
 	CreateToggleLayoutItem(TogglePanelAction.ID, PanelVisibleContext, localize('panel', "Panel"), panelIcon),
 	CreateToggleLayoutItem(ToggleStatusbarVisibilityAction.ID, ContextKeyExpr.equals('config.workbench.statusBar.visible', true), localize('statusBar', "Status Bar"), statusBarIcon),
-	CreateToggleLayoutItem(ToggleOnboardingAction.ID, OrangePiVisibleContext, 'OrangePi', orangepiIcon)
+	CreateToggleLayoutItem(ToggleOnboardingAction.ID, OrangePiVisibleContext, 'OrangePi', orangepiIcon),
 ]);
 
 const MoveSideBarActions: CustomizeLayoutItem[] = [
@@ -1610,3 +1610,6 @@ registerAction2(class CustomizeLayoutAction extends Action2 {
 		quickPick.show();
 	}
 });
+
+// overlay actions
+import '../parts/overlay/overlayActions.js';

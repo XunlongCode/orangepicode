@@ -24,7 +24,7 @@ export interface IOnboardingService extends IDisposable {
 	/**
 	 * Returns the FirstLaunchOverlayPart instance.
 	 */
-	readonly pearOverlayPart: OnboardingPart;
+	readonly onboardingPart: OnboardingPart;
 
 	/**
 	 * Shows the Overlay popup.
@@ -72,7 +72,7 @@ export class OnboardingService
 	implements IOnboardingService {
 	declare readonly _serviceBrand: undefined;
 
-	private readonly _pearOverlayPart: OnboardingPart;
+	private readonly _onboardingPart: OnboardingPart;
 
 	constructor(
 		@IInstantiationService
@@ -82,7 +82,7 @@ export class OnboardingService
 		// @ICommandService private readonly commandService: ICommandService,
 	) {
 		super();
-		this._pearOverlayPart =
+		this._onboardingPart =
 			this.instantiationService.createInstance(OnboardingPart);
 		this.registerListeners();
 		this.registerCommands();
@@ -145,45 +145,45 @@ export class OnboardingService
 		});
 	}
 
-	get pearOverlayPart(): OnboardingPart {
-		return this._pearOverlayPart;
+	get onboardingPart(): OnboardingPart {
+		return this._onboardingPart;
 	}
 
 	show(): void {
-		this._pearOverlayPart.show();
+		this._onboardingPart.show();
 	}
 
 	hide(): void {
-		this._pearOverlayPart.hide();
+		this._onboardingPart.hide();
 	}
 
 	hideLoadingOverlay(): void {
-		this._pearOverlayPart.hideLoadingOverlay();
+		this._onboardingPart.hideLoadingOverlay();
 	}
 
 	toggle(): void {
-		this._pearOverlayPart.toggle();
+		this._onboardingPart.toggle();
 	}
 
 	lock(): void {
-		this._pearOverlayPart.lock();
+		this._onboardingPart.lock();
 	}
 
 	unlock(): void {
-		this._pearOverlayPart.unlock();
+		this._onboardingPart.unlock();
 	}
 
 	isLocked(): boolean {
-		return this._pearOverlayPart.isLocked;
+		return this._onboardingPart.isLocked;
 	}
 
 	override dispose(): void {
 		super.dispose();
-		this._pearOverlayPart.dispose();
+		this._onboardingPart.dispose();
 	}
 
 	isVisible(): boolean {
-		return this._pearOverlayPart.isVisible();
+		return this._onboardingPart.isVisible();
 	}
 }
 

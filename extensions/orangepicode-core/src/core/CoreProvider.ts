@@ -8,7 +8,8 @@ import { getTheme, getThemeType } from '../utils/getTheme';
 import { v4 as uuidv4 } from 'uuid';
 import { importUserSettingsFromCursor, importUserSettingsFromVSCode } from '../utils/copySettings';
 
-export const ORANGEPICODE_OVERLAY_VIEWID = "onboarding_view";
+export const ORANGEPICODE_ONBOARDING_VIEWID = "onboarding_view";
+export const ORANGEPICODE_USERMENU_VIEWID = "usermenu_view";
 
 class CoreProvider implements vscode.WebviewViewProvider {
 	private view?: vscode.WebviewView | vscode.WebviewPanel;
@@ -17,8 +18,9 @@ class CoreProvider implements vscode.WebviewViewProvider {
 	constructor(
 		readonly context: vscode.ExtensionContext,
 		private readonly outputChannel: vscode.OutputChannel,
+		public readonly viewId: string = ORANGEPICODE_ONBOARDING_VIEWID
 	) {
-		console.log("OrangePi Code Provider.");
+		console.log("OrangePi Code CoreProvider for view id: ", this.viewId);
 	}
 
 	public async resolveWebviewView(webviewView: vscode.WebviewView | vscode.WebviewPanel) {
@@ -111,6 +113,10 @@ class CoreProvider implements vscode.WebviewViewProvider {
 					})
 					break
 				}
+				case "hideUsermenu": {
+					await vscode.commands.executeCommand("orangepicode-core.hideUsermenu")
+					break
+				}
 			}
 		})
 	}
@@ -135,6 +141,8 @@ class CoreProvider implements vscode.WebviewViewProvider {
 		])
 		const currentTheme = await getTheme(this.context);
 
+		const language = vscode.env.language;
+
 		return /* html */`
 			<link href="${codiconsUri}" rel="stylesheet" />
 			<link rel="stylesheet" type="text/css" href="${stylesUri}">
@@ -142,6 +150,8 @@ class CoreProvider implements vscode.WebviewViewProvider {
 			<script nonce="${nonce}">window.vscExtensionUrl = "${vscExtensionUrl}"</script>
 			<script nonce="${nonce}">window.isOnboardingCompleted = ${isOnboardingCompleted}</script>
 			<script nonce="${nonce}">window.fullColorTheme = ${JSON.stringify(currentTheme)}</script>
+			<script nonce="${nonce}">window.language = "${language}"</script>
+			<script nonce="${nonce}">window.viewId = "${this.viewId}"</script>
 		`
 	}
 

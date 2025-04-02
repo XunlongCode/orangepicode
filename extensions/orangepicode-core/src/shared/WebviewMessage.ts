@@ -10,12 +10,10 @@ export interface WebviewMessage {
 	| "setThemeType"
 	| "importUserSettingsFromVSCode"
 	| "importUserSettingsFromCursor"
+	| "setLanguage"
+	| "hideUsermenu"
 	messageId?: string
-	theme?: {
-		rules?: {
-			token?: string;
-			foreground?: string;
-		}[]
-	}
+	theme?: string
 	themeType?: string
+	language?: string
 }

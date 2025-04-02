@@ -1,6 +1,17 @@
 import i18next from "i18next"
 import { initReactI18next } from "react-i18next"
 
+// Initialize i18next for React
+// This will be initialized with the VSCode language in TranslationProvider
+i18next.use(initReactI18next).init({
+	lng: "en", // Default language (will be overridden)
+	fallbackLng: "en",
+	debug: false,
+	interpolation: {
+		escapeValue: false, // React already escapes by default
+	},
+})
+
 // Build translations object
 const translations: Record<string, Record<string, any>> = {}
 
@@ -28,27 +39,14 @@ Object.entries(localeFiles).forEach(([path, module]) => {
 
 console.log("Dynamically loaded translations:", Object.keys(translations))
 
-// Initialize i18next for React
-// This will be initialized with the VSCode language in TranslationProvider
-i18next.use(initReactI18next).init({
-	lng: "en", // Default language (will be overridden)
-	fallbackLng: "en",
-	debug: false,
-	interpolation: {
-		escapeValue: false, // React already escapes by default
-	},
+Object.entries(translations).forEach(([lang, namespaces]) => {
+	try {
+		Object.entries(namespaces).forEach(([namespace, resources]) => {
+			i18next.addResourceBundle(lang, namespace, resources, true, true)
+		})
+	} catch (error) {
+		console.warn(`Could not load ${lang} translations:`, error)
+	}
 })
-
-export function loadTranslations() {
-	Object.entries(translations).forEach(([lang, namespaces]) => {
-		try {
-			Object.entries(namespaces).forEach(([namespace, resources]) => {
-				i18next.addResourceBundle(lang, namespace, resources, true, true)
-			})
-		} catch (error) {
-			console.warn(`Could not load ${lang} translations:`, error)
-		}
-	})
-}
 
 export default i18next

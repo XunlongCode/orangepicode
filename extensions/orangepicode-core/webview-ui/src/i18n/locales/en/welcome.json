@@ -5,7 +5,6 @@
 	"selectThemeAndLanguage": "Select Theme and Language",
 	"selectTheme": "Select Theme",
 	"selectLanguage": "Select Language",
-	"theme": {},
 	"continue": "Continue",
 	"importSettings": "Import Settings",
 	"importSettingsDescription": "Easily import IDE settings from VSCode or Cursor, including extensions, preferences, and keybindings.",

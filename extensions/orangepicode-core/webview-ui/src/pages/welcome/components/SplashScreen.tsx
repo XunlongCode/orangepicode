@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { getVscExtensionPath } from "../../../utils";
 import { FC } from 'react';
-import { useAppTranslation } from '../../../i18n/TranslationContext';
+import { useTranslation } from 'react-i18next';
 
 const SplashScreen: FC<{ onNext: () => void }> = ({ onNext }) => {
-	const { t } = useAppTranslation();
+	const { t } = useTranslation();
 
 	return (
 		<div className="h-full flex-col justify-center items-center inline-flex overflow-hidden select-none">
@@ -14,10 +14,10 @@ const SplashScreen: FC<{ onNext: () => void }> = ({ onNext }) => {
 				</div>
 				<div className="flex flex-col mt-10">
 					<div className="text-[40px] text-[#979CA6] leading-none font-medium">
-						{t("welcome:welcome")}
+						{t("welcome", { ns: "welcome" })}
 					</div>
 					<div className="text-[32px] mt-10 leading-none">
-						OrangePi AI Code
+						{t("appName", { ns: "welcome" })}
 					</div>
 				</div>
 
@@ -27,7 +27,9 @@ const SplashScreen: FC<{ onNext: () => void }> = ({ onNext }) => {
 						className="mt-14 w-[112px]"
 						onClick={onNext}
 					>
-						<div className='text-base font-medium'>下一步</div>
+						<div className='text-base font-medium'>
+							{t("nextStep", { ns: "welcome" })}
+						</div>
 					</Button>
 				</div>
 			</div>

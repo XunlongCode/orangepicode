@@ -380,10 +380,10 @@ export class Cline extends EventEmitter<ClineEvents> {
 			const taskMessage = this.clineMessages[0] // first message is always the task say
 			const lastRelevantMessage =
 				this.clineMessages[
-					findLastIndex(
-						this.clineMessages,
-						(m) => !(m.ask === "resume_task" || m.ask === "resume_completed_task"),
-					)
+				findLastIndex(
+					this.clineMessages,
+					(m) => !(m.ask === "resume_task" || m.ask === "resume_completed_task"),
+				)
 				]
 
 			let taskDirSize = 0
@@ -589,8 +589,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 	async sayAndCreateMissingParamError(toolName: ToolUseName, paramName: string, relPath?: string) {
 		await this.say(
 			"error",
-			`OrangePi AI tried to use ${toolName}${
-				relPath ? ` for '${relPath.toPosix()}'` : ""
+			`OrangePi AI tried to use ${toolName}${relPath ? ` for '${relPath.toPosix()}'` : ""
 			} without value for required parameter '${paramName}'. Retrying...`,
 		)
 		return formatResponse.toolError(formatResponse.missingToolParameterError(paramName))
@@ -854,10 +853,9 @@ export class Cline extends EventEmitter<ClineEvents> {
 		newUserContent.push({
 			type: "text",
 			text:
-				`[TASK RESUMPTION] This task was interrupted ${agoText}. It may or may not be complete, so please reassess the task context. Be aware that the project state may have changed since then. The current working directory is now '${this.cwd.toPosix()}'. If the task has not been completed, retry the last step before interruption and proceed with completing the task.\n\nNote: If you previously attempted a tool use that the user did not provide a result for, you should assume the tool use was not successful and assess whether you should retry. If the last tool was a browser_action, the browser has been closed and you must launch a new browser if needed.${
-					wasRecent
-						? "\n\nIMPORTANT: If the last tool use was a write_to_file that was interrupted, the file was reverted back to its original state before the interrupted edit, and you do NOT need to re-read the file as you already have its up-to-date contents."
-						: ""
+				`[TASK RESUMPTION] This task was interrupted ${agoText}. It may or may not be complete, so please reassess the task context. Be aware that the project state may have changed since then. The current working directory is now '${this.cwd.toPosix()}'. If the task has not been completed, retry the last step before interruption and proceed with completing the task.\n\nNote: If you previously attempted a tool use that the user did not provide a result for, you should assume the tool use was not successful and assess whether you should retry. If the last tool was a browser_action, the browser has been closed and you must launch a new browser if needed.${wasRecent
+					? "\n\nIMPORTANT: If the last tool use was a write_to_file that was interrupted, the file was reverted back to its original state before the interrupted edit, and you do NOT need to re-read the file as you already have its up-to-date contents."
+					: ""
 				}` +
 				(responseText
 					? `\n\nNew instructions for task continuation:\n<user_message>\n${responseText}\n</user_message>`
@@ -1036,8 +1034,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 			return [
 				true,
 				formatResponse.toolResult(
-					`Command is still running in terminal ${terminalInfo.id}${workingDirInfo}.${
-						result.length > 0 ? `\nHere's the output so far:\n${result}` : ""
+					`Command is still running in terminal ${terminalInfo.id}${workingDirInfo}.${result.length > 0 ? `\nHere's the output so far:\n${result}` : ""
 					}\n\nThe user provided the following feedback:\n<feedback>\n${userFeedback.text}\n</feedback>`,
 					userFeedback.images,
 				),
@@ -1079,8 +1076,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 		} else {
 			return [
 				false,
-				`Command is still running in terminal ${terminalInfo.id}${workingDirInfo}.${
-					result.length > 0 ? `\nHere's the output so far:\n${result}` : ""
+				`Command is still running in terminal ${terminalInfo.id}${workingDirInfo}.${result.length > 0 ? `\nHere's the output so far:\n${result}` : ""
 				}\n\nYou will be updated on the terminal status and new output in the future.`,
 			]
 		}
@@ -1367,9 +1363,8 @@ export class Cline extends EventEmitter<ClineEvents> {
 						case "apply_diff":
 							return `[${block.name} for '${block.params.path}']`
 						case "search_files":
-							return `[${block.name} for '${block.params.regex}'${
-								block.params.file_pattern ? ` in '${block.params.file_pattern}'` : ""
-							}]`
+							return `[${block.name} for '${block.params.regex}'${block.params.file_pattern ? ` in '${block.params.file_pattern}'` : ""
+								}]`
 						case "insert_content":
 							return `[${block.name} for '${block.params.path}']`
 						case "search_and_replace":
@@ -1606,7 +1601,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 							if (block.partial) {
 								// update gui message
 								const partialMessage = JSON.stringify(sharedMessageProps)
-								await this.ask("tool", partialMessage, block.partial).catch(() => {})
+								await this.ask("tool", partialMessage, block.partial).catch(() => { })
 								// update editor
 								if (!this.diffViewProvider.isEditing) {
 									// open the editor and prepare to stream content in
@@ -1647,7 +1642,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 								if (!this.diffViewProvider.isEditing) {
 									// show gui message before showing edit animation
 									const partialMessage = JSON.stringify(sharedMessageProps)
-									await this.ask("tool", partialMessage, true).catch(() => {}) // sending true for partial even though it's not a partial, this shows the edit row before the content is streamed into the editor
+									await this.ask("tool", partialMessage, true).catch(() => { }) // sending true for partial even though it's not a partial, this shows the edit row before the content is streamed into the editor
 									await this.diffViewProvider.open(relPath)
 								}
 								await this.diffViewProvider.update(
@@ -1669,8 +1664,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 										await this.diffViewProvider.revertChanges()
 										pushToolResult(
 											formatResponse.toolError(
-												`Content appears to be truncated (file has ${
-													newContent.split("\n").length
+												`Content appears to be truncated (file has ${newContent.split("\n").length
 												} lines but was predicted to have ${predictedLineCount} lines), and found comments indicating omitted code (e.g., '// rest of code unchanged', '/* previous code */'). Please provide the complete file content without any omissions if possible, or otherwise use the 'apply_diff' tool to apply the diff to the original file.`,
 											),
 										)
@@ -1698,10 +1692,10 @@ export class Cline extends EventEmitter<ClineEvents> {
 									content: fileExists ? undefined : newContent,
 									diff: fileExists
 										? formatResponse.createPrettyPatch(
-												relPath,
-												this.diffViewProvider.originalContent,
-												newContent,
-											)
+											relPath,
+											this.diffViewProvider.originalContent,
+											newContent,
+										)
 										: undefined,
 								} satisfies ClineSayTool)
 								const didApprove = await askApproval("tool", completeMessage)
@@ -1723,15 +1717,15 @@ export class Cline extends EventEmitter<ClineEvents> {
 									)
 									pushToolResult(
 										`The user made the following updates to your content:\n\n${userEdits}\n\n` +
-											`The updated content, which includes both your original modifications and the user's edits, has been successfully saved to ${relPath.toPosix()}. Here is the full, updated content of the file, including line numbers:\n\n` +
-											`<final_file_content path="${relPath.toPosix()}">\n${addLineNumbers(
-												finalContent || "",
-											)}\n</final_file_content>\n\n` +
-											`Please note:\n` +
-											`1. You do not need to re-write the file with these changes, as they have already been applied.\n` +
-											`2. Proceed with the task using this updated file content as the new baseline.\n` +
-											`3. If the user's edits have addressed part of the task or changed the requirements, adjust your approach accordingly.` +
-											`${newProblemsMessage}`,
+										`The updated content, which includes both your original modifications and the user's edits, has been successfully saved to ${relPath.toPosix()}. Here is the full, updated content of the file, including line numbers:\n\n` +
+										`<final_file_content path="${relPath.toPosix()}">\n${addLineNumbers(
+											finalContent || "",
+										)}\n</final_file_content>\n\n` +
+										`Please note:\n` +
+										`1. You do not need to re-write the file with these changes, as they have already been applied.\n` +
+										`2. Proceed with the task using this updated file content as the new baseline.\n` +
+										`3. If the user's edits have addressed part of the task or changed the requirements, adjust your approach accordingly.` +
+										`${newProblemsMessage}`,
 									)
 								} else {
 									pushToolResult(
@@ -1767,7 +1761,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 								const partialMessage = JSON.stringify(sharedMessageProps)
 
 								await this.ask("tool", partialMessage, block.partial, toolProgressStatus).catch(
-									() => {},
+									() => { },
 								)
 								break
 							} else {
@@ -1829,18 +1823,16 @@ export class Cline extends EventEmitter<ClineEvents> {
 											const errorDetails = failPart.details
 												? JSON.stringify(failPart.details, null, 2)
 												: ""
-											formattedError = `<error_details>\n${
-												failPart.error
-											}${errorDetails ? `\n\nDetails:\n${errorDetails}` : ""}\n</error_details>`
+											formattedError = `<error_details>\n${failPart.error
+												}${errorDetails ? `\n\nDetails:\n${errorDetails}` : ""}\n</error_details>`
 											partResults += formattedError
 										}
 									} else {
 										const errorDetails = diffResult.details
 											? JSON.stringify(diffResult.details, null, 2)
 											: ""
-										formattedError = `Unable to apply diff to file: ${absolutePath}\n\n<error_details>\n${
-											diffResult.error
-										}${errorDetails ? `\n\nDetails:\n${errorDetails}` : ""}\n</error_details>`
+										formattedError = `Unable to apply diff to file: ${absolutePath}\n\n<error_details>\n${diffResult.error
+											}${errorDetails ? `\n\nDetails:\n${errorDetails}` : ""}\n</error_details>`
 									}
 
 									if (currentCount >= 2) {
@@ -1892,21 +1884,21 @@ export class Cline extends EventEmitter<ClineEvents> {
 									)
 									pushToolResult(
 										`The user made the following updates to your content:\n\n${userEdits}\n\n` +
-											partFailHint +
-											`The updated content, which includes both your original modifications and the user's edits, has been successfully saved to ${relPath.toPosix()}. Here is the full, updated content of the file, including line numbers:\n\n` +
-											`<final_file_content path="${relPath.toPosix()}">\n${addLineNumbers(
-												finalContent || "",
-											)}\n</final_file_content>\n\n` +
-											`Please note:\n` +
-											`1. You do not need to re-write the file with these changes, as they have already been applied.\n` +
-											`2. Proceed with the task using this updated file content as the new baseline.\n` +
-											`3. If the user's edits have addressed part of the task or changed the requirements, adjust your approach accordingly.` +
-											`${newProblemsMessage}`,
+										partFailHint +
+										`The updated content, which includes both your original modifications and the user's edits, has been successfully saved to ${relPath.toPosix()}. Here is the full, updated content of the file, including line numbers:\n\n` +
+										`<final_file_content path="${relPath.toPosix()}">\n${addLineNumbers(
+											finalContent || "",
+										)}\n</final_file_content>\n\n` +
+										`Please note:\n` +
+										`1. You do not need to re-write the file with these changes, as they have already been applied.\n` +
+										`2. Proceed with the task using this updated file content as the new baseline.\n` +
+										`3. If the user's edits have addressed part of the task or changed the requirements, adjust your approach accordingly.` +
+										`${newProblemsMessage}`,
 									)
 								} else {
 									pushToolResult(
 										`Changes successfully applied to ${relPath.toPosix()}:\n\n${newProblemsMessage}\n` +
-											partFailHint,
+										partFailHint,
 									)
 								}
 								await this.diffViewProvider.reset()
@@ -1931,7 +1923,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 						try {
 							if (block.partial) {
 								const partialMessage = JSON.stringify(sharedMessageProps)
-								await this.ask("tool", partialMessage, block.partial).catch(() => {})
+								await this.ask("tool", partialMessage, block.partial).catch(() => { })
 								break
 							}
 
@@ -1996,7 +1988,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 
 							// Show changes in diff view
 							if (!this.diffViewProvider.isEditing) {
-								await this.ask("tool", JSON.stringify(sharedMessageProps), true).catch(() => {})
+								await this.ask("tool", JSON.stringify(sharedMessageProps), true).catch(() => { })
 								// First open with original content
 								await this.diffViewProvider.open(relPath)
 								await this.diffViewProvider.update(fileContent, false)
@@ -2050,13 +2042,13 @@ export class Cline extends EventEmitter<ClineEvents> {
 							await this.say("user_feedback_diff", userFeedbackDiff)
 							pushToolResult(
 								`The user made the following updates to your content:\n\n${userEdits}\n\n` +
-									`The updated content, which includes both your original modifications and the user's edits, has been successfully saved to ${relPath.toPosix()}. Here is the full, updated content of the file:\n\n` +
-									`<final_file_content path="${relPath.toPosix()}">\n${finalContent}\n</final_file_content>\n\n` +
-									`Please note:\n` +
-									`1. You do not need to re-write the file with these changes, as they have already been applied.\n` +
-									`2. Proceed with the task using this updated file content as the new baseline.\n` +
-									`3. If the user's edits have addressed part of the task or changed the requirements, adjust your approach accordingly.` +
-									`${newProblemsMessage}`,
+								`The updated content, which includes both your original modifications and the user's edits, has been successfully saved to ${relPath.toPosix()}. Here is the full, updated content of the file:\n\n` +
+								`<final_file_content path="${relPath.toPosix()}">\n${finalContent}\n</final_file_content>\n\n` +
+								`Please note:\n` +
+								`1. You do not need to re-write the file with these changes, as they have already been applied.\n` +
+								`2. Proceed with the task using this updated file content as the new baseline.\n` +
+								`3. If the user's edits have addressed part of the task or changed the requirements, adjust your approach accordingly.` +
+								`${newProblemsMessage}`,
 							)
 							await this.diffViewProvider.reset()
 						} catch (error) {
@@ -2081,7 +2073,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 									path: removeClosingTag("path", relPath),
 									operations: removeClosingTag("operations", operations),
 								})
-								await this.ask("tool", partialMessage, block.partial).catch(() => {})
+								await this.ask("tool", partialMessage, block.partial).catch(() => { })
 								break
 							} else {
 								if (!relPath) {
@@ -2210,13 +2202,13 @@ export class Cline extends EventEmitter<ClineEvents> {
 									)
 									pushToolResult(
 										`The user made the following updates to your content:\n\n${userEdits}\n\n` +
-											`The updated content, which includes both your original modifications and the user's edits, has been successfully saved to ${relPath.toPosix()}. Here is the full, updated content of the file, including line numbers:\n\n` +
-											`<final_file_content path="${relPath.toPosix()}">\n${addLineNumbers(finalContent || "")}\n</final_file_content>\n\n` +
-											`Please note:\n` +
-											`1. You do not need to re-write the file with these changes, as they have already been applied.\n` +
-											`2. Proceed with the task using this updated file content as the new baseline.\n` +
-											`3. If the user's edits have addressed part of the task or changed the requirements, adjust your approach accordingly.` +
-											`${newProblemsMessage}`,
+										`The updated content, which includes both your original modifications and the user's edits, has been successfully saved to ${relPath.toPosix()}. Here is the full, updated content of the file, including line numbers:\n\n` +
+										`<final_file_content path="${relPath.toPosix()}">\n${addLineNumbers(finalContent || "")}\n</final_file_content>\n\n` +
+										`Please note:\n` +
+										`1. You do not need to re-write the file with these changes, as they have already been applied.\n` +
+										`2. Proceed with the task using this updated file content as the new baseline.\n` +
+										`3. If the user's edits have addressed part of the task or changed the requirements, adjust your approach accordingly.` +
+										`${newProblemsMessage}`,
 									)
 								} else {
 									pushToolResult(
@@ -2245,7 +2237,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 									...sharedMessageProps,
 									content: undefined,
 								} satisfies ClineSayTool)
-								await this.ask("tool", partialMessage, block.partial).catch(() => {})
+								await this.ask("tool", partialMessage, block.partial).catch(() => { })
 								break
 							} else {
 								if (!relPath) {
@@ -2296,7 +2288,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 									...sharedMessageProps,
 									content: "",
 								} satisfies ClineSayTool)
-								await this.ask("tool", partialMessage, block.partial).catch(() => {})
+								await this.ask("tool", partialMessage, block.partial).catch(() => { })
 								break
 							} else {
 								if (!relDirPath) {
@@ -2343,7 +2335,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 									...sharedMessageProps,
 									content: "",
 								} satisfies ClineSayTool)
-								await this.ask("tool", partialMessage, block.partial).catch(() => {})
+								await this.ask("tool", partialMessage, block.partial).catch(() => { })
 								break
 							} else {
 								if (!relDirPath) {
@@ -2391,7 +2383,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 									...sharedMessageProps,
 									content: "",
 								} satisfies ClineSayTool)
-								await this.ask("tool", partialMessage, block.partial).catch(() => {})
+								await this.ask("tool", partialMessage, block.partial).catch(() => { })
 								break
 							} else {
 								if (!relDirPath) {
@@ -2452,7 +2444,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 										"browser_action_launch",
 										removeClosingTag("url", url),
 										block.partial,
-									).catch(() => {})
+									).catch(() => { })
 								} else {
 									await this.say(
 										"browser_action",
@@ -2552,8 +2544,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 										await this.say("browser_action_result", JSON.stringify(browserActionResult))
 										pushToolResult(
 											formatResponse.toolResult(
-												`The browser action has been executed. The console logs and screenshot have been captured for your analysis.\n\nConsole logs:\n${
-													browserActionResult.logs || "(No new logs)"
+												`The browser action has been executed. The console logs and screenshot have been captured for your analysis.\n\nConsole logs:\n${browserActionResult.logs || "(No new logs)"
 												}\n\n(REMEMBER: if you need to proceed to using non-\`browser_action\` tools or launch a new browser, you MUST first close this browser. For example, if after analyzing the logs and screenshot you need to edit a file, you must first close the browser before you can use the write_to_file tool.)`,
 												browserActionResult.screenshot ? [browserActionResult.screenshot] : [],
 											),
@@ -2581,7 +2572,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 						try {
 							if (block.partial) {
 								await this.ask("command", removeClosingTag("command", command), block.partial).catch(
-									() => {},
+									() => { },
 								)
 								break
 							} else {
@@ -2635,7 +2626,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 									toolName: removeClosingTag("tool_name", tool_name),
 									arguments: removeClosingTag("arguments", mcp_arguments),
 								} satisfies ClineAskUseMcpServer)
-								await this.ask("use_mcp_server", partialMessage, block.partial).catch(() => {})
+								await this.ask("use_mcp_server", partialMessage, block.partial).catch(() => { })
 								break
 							} else {
 								if (!server_name) {
@@ -2697,19 +2688,19 @@ export class Cline extends EventEmitter<ClineEvents> {
 								// TODO: add progress indicator and ability to parse images and non-text responses
 								const toolResultPretty =
 									(toolResult?.isError ? "Error:\n" : "") +
-										toolResult?.content
-											.map((item) => {
-												if (item.type === "text") {
-													return item.text
-												}
-												if (item.type === "resource") {
-													const { blob, ...rest } = item.resource
-													return JSON.stringify(rest, null, 2)
-												}
-												return ""
-											})
-											.filter(Boolean)
-											.join("\n\n") || "(No response)"
+									toolResult?.content
+										.map((item) => {
+											if (item.type === "text") {
+												return item.text
+											}
+											if (item.type === "resource") {
+												const { blob, ...rest } = item.resource
+												return JSON.stringify(rest, null, 2)
+											}
+											return ""
+										})
+										.filter(Boolean)
+										.join("\n\n") || "(No response)"
 								await this.say("mcp_server_response", toolResultPretty)
 								pushToolResult(formatResponse.toolResult(toolResultPretty))
 								break
@@ -2729,7 +2720,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 									serverName: removeClosingTag("server_name", server_name),
 									uri: removeClosingTag("uri", uri),
 								} satisfies ClineAskUseMcpServer)
-								await this.ask("use_mcp_server", partialMessage, block.partial).catch(() => {})
+								await this.ask("use_mcp_server", partialMessage, block.partial).catch(() => { })
 								break
 							} else {
 								if (!server_name) {
@@ -2786,7 +2777,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 						try {
 							if (block.partial) {
 								await this.ask("followup", removeClosingTag("question", question), block.partial).catch(
-									() => {},
+									() => { },
 								)
 								break
 							} else {
@@ -2818,7 +2809,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 									mode: removeClosingTag("mode_slug", mode_slug),
 									reason: removeClosingTag("reason", reason),
 								})
-								await this.ask("tool", partialMessage, block.partial).catch(() => {})
+								await this.ask("tool", partialMessage, block.partial).catch(() => { })
 								break
 							} else {
 								if (!mode_slug) {
@@ -2860,8 +2851,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 								// Switch the mode using shared handler
 								await this.providerRef.deref()?.handleModeSwitch(mode_slug)
 								pushToolResult(
-									`Successfully switched from ${getModeBySlug(currentMode)?.name ?? currentMode} mode to ${
-										targetMode.name
+									`Successfully switched from ${getModeBySlug(currentMode)?.name ?? currentMode} mode to ${targetMode.name
 									} mode${reason ? ` because: ${reason}` : ""}.`,
 								)
 								await delay(500) // delay to allow mode change to take effect before next tool is executed
@@ -2883,7 +2873,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 									mode: removeClosingTag("mode", mode),
 									message: removeClosingTag("message", message),
 								})
-								await this.ask("tool", partialMessage, block.partial).catch(() => {})
+								await this.ask("tool", partialMessage, block.partial).catch(() => { })
 								break
 							} else {
 								if (!mode) {
@@ -2971,7 +2961,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 											"command",
 											removeClosingTag("command", command),
 											block.partial,
-										).catch(() => {})
+										).catch(() => { })
 									} else {
 										// last message is completion_result
 										// we have command string, which means we have the result as well, so finish it (doesnt have to exist yet)
@@ -2986,7 +2976,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 											"command",
 											removeClosingTag("command", command),
 											block.partial,
-										).catch(() => {})
+										).catch(() => { })
 									}
 								} else {
 									// no command, still outputting partial result
@@ -3292,10 +3282,9 @@ export class Cline extends EventEmitter<ClineEvents> {
 							type: "text",
 							text:
 								assistantMessage +
-								`\n\n[${
-									cancelReason === "streaming_failed"
-										? "Response interrupted by API Error"
-										: "Response interrupted by user"
+								`\n\n[${cancelReason === "streaming_failed"
+									? "Response interrupted by API Error"
+									: "Response interrupted by user"
 								}]`,
 						},
 					],
@@ -3599,7 +3588,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 			await pWaitFor(() => busyTerminals.every((t) => !TerminalRegistry.isProcessHot(t.id)), {
 				interval: 100,
 				timeout: 15_000,
-			}).catch(() => {})
+			}).catch(() => { })
 		}
 
 		// we want to get diagnostics AFTER terminal cools down for a few reasons: terminal could be scaffolding a project, dev servers (compilers like webpack) will first re-compile and then send diagnostics, etc
@@ -3725,7 +3714,8 @@ export class Cline extends EventEmitter<ClineEvents> {
 		const modeDetails = await getFullModeDetails(currentMode, customModes, customModePrompts, {
 			cwd: this.cwd,
 			globalCustomInstructions,
-			language: language ?? formatLanguage(vscode.env.language),
+			// language: language ?? formatLanguage(vscode.env.language),
+			language: formatLanguage(vscode.env.language),
 		})
 		details += `\n\n# Current Mode\n`
 		details += `<slug>${currentMode}</slug>\n`

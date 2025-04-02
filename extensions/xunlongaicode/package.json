@@ -140,6 +140,11 @@
 				"category": "OrangePi AI Code"
 			},
 			{
+				"command": "orangepiaicode.openSettings",
+				"title": "Open Settings",
+				"category": "Core"
+			},
+			{
 				"command": "orangepiaicode.explainCode",
 				"title": "OrangePi AI Code: Explain Code",
 				"category": "OrangePi AI Code"

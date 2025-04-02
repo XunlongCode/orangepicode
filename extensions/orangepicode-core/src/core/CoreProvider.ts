@@ -119,7 +119,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 					break
 				}
 				case "openSettings": {
-					await vscode.commands.executeCommand("orangepicode-core.openSettingsInNewTab")
+					await vscode.commands.executeCommand("orangepiaicode.openSettings")
 					break
 				}
 			}

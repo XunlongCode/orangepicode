@@ -33,12 +33,6 @@
         "category": "Core",
         "title": "Toggle Usermenu",
         "command": "orangepicode-core.toggleUsermenu"
-      },
-      {
-        "icon": "$(gear)",
-        "category": "Core",
-        "title": "Open Settings In New Tab",
-        "command": "orangepicode-core.openSettingsInNewTab"
       }
     ],
     "viewsContainers": {

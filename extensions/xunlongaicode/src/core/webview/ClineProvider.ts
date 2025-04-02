@@ -109,7 +109,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 	constructor(
 		readonly context: vscode.ExtensionContext,
 		private readonly outputChannel: vscode.OutputChannel,
-		private readonly renderContext: "sidebar" | "editor" | "chat" | "code" = "sidebar",
+		private readonly renderContext: "sidebar" | "editor" | "chat" | "code" | "settings" = "sidebar",
 	) {
 		super()
 
@@ -642,7 +642,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			"codicon.css",
 		])
 
-		const file = "src/index.tsx"
+		const file = this.renderContext === "settings" ? "src/settings.tsx" : "src/index.tsx"
 		const scriptUri = `http://${localServerUrl}/${file}`
 
 		const reactRefresh = /*html*/ `
@@ -707,7 +707,8 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			"index.css",
 		])
 		// The JS file from the React build output
-		const scriptUri = getUri(webview, this.contextProxy.extensionUri, ["webview-ui", "build", "assets", "index.js"])
+		const file = this.renderContext === "settings" ? "settings.js" : "index.js"
+		const scriptUri = getUri(webview, this.contextProxy.extensionUri, ["webview-ui", "build", "assets", file])
 
 		// The codicon font from the React build output
 		// https://github.com/microsoft/vscode-extension-samples/blob/main/webview-codicons-sample/src/extension.ts

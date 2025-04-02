@@ -46,6 +46,14 @@ const getUsermenuCommandsMap = ({ context, outputChannel, provider }: RegisterCo
 		},
 		'orangepicode-core.hideUsermenu': async () => {
 			vscode.commands.executeCommand(HIDE_OVERLAY_COMMAND_ID, usermenuOverlayOptions.id)
+		},
+		"orangepicode-core.toggleUsermenu": async () => {
+			const overlay: any = await vscode.commands.executeCommand(CREATE_OVERLAY_COMMAND_ID, usermenuOverlayOptions)
+			if (overlay.isVisible) {
+				await vscode.commands.executeCommand("orangepicode-core.hideUsermenu")
+			} else {
+				await vscode.commands.executeCommand("orangepicode-core.showUsermenu")
+			}
 		}
 	}
 }

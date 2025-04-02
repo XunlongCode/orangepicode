@@ -222,7 +222,9 @@ export class Overlay extends Disposable {
 		return {
 			type: "overlay",
 			id: this.id,
-			viewId: this.viewId
+			viewId: this.viewId,
+			state: this.state,
+			isVisible: this.isVisible,
 		};
 	}
 }

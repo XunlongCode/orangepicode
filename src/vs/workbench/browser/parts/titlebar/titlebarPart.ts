@@ -709,7 +709,7 @@ export class BrowserTitlebarPart extends Part implements ITitlebarPart {
 				true,
 				async () => this.instantiationService.invokeFunction(accessor => {
 					const commandService = accessor.get(ICommandService);
-					return commandService.executeCommand('orangepicode-core.showUsermenu');
+					return commandService.executeCommand('orangepicode-core.toggleUsermenu');
 				})
 			);
 			actions.primary.push(orangeSettingsAction);

@@ -5,6 +5,7 @@ import { vscode } from '../../utils/vscode';
 import { css } from '@emotion/css';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from '../../components/ui/dropdown-menu';
 import { useTranslation } from 'react-i18next';
+import tw from "twin.macro";
 
 export const Usermenu: FC = () => {
 	const { t } = useTranslation()
@@ -25,7 +26,7 @@ export const Usermenu: FC = () => {
 
 	return <div className='absolute inset-0'>
 		<div className='absolute inset-0' onClick={onUsermenuMaskClick}></div>
-		<div className='absolute w-[240px] h-[456px] right-[24px] top-[45px]'>
+		<div className='absolute w-[240px] h-[464px] right-[24px] top-[45px]'>
 			<VscodeTheme
 				style={{
 					boxShadow: "0px 0px 30px 0px rgba(0, 0, 0, 0.25)"
@@ -48,17 +49,20 @@ export const Usermenu: FC = () => {
 							div[data-radix-popper-content-wrapper] {
 								/* position: relative !important;
 								transform: none !important; */
+								div[role=menuitem][data-highlighted] {
+									${tw`text-background`}
+								}
 							}
 						`}
 					></div>
 					<DropdownMenu open={open} modal={false}>
-						<DropdownMenuTrigger className='w-full h-0'></DropdownMenuTrigger>
+						<DropdownMenuTrigger className='w-full h-0'>.</DropdownMenuTrigger>
 						<DropdownMenuContent
 							container={dropdownContiainerRef.current!}
 							className="w-[--radix-dropdown-menu-trigger-width] border-none !animate-none p-0"
 						>
 							<DropdownMenuSub>
-								<DropdownMenuSubTrigger className='h-[48px]'>
+								<DropdownMenuSubTrigger className='h-[48px] cursor-pointer'>
 									{t("theme", { ns: "usermenu" })}
 								</DropdownMenuSubTrigger>
 								<DropdownMenuPortal container={dropdownContiainerRef.current!}>
@@ -71,7 +75,7 @@ export const Usermenu: FC = () => {
 							</DropdownMenuSub>
 
 							<DropdownMenuSub>
-								<DropdownMenuSubTrigger className='h-[48px]'>
+								<DropdownMenuSubTrigger className='h-[48px] cursor-pointer'>
 									{t("language", { ns: "usermenu" })}
 								</DropdownMenuSubTrigger>
 								<DropdownMenuPortal container={dropdownContiainerRef.current!}>
@@ -84,25 +88,25 @@ export const Usermenu: FC = () => {
 
 							<DropdownMenuSeparator className='m-0' />
 
-							<DropdownMenuItem className='h-[48px]'>
+							<DropdownMenuItem className='h-[48px] cursor-pointer'>
 								{t("settings", { ns: "usermenu" })}
 							</DropdownMenuItem>
-							<DropdownMenuItem className='h-[48px]'>
+							<DropdownMenuItem className='h-[48px] cursor-pointer'>
 								{t("keyboardShortcuts", { ns: "usermenu" })}
 							</DropdownMenuItem>
-							<DropdownMenuItem className='h-[48px]'>
+							<DropdownMenuItem className='h-[48px] cursor-pointer'>
 								{t("checkUpdate", { ns: "usermenu" })}
 							</DropdownMenuItem>
-							<DropdownMenuItem className='h-[48px]'>
+							<DropdownMenuItem className='h-[48px] cursor-pointer'>
 								{t("helpDocumentation", { ns: "usermenu" })}
 							</DropdownMenuItem>
-							<DropdownMenuItem className='h-[48px]'>
+							<DropdownMenuItem className='h-[48px] cursor-pointer'>
 								{t("contactUs", { ns: "usermenu" })}
 							</DropdownMenuItem>
 
 							<DropdownMenuSeparator className='m-0' />
 
-							<DropdownMenuItem className='h-[48px]'>
+							<DropdownMenuItem className='h-[48px] cursor-pointer'>
 								{t("logout", { ns: "usermenu" })}
 							</DropdownMenuItem>
 						</DropdownMenuContent>

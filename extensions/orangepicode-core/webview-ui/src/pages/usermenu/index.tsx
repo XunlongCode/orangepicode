@@ -6,6 +6,7 @@ import { css } from '@emotion/css';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from '../../components/ui/dropdown-menu';
 import { useTranslation } from 'react-i18next';
 import tw from "twin.macro";
+import { useWebviewListener } from '../../hooks/useWebviewListener';
 
 export const Usermenu: FC = () => {
 	const { t, i18n } = useTranslation()
@@ -13,12 +14,44 @@ export const Usermenu: FC = () => {
 	const [open, setOpen] = useState(false)
 	const [themeSubOpen, setThemeSubOpen] = useState(false)
 	const [languageSubOpen, setLanguageSubOpen] = useState(false)
+	// 添加用户登录状态和用户信息的状态变量
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [userInfo, setUserInfo] = useState<{ label: string; id: string } | null>(null);
+
+	useEffect(() => {
+		vscode.postMessage({
+			type: "getGitHubLoginInfo"
+		})
+	}, [])
+
+
+	useWebviewListener("gitHubLoginInfo", async (message) => {
+		if (message.type === "gitHubLoginInfo") {
+			if (message.githubSession) {
+				// 用户已登录，更新 UI
+				setIsLoggedIn(true);
+				setUserInfo(message.githubSession.account);
+			} else {
+				// 用户未登录
+				setIsLoggedIn(false);
+				setUserInfo(null);
+			}
+		}
+	})
 
 	useEffect(() => {
 		if (dropdownContiainerRef.current) {
 			setOpen(true)
 		}
+		// 组件加载时获取 GitHub 登录信息
+		vscode.postMessage({
+			type: "getGitHubLoginInfo"
+		});
+
+
 	}, [dropdownContiainerRef.current])
+
+
 
 	// 点击遮罩，关闭菜单
 	const hideUsermenu = () => {
@@ -39,6 +72,14 @@ export const Usermenu: FC = () => {
 		})
 		hideUsermenu()
 	}
+	//选择主题
+	const onSelectTheme = (theme: string) => {
+
+		vscode.postMessage({
+			type: "setTheme",
+			theme: theme
+		})
+	}
 
 	// 点击设置
 	const openSettings = () => {
@@ -47,6 +88,46 @@ export const Usermenu: FC = () => {
 		})
 		hideUsermenu()
 	}
+
+
+	// 点击登出
+	const onLogout = () => {
+		vscode.postMessage({
+			type: "logout"
+		})
+	}
+	// 点击登录
+	const onLogin = () => {
+		if (isLoggedIn && userInfo) {
+			console.log("已经登录过了无须登录");
+			return;
+		}
+		vscode.postMessage({
+			type: "login"
+		})
+	}
+
+
+
+	// 接受登录成功的回调用
+	useWebviewListener("loginSuccess", async () => {
+		vscode.postMessage({
+			type: "getGitHubLoginInfo"
+		})
+	})
+
+	// 接受登出的回掉
+	useWebviewListener("logoutSuccess", async (e: any) => {
+		console.log(e);
+		if (e.error) {
+			console.log(e);
+			return
+		}
+		// 登出成功后更新状态
+		setIsLoggedIn(false);
+		setUserInfo(null);
+	})
+
 
 	return <div className='absolute inset-0'>
 		<div className='absolute inset-0' onClick={hideUsermenu}></div>
@@ -59,12 +140,12 @@ export const Usermenu: FC = () => {
 			>
 				<div className='pt-[16px]'>
 					{/* 用户信息 */}
-					<div className='flex h-[56px] items-center px-[16px] border-b border-secondary'>
+					<div className='flex h-[56px] items-center px-[16px] border-b border-secondary' onClick={onLogin}>
 						<div className='w-[40px] h-[40px] rounded-full overflow-hidden'>
 							<img className='h-full w-full' src={getVscExtensionPath('/src/assets/usermenu/default-avatar.png')} alt="" />
 						</div>
 						<div className='w-[12px]'></div>
-						<div className='font-medium text-base'>用户名</div>
+						{isLoggedIn && userInfo ? userInfo.label : t("notLoggedIn", { ns: "usermenu", defaultValue: "未登录" })}
 					</div>
 					{/* 用户菜单 */}
 					<div
@@ -78,7 +159,8 @@ export const Usermenu: FC = () => {
 
 								div[role="menuitem"][data-highlighted],
 								div[role="menuitem"][data-state="open"] {
-									${tw`text-background`}
+									${tw`text-background`};
+									background-color: var(--vscode-activityBar-background);
 								}
 							}
 						`}
@@ -95,9 +177,9 @@ export const Usermenu: FC = () => {
 								</DropdownMenuSubTrigger>
 								<DropdownMenuPortal container={dropdownContiainerRef.current!}>
 									<DropdownMenuSubContent className='!animate-none'>
-										<DropdownMenuItem className='cursor-pointer'>{t("darkTheme", { ns: "theme" })}</DropdownMenuItem>
-										<DropdownMenuItem className='cursor-pointer'>{t("lightTheme", { ns: "theme" })}</DropdownMenuItem>
-										<DropdownMenuItem className='cursor-pointer'>{t("orangeTheme", { ns: "theme" })}</DropdownMenuItem>
+										<DropdownMenuItem className='cursor-pointer' onClick={() => onSelectTheme("darkTheme")}>{t("darkTheme", { ns: "theme" })}</DropdownMenuItem>
+										<DropdownMenuItem className='cursor-pointer' onClick={() => onSelectTheme("lightTheme")}>{t("lightTheme", { ns: "theme" })}</DropdownMenuItem>
+										<DropdownMenuItem className='cursor-pointer' onClick={() => onSelectTheme("orangeTheme")}>{t("orangeTheme", { ns: "theme" })}</DropdownMenuItem>
 									</DropdownMenuSubContent>
 								</DropdownMenuPortal>
 							</DropdownMenuSub>
@@ -134,7 +216,7 @@ export const Usermenu: FC = () => {
 
 							<DropdownMenuSeparator className='m-0' />
 
-							<DropdownMenuItem className='h-[48px] cursor-pointer'>
+							<DropdownMenuItem className='h-[48px] cursor-pointer' onClick={onLogout}>
 								{t("logout", { ns: "usermenu" })}
 							</DropdownMenuItem>
 						</DropdownMenuContent>

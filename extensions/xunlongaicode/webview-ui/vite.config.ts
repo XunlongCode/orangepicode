@@ -16,6 +16,10 @@ export default defineConfig({
 		outDir: "build",
 		reportCompressedSize: false,
 		rollupOptions: {
+			input: {
+				main: path.resolve(__dirname, "index.html"),
+				settings: path.resolve(__dirname, "settings.html"),
+			},
 			output: {
 				entryFileNames: `assets/[name].js`,
 				chunkFileNames: `assets/[name].js`,

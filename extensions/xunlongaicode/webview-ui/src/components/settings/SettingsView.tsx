@@ -78,10 +78,11 @@ const sectionNames = [
 type SectionName = (typeof sectionNames)[number]
 
 type SettingsViewProps = {
-	onDone: () => void
+	onDone?: () => void
+	className?: string
 }
 
-const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone }, ref) => {
+const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, className }, ref) => {
 	const { t } = useAppTranslation()
 
 	const extensionState = useExtensionState()
@@ -308,7 +309,7 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone },
 	const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => ref.current?.scrollIntoView()
 
 	return (
-		<Tab>
+		<Tab className={className}>
 			<TabHeader className="flex justify-between items-center gap-2">
 				<div className="flex items-center gap-1">
 					<h3 className="text-vscode-foreground m-0">{t("settings:header.title")}</h3>
@@ -344,12 +345,12 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone },
 						data-testid="save-button">
 						{t("settings:common.save")}
 					</VSCodeButton>
-					<VSCodeButton
+					{onDone && <VSCodeButton
 						appearance="secondary"
 						title={t("settings:header.doneButtonTooltip")}
 						onClick={() => checkUnsaveChanges(onDone)}>
 						{t("settings:common.done")}
-					</VSCodeButton>
+					</VSCodeButton>}
 				</div>
 			</TabHeader>
 

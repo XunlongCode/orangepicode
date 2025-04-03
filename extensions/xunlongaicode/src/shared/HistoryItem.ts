@@ -9,4 +9,5 @@ export type HistoryItem = {
 	cacheReads?: number
 	totalCost: number
 	size?: number
+	mode: string
 }

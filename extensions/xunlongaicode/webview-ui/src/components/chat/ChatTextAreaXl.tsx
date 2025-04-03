@@ -26,7 +26,8 @@ import Thumbnails from "../common/Thumbnails"
 import { MAX_IMAGES_PER_MESSAGE } from "./ChatView"
 import ContextMenu from "./ContextMenu"
 import { VolumeX } from "lucide-react"
-import { svgImage } from "@/svgImage"
+import { SvgIcons } from "@/SvgIcons"
+import { VSCodeCheckbox } from "@vscode/webview-ui-toolkit/react"
 
 interface ChatTextAreaProps {
 	inputValue: string
@@ -42,6 +43,8 @@ interface ChatTextAreaProps {
 	mode: Mode
 	setMode: (value: Mode) => void
 	modeShortcutText: string
+	// 添加新的回调函数属性
+	onToggleAutoApproveMenu?: () => void
 }
 
 const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
@@ -60,11 +63,21 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 			mode,
 			setMode,
 			modeShortcutText,
+			onToggleAutoApproveMenu,
 		},
 		ref,
 	) => {
 		const { t } = useAppTranslation()
-		const { filePaths, openedTabs, currentApiConfigName, listApiConfigMeta, customModes, cwd } = useExtensionState()
+		const {
+			filePaths,
+			openedTabs,
+			currentApiConfigName,
+			listApiConfigMeta,
+			customModes,
+			cwd,
+			setAutoApprovalEnabled,
+			autoApprovalEnabled,
+		} = useExtensionState()
 		const [gitCommits, setGitCommits] = useState<any[]>([])
 		const [showDropdown, setShowDropdown] = useState(false)
 
@@ -106,6 +119,13 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 			window.addEventListener("message", messageHandler)
 			return () => window.removeEventListener("message", messageHandler)
 		}, [setInputValue])
+
+		// 在点击事件处理函数中调用回调
+		const handleToggleAutoApproveMenu = useCallback(() => {
+			if (onToggleAutoApproveMenu) {
+				onToggleAutoApproveMenu()
+			}
+		}, [onToggleAutoApproveMenu])
 
 		const [thumbnailsHeight, setThumbnailsHeight] = useState(0)
 		const [textAreaBaseHeight, setTextAreaBaseHeight] = useState<number | undefined>(undefined)
@@ -696,7 +716,8 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 						alignItems: "center",
 						marginTop: "auto",
 						paddingTop: "2px",
-					}}>
+					}}
+					onClick={handleToggleAutoApproveMenu}>
 					{/* 顶部左边的按钮 */}
 					<div
 						style={{
@@ -706,6 +727,16 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							marginTop: "auto",
 							paddingTop: "2px",
 						}}>
+						<div onClick={(e) => e.stopPropagation()}>
+							<VSCodeCheckbox
+								checked={autoApprovalEnabled ?? false}
+								onChange={() => {
+									const newValue = !(autoApprovalEnabled ?? false)
+									setAutoApprovalEnabled(newValue)
+									vscode.postMessage({ type: "autoApprovalEnabled", bool: newValue })
+								}}
+							/>
+						</div>
 						<span
 							className={`input-icon-button ${textAreaDisabled ? "disabled" : ""}`}
 							title={t("chat:referenceImage")}
@@ -726,30 +757,14 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							className={`input-icon-button ${textAreaDisabled ? "disabled" : ""}`}
 							title={t("chat:referenceImage")}
 							onClick={() => {}}>
-							{/* <span style={{ fontSize: "var(--vscode-editor-font-size)" }}>图片</span> */}
-							<span
-								dangerouslySetInnerHTML={{ __html: svgImage.changeButton }}
-								style={{
-									color: "var(--vscode-input-foreground)",
-									// "--svg-color": "var(--vscode-input-foreground)",
-								}}
-								className="svg-icon-container"
-							/>
+							<SvgIcons.change />
 						</span>
 						{/* 展开 */}
 						<span
 							className={`input-icon-button ${textAreaDisabled ? "disabled" : ""}`}
 							title={t("chat:referenceImage")}
 							onClick={() => {}}>
-							{/* <span style={{ fontSize: "var(--vscode-editor-font-size)" }}>图片</span> */}
-							<span
-								dangerouslySetInnerHTML={{ __html: svgImage.expenButton }}
-								style={{
-									color: "var(--vscode-input-foreground)",
-									// "--svg-color": "var(--vscode-input-foreground)",
-								}}
-								className="svg-icon-container"
-							/>
+							<SvgIcons.expand />
 						</span>
 					</div>
 				</div>
@@ -904,14 +919,7 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 								color: "var(--vscode-input-foreground)",
 							}}>
 							<span style={{ fontSize: "var(--vscode-editor-font-size)" }}>引用</span>
-							<span
-								dangerouslySetInnerHTML={{ __html: svgImage.otherUse }}
-								style={{
-									color: "var(--vscode-input-foreground)",
-									// "--svg-color": "var(--vscode-input-foreground)",
-								}}
-								className="svg-icon-container"
-							/>
+							<SvgIcons.beautify />
 						</span>
 						{/* 图片上传按钮 */}
 						<span
@@ -925,14 +933,7 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 								color: "var(--vscode-input-foreground)",
 							}}>
 							<span style={{ fontSize: "var(--vscode-editor-font-size)" }}>图片</span>
-							<span
-								dangerouslySetInnerHTML={{ __html: svgImage.postPicture }}
-								style={{
-									color: "var(--vscode-input-foreground)",
-									// "--svg-color": "var(--vscode-input-foreground)",
-								}}
-								className="svg-icon-container"
-							/>
+							<SvgIcons.picture />
 						</span>
 
 						{/* 美化按钮 */}
@@ -962,14 +963,7 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 										color: "var(--vscode-input-foreground)",
 									}}>
 									<span style={{ fontSize: "var(--vscode-editor-font-size)" }}>美化</span>
-									<span
-										dangerouslySetInnerHTML={{ __html: svgImage.beautify }}
-										style={{
-											color: "var(--vscode-input-foreground)",
-											// "--svg-color": "var(--vscode-input-foreground)",
-										}}
-										className="svg-icon-container"
-									/>
+									<SvgIcons.beautify />
 								</span>
 							)}
 						</div>
@@ -1110,14 +1104,7 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							title={t("chat:sendMessage")}
 							onClick={() => !textAreaDisabled && onSend()}
 							style={{ fontSize: 15 }}>
-							<span
-								dangerouslySetInnerHTML={{ __html: svgImage.postButton }}
-								style={{
-									color: "var(--vscode-input-foreground)",
-									// "--svg-color": "var(--vscode-input-foreground)",
-								}}
-								className="svg-icon-container"
-							/>
+							<SvgIcons.post />
 						</span>
 					</div>
 				</div>

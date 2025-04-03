@@ -149,7 +149,7 @@ export class Overlay extends Disposable {
 	}
 
 	show(): void {
-		if (this.state === 'visible' || !this.webviewView?.webview || !this.overlayContainer) {
+		if (this.state === 'visible' || !this.webviewView?.webview || !this.overlayContainer || !this.contentContainer) {
 			return
 		}
 
@@ -159,11 +159,16 @@ export class Overlay extends Disposable {
 		this.overlayContainer.classList.add("visible")
 		this.overlayContainer.classList.add("active")
 
+		// 显示content
+		this.contentContainer.classList.add("visible")
+
 		if (this.options?.styles) {
 			this.setStyles(this.options.styles);
 		}
 
 		this.updateStatus("visible")
+
+		this.layoutWebviewOverElement();
 	}
 
 	hide(): void {
@@ -171,8 +176,12 @@ export class Overlay extends Disposable {
 			return;
 		}
 
+		if (this.contentContainer) {
+			this.contentContainer.classList.remove("visible")
+		}
+
 		if (this.overlayContainer) {
-			this.overlayContainer.classList.remove("active")
+			this.overlayContainer.classList.remove("visible")
 
 			// 等待动画结束
 			setTimeout(() => {

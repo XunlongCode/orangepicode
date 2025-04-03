@@ -13,6 +13,7 @@ type CheckpointSettingsProps = HTMLAttributes<HTMLDivElement> & {
 	enableCheckpoints?: boolean
 	checkpointStorage?: CheckpointStorage
 	setCachedStateField: SetCachedStateField<"enableCheckpoints" | "checkpointStorage">
+	sectionClassName?: string
 }
 
 export const CheckpointSettings = ({
@@ -31,7 +32,7 @@ export const CheckpointSettings = ({
 				</div>
 			</SectionHeader>
 
-			<Section>
+			<Section className={props.sectionClassName}>
 				<div>
 					<VSCodeCheckbox
 						checked={enableCheckpoints}

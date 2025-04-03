@@ -21,6 +21,7 @@ import { Tab, TabContent, TabHeader } from "../common/Tab"
 import { useTaskSearch } from "./useTaskSearch"
 import { ExportButton } from "./ExportButton"
 import { CopyButton } from "./CopyButton"
+import { useExtensionState } from '../../context/ExtensionStateContext'
 
 type HistoryViewProps = {
 	onDone: () => void
@@ -29,7 +30,13 @@ type HistoryViewProps = {
 type SortOption = "newest" | "oldest" | "mostExpensive" | "mostTokens" | "mostRelevant"
 
 const HistoryView = ({ onDone }: HistoryViewProps) => {
-	const { tasks, searchQuery, setSearchQuery, sortOption, setSortOption, setLastNonRelevantSort } = useTaskSearch()
+	const {
+		renderContext
+	} = useExtensionState()
+
+	const { tasks, searchQuery, setSearchQuery, sortOption, setSortOption, setLastNonRelevantSort } = useTaskSearch({
+		mode: renderContext
+	})
 	const { t } = useAppTranslation()
 
 	const [deleteTaskId, setDeleteTaskId] = useState<string | null>(null)

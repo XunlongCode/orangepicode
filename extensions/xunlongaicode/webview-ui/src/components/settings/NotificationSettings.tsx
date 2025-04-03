@@ -14,6 +14,7 @@ type NotificationSettingsProps = HTMLAttributes<HTMLDivElement> & {
 	soundEnabled?: boolean
 	soundVolume?: number
 	setCachedStateField: SetCachedStateField<"ttsEnabled" | "ttsSpeed" | "soundEnabled" | "soundVolume">
+	sectionClassName?: string
 }
 
 export const NotificationSettings = ({
@@ -34,7 +35,7 @@ export const NotificationSettings = ({
 				</div>
 			</SectionHeader>
 
-			<Section>
+			<Section className={props.sectionClassName}>
 				<div>
 					<VSCodeCheckbox
 						checked={ttsEnabled}

@@ -1,0 +1,493 @@
+import { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react"
+import { useAppTranslation } from "@/i18n/TranslationContext"
+import { Button as VSCodeButton } from "vscrui"
+import {
+	CheckCheck,
+	SquareMousePointer,
+	Webhook,
+	GitBranch,
+	Bell,
+	Database,
+	SquareTerminal,
+	Cog,
+	FlaskConical,
+	AlertTriangle,
+	Globe,
+	Info,
+	LucideIcon,
+} from "lucide-react"
+import { CaretSortIcon } from "@radix-ui/react-icons"
+
+import { ExperimentId } from "../../../../src/shared/experiments"
+import { TelemetrySetting } from "../../../../src/shared/TelemetrySetting"
+import { ApiConfiguration } from "../../../../src/shared/api"
+
+import { vscode } from "@/utils/vscode"
+import { ExtensionStateContextType, useExtensionState } from "@/context/ExtensionStateContext"
+import {
+	AlertDialog,
+	AlertDialogContent,
+	AlertDialogTitle,
+	AlertDialogDescription,
+	AlertDialogCancel,
+	AlertDialogAction,
+	AlertDialogHeader,
+	AlertDialogFooter,
+	Button,
+	DropdownMenu,
+	DropdownMenuTrigger,
+	DropdownMenuContent,
+	DropdownMenuItem,
+} from "@/components/ui"
+
+import { Tab, TabContent, TabHeader } from "../common/Tab"
+import { SetCachedStateField, SetExperimentEnabled } from "./types"
+import { SectionHeader } from "./SectionHeader"
+import ApiConfigManager from "./ApiConfigManager"
+import ApiOptions from "./ApiOptions"
+import { AutoApproveSettings } from "./AutoApproveSettings"
+import { BrowserSettings } from "./BrowserSettings"
+import { CheckpointSettings } from "./CheckpointSettings"
+import { NotificationSettings } from "./NotificationSettings"
+import { ContextManagementSettings } from "./ContextManagementSettings"
+import { TerminalSettings } from "./TerminalSettings"
+import { AdvancedSettings } from "./AdvancedSettings"
+import { ExperimentalSettings } from "./ExperimentalSettings"
+import { LanguageSettings } from "./LanguageSettings"
+import { About } from "./About"
+import { Section } from "./Section"
+
+export interface SettingsViewRef {
+	checkUnsaveChanges: (then: () => void) => void
+}
+
+const sectionNames = [
+	"providers",
+	"autoApprove",
+	"browser",
+	"checkpoints",
+	"notifications",
+	"contextManagement",
+	"terminal",
+	"advanced",
+	"experimental",
+	"language",
+	"about",
+] as const
+
+type SectionName = (typeof sectionNames)[number]
+
+type SettingsViewProps = {
+	onDone?: () => void
+	className?: string
+}
+
+const SettingsView2 = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, className }, ref) => {
+	const { t } = useAppTranslation()
+
+	const extensionState = useExtensionState()
+	const { currentApiConfigName, listApiConfigMeta, uriScheme, version } = extensionState
+
+	const [isDiscardDialogShow, setDiscardDialogShow] = useState(false)
+	const [isChangeDetected, setChangeDetected] = useState(false)
+	const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
+
+	const prevApiConfigName = useRef(currentApiConfigName)
+	const confirmDialogHandler = useRef<() => void>()
+
+	const [cachedState, setCachedState] = useState(extensionState)
+
+	const {
+		alwaysAllowReadOnly,
+		allowedCommands,
+		language,
+		alwaysAllowBrowser,
+		alwaysAllowExecute,
+		alwaysAllowMcp,
+		alwaysAllowModeSwitch,
+		alwaysAllowSubtasks,
+		alwaysAllowWrite,
+		alwaysApproveResubmit,
+		browserToolEnabled,
+		browserViewportSize,
+		enableCheckpoints,
+		checkpointStorage,
+		diffEnabled,
+		experiments,
+		fuzzyMatchThreshold,
+		maxOpenTabsContext,
+		maxWorkspaceFiles,
+		mcpEnabled,
+		rateLimitSeconds,
+		requestDelaySeconds,
+		remoteBrowserHost,
+		screenshotQuality,
+		soundEnabled,
+		ttsEnabled,
+		ttsSpeed,
+		soundVolume,
+		telemetrySetting,
+		terminalOutputLineLimit,
+		terminalShellIntegrationTimeout,
+		writeDelayMs,
+		showRooIgnoredFiles,
+		remoteBrowserEnabled,
+	} = cachedState
+
+	// Make sure apiConfiguration is initialized and managed by SettingsView.
+	const apiConfiguration = useMemo(() => cachedState.apiConfiguration ?? {}, [cachedState.apiConfiguration])
+
+	useEffect(() => {
+		// Update only when currentApiConfigName is changed.
+		// Expected to be triggered by loadApiConfiguration/upsertApiConfiguration.
+		if (prevApiConfigName.current === currentApiConfigName) {
+			return
+		}
+
+		setCachedState((prevCachedState) => ({ ...prevCachedState, ...extensionState }))
+		prevApiConfigName.current = currentApiConfigName
+		setChangeDetected(false)
+	}, [currentApiConfigName, extensionState, isChangeDetected])
+
+	const setCachedStateField: SetCachedStateField<keyof ExtensionStateContextType> = useCallback((field, value) => {
+		setCachedState((prevState) => {
+			if (prevState[field] === value) {
+				return prevState
+			}
+
+			setChangeDetected(true)
+			return { ...prevState, [field]: value }
+		})
+	}, [])
+
+	const setApiConfigurationField = useCallback(
+		<K extends keyof ApiConfiguration>(field: K, value: ApiConfiguration[K]) => {
+			setCachedState((prevState) => {
+				if (prevState.apiConfiguration?.[field] === value) {
+					return prevState
+				}
+
+				setChangeDetected(true)
+
+				return { ...prevState, apiConfiguration: { ...prevState.apiConfiguration, [field]: value } }
+			})
+		},
+		[],
+	)
+
+	const setExperimentEnabled: SetExperimentEnabled = useCallback((id: ExperimentId, enabled: boolean) => {
+		setCachedState((prevState) => {
+			if (prevState.experiments?.[id] === enabled) {
+				return prevState
+			}
+
+			setChangeDetected(true)
+
+			return {
+				...prevState,
+				experiments: { ...prevState.experiments, [id]: enabled },
+			}
+		})
+	}, [])
+
+	const setTelemetrySetting = useCallback((setting: TelemetrySetting) => {
+		setCachedState((prevState) => {
+			if (prevState.telemetrySetting === setting) {
+				return prevState
+			}
+			setChangeDetected(true)
+			return {
+				...prevState,
+				telemetrySetting: setting,
+			}
+		})
+	}, [])
+
+	const isSettingValid = !errorMessage
+
+	const handleSubmit = () => {
+		if (isSettingValid) {
+			vscode.postMessage({ type: "language", text: language })
+			vscode.postMessage({ type: "alwaysAllowReadOnly", bool: alwaysAllowReadOnly })
+			vscode.postMessage({ type: "alwaysAllowWrite", bool: alwaysAllowWrite })
+			vscode.postMessage({ type: "alwaysAllowExecute", bool: alwaysAllowExecute })
+			vscode.postMessage({ type: "alwaysAllowBrowser", bool: alwaysAllowBrowser })
+			vscode.postMessage({ type: "alwaysAllowMcp", bool: alwaysAllowMcp })
+			vscode.postMessage({ type: "allowedCommands", commands: allowedCommands ?? [] })
+			vscode.postMessage({ type: "browserToolEnabled", bool: browserToolEnabled })
+			vscode.postMessage({ type: "soundEnabled", bool: soundEnabled })
+			vscode.postMessage({ type: "ttsEnabled", bool: ttsEnabled })
+			vscode.postMessage({ type: "ttsSpeed", value: ttsSpeed })
+			vscode.postMessage({ type: "soundVolume", value: soundVolume })
+			vscode.postMessage({ type: "diffEnabled", bool: diffEnabled })
+			vscode.postMessage({ type: "enableCheckpoints", bool: enableCheckpoints })
+			vscode.postMessage({ type: "checkpointStorage", text: checkpointStorage })
+			vscode.postMessage({ type: "browserViewportSize", text: browserViewportSize })
+			vscode.postMessage({ type: "remoteBrowserHost", text: remoteBrowserHost })
+			vscode.postMessage({ type: "remoteBrowserEnabled", bool: remoteBrowserEnabled })
+			vscode.postMessage({ type: "fuzzyMatchThreshold", value: fuzzyMatchThreshold ?? 1.0 })
+			vscode.postMessage({ type: "writeDelayMs", value: writeDelayMs })
+			vscode.postMessage({ type: "screenshotQuality", value: screenshotQuality ?? 75 })
+			vscode.postMessage({ type: "terminalOutputLineLimit", value: terminalOutputLineLimit ?? 500 })
+			vscode.postMessage({ type: "terminalShellIntegrationTimeout", value: terminalShellIntegrationTimeout })
+			vscode.postMessage({ type: "mcpEnabled", bool: mcpEnabled })
+			vscode.postMessage({ type: "alwaysApproveResubmit", bool: alwaysApproveResubmit })
+			vscode.postMessage({ type: "requestDelaySeconds", value: requestDelaySeconds })
+			vscode.postMessage({ type: "rateLimitSeconds", value: rateLimitSeconds })
+			vscode.postMessage({ type: "maxOpenTabsContext", value: maxOpenTabsContext })
+			vscode.postMessage({ type: "maxWorkspaceFiles", value: maxWorkspaceFiles ?? 200 })
+			vscode.postMessage({ type: "showRooIgnoredFiles", bool: showRooIgnoredFiles })
+			vscode.postMessage({ type: "currentApiConfigName", text: currentApiConfigName })
+			vscode.postMessage({ type: "updateExperimental", values: experiments })
+			vscode.postMessage({ type: "alwaysAllowModeSwitch", bool: alwaysAllowModeSwitch })
+			vscode.postMessage({ type: "alwaysAllowSubtasks", bool: alwaysAllowSubtasks })
+			vscode.postMessage({ type: "upsertApiConfiguration", text: currentApiConfigName, apiConfiguration })
+			vscode.postMessage({ type: "telemetrySetting", text: telemetrySetting })
+			setChangeDetected(false)
+		}
+	}
+
+	const checkUnsaveChanges = useCallback(
+		(then: () => void) => {
+			if (isChangeDetected) {
+				confirmDialogHandler.current = then
+				setDiscardDialogShow(true)
+			} else {
+				then()
+			}
+		},
+		[isChangeDetected],
+	)
+
+	useImperativeHandle(ref, () => ({ checkUnsaveChanges }), [checkUnsaveChanges])
+
+	const onConfirmDialogResult = useCallback((confirm: boolean) => {
+		if (confirm) {
+			confirmDialogHandler.current?.()
+		}
+	}, [])
+
+	const providersRef = useRef<HTMLDivElement>(null)
+	const autoApproveRef = useRef<HTMLDivElement>(null)
+	const browserRef = useRef<HTMLDivElement>(null)
+	const checkpointsRef = useRef<HTMLDivElement>(null)
+	const notificationsRef = useRef<HTMLDivElement>(null)
+	const contextManagementRef = useRef<HTMLDivElement>(null)
+	const terminalRef = useRef<HTMLDivElement>(null)
+	const advancedRef = useRef<HTMLDivElement>(null)
+	const experimentalRef = useRef<HTMLDivElement>(null)
+	const languageRef = useRef<HTMLDivElement>(null)
+	const aboutRef = useRef<HTMLDivElement>(null)
+
+	return (
+		<Tab className={className}>
+			<TabHeader className="flex justify-between items-center gap-2 px-0">
+				<div className="flex items-center gap-1">
+					<h3 className="text-vscode-foreground m-0">{t("settings:header.title")}</h3>
+				</div>
+				<div className="flex gap-2">
+					<VSCodeButton
+						appearance={isSettingValid ? "primary" : "secondary"}
+						className={!isSettingValid ? "!border-vscode-errorForeground" : ""}
+						title={
+							!isSettingValid
+								? errorMessage
+								: isChangeDetected
+									? t("settings:header.saveButtonTooltip")
+									: t("settings:header.nothingChangedTooltip")
+						}
+						onClick={handleSubmit}
+						disabled={!isChangeDetected || !isSettingValid}
+						data-testid="save-button">
+						{t("settings:common.save")}
+					</VSCodeButton>
+					{onDone && <VSCodeButton
+						appearance="secondary"
+						title={t("settings:header.doneButtonTooltip")}
+						onClick={() => checkUnsaveChanges(onDone)}>
+						{t("settings:common.done")}
+					</VSCodeButton>}
+				</div>
+			</TabHeader>
+
+			<TabContent className="p-0 divide-y divide-vscode-sideBar-background">
+				<div ref={providersRef}>
+					<SectionHeader>
+						<div className="flex items-center gap-2">
+							<Webhook className="w-4" />
+							<div>{t("settings:sections.providers")}</div>
+						</div>
+					</SectionHeader>
+
+					<Section className='px-0'>
+						<ApiConfigManager
+							currentApiConfigName={currentApiConfigName}
+							listApiConfigMeta={listApiConfigMeta}
+							onSelectConfig={(configName: string) =>
+								checkUnsaveChanges(() =>
+									vscode.postMessage({ type: "loadApiConfiguration", text: configName }),
+								)
+							}
+							onDeleteConfig={(configName: string) =>
+								vscode.postMessage({ type: "deleteApiConfiguration", text: configName })
+							}
+							onRenameConfig={(oldName: string, newName: string) => {
+								vscode.postMessage({
+									type: "renameApiConfiguration",
+									values: { oldName, newName },
+									apiConfiguration,
+								})
+								prevApiConfigName.current = newName
+							}}
+							onUpsertConfig={(configName: string) =>
+								vscode.postMessage({
+									type: "upsertApiConfiguration",
+									text: configName,
+									apiConfiguration,
+								})
+							}
+						/>
+						<ApiOptions
+							uriScheme={uriScheme}
+							apiConfiguration={apiConfiguration}
+							setApiConfigurationField={setApiConfigurationField}
+							errorMessage={errorMessage}
+							setErrorMessage={setErrorMessage}
+						/>
+					</Section>
+				</div>
+
+				<div ref={autoApproveRef}>
+					<AutoApproveSettings
+						sectionClassName='px-0'
+						alwaysAllowReadOnly={alwaysAllowReadOnly}
+						alwaysAllowWrite={alwaysAllowWrite}
+						writeDelayMs={writeDelayMs}
+						alwaysAllowBrowser={alwaysAllowBrowser}
+						alwaysApproveResubmit={alwaysApproveResubmit}
+						requestDelaySeconds={requestDelaySeconds}
+						alwaysAllowMcp={alwaysAllowMcp}
+						alwaysAllowModeSwitch={alwaysAllowModeSwitch}
+						alwaysAllowSubtasks={alwaysAllowSubtasks}
+						alwaysAllowExecute={alwaysAllowExecute}
+						allowedCommands={allowedCommands}
+						setCachedStateField={setCachedStateField}
+					/>
+				</div>
+
+				<div ref={browserRef}>
+					<BrowserSettings
+						sectionClassName='px-0'
+						browserToolEnabled={browserToolEnabled}
+						browserViewportSize={browserViewportSize}
+						screenshotQuality={screenshotQuality}
+						remoteBrowserHost={remoteBrowserHost}
+						remoteBrowserEnabled={remoteBrowserEnabled}
+						setCachedStateField={setCachedStateField}
+					/>
+				</div>
+
+				<div ref={checkpointsRef}>
+					<CheckpointSettings
+						sectionClassName='px-0'
+						enableCheckpoints={enableCheckpoints}
+						checkpointStorage={checkpointStorage}
+						setCachedStateField={setCachedStateField}
+					/>
+				</div>
+
+				<div ref={notificationsRef}>
+					<NotificationSettings
+						sectionClassName='px-0'
+						ttsEnabled={ttsEnabled}
+						ttsSpeed={ttsSpeed}
+						soundEnabled={soundEnabled}
+						soundVolume={soundVolume}
+						setCachedStateField={setCachedStateField}
+					/>
+				</div>
+
+				<div ref={contextManagementRef}>
+					<ContextManagementSettings
+						sectionClassName='px-0'
+						maxOpenTabsContext={maxOpenTabsContext}
+						maxWorkspaceFiles={maxWorkspaceFiles ?? 200}
+						showRooIgnoredFiles={showRooIgnoredFiles}
+						setCachedStateField={setCachedStateField}
+					/>
+				</div>
+
+				<div ref={terminalRef}>
+					<TerminalSettings
+						sectionClassName='px-0'
+						terminalOutputLineLimit={terminalOutputLineLimit}
+						terminalShellIntegrationTimeout={terminalShellIntegrationTimeout}
+						setCachedStateField={setCachedStateField}
+					/>
+				</div>
+
+				<div ref={advancedRef}>
+					<AdvancedSettings
+						sectionClassName='px-0'
+						rateLimitSeconds={rateLimitSeconds}
+						diffEnabled={diffEnabled}
+						fuzzyMatchThreshold={fuzzyMatchThreshold}
+						setCachedStateField={setCachedStateField}
+						setExperimentEnabled={setExperimentEnabled}
+						experiments={experiments}
+					/>
+				</div>
+
+				<div ref={experimentalRef}>
+					<ExperimentalSettings
+						sectionClassName='px-0'
+						setCachedStateField={setCachedStateField}
+						setExperimentEnabled={setExperimentEnabled}
+						experiments={experiments}
+					/>
+				</div>
+
+				<div ref={languageRef}>
+					{/* <LanguageSettings
+						sectionClassName='px-0'
+						language={language || "en"}
+						setCachedStateField={setCachedStateField}
+					/> */}
+				</div>
+
+				<div ref={aboutRef}>
+					{/* <About
+						sectionClassName='px-0'
+						version={version}
+						telemetrySetting={telemetrySetting}
+						setTelemetrySetting={setTelemetrySetting}
+					/> */}
+				</div>
+			</TabContent>
+
+			<AlertDialog open={isDiscardDialogShow} onOpenChange={setDiscardDialogShow}>
+				<AlertDialogContent>
+					<AlertDialogHeader>
+						<AlertDialogTitle>
+							<AlertTriangle className="w-5 h-5 text-yellow-500" />
+							{t("settings:unsavedChangesDialog.title")}
+						</AlertDialogTitle>
+						<AlertDialogDescription>
+							{t("settings:unsavedChangesDialog.description")}
+						</AlertDialogDescription>
+					</AlertDialogHeader>
+					<AlertDialogFooter>
+						<AlertDialogCancel onClick={() => onConfirmDialogResult(false)}>
+							{t("settings:unsavedChangesDialog.cancelButton")}
+						</AlertDialogCancel>
+						<AlertDialogAction onClick={() => onConfirmDialogResult(true)}>
+							{t("settings:unsavedChangesDialog.discardButton")}
+						</AlertDialogAction>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
+		</Tab>
+	)
+})
+
+export default memo(SettingsView2)

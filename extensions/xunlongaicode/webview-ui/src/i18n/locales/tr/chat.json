@@ -1,5 +1,9 @@
 {
 	"greeting": "OrangePi AI sizin için ne yapabilir?",
+	"chatMode": "Chat modu",
+	"codeMode": "Code modu",
+	"chatModeDescription": "Kodunuz veya programlama ile ilgili sorular hakkında istediğiniz zaman soru sorun veya tavsiye isteyin.",
+	"codeModeDescription": "Proje oluşturmayı sıfırdan kolayca tamamlayın.",
 	"task": {
 		"title": "Görev",
 		"seeMore": "Daha fazla gör",

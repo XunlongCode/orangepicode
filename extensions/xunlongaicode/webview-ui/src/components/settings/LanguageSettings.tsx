@@ -30,6 +30,7 @@ const LANGUAGES: Record<string, string> = {
 type LanguageSettingsProps = HTMLAttributes<HTMLDivElement> & {
 	language: string
 	setCachedStateField: SetCachedStateField<"language">
+	sectionClassName?: string
 }
 
 export const LanguageSettings = ({ language, setCachedStateField, className, ...props }: LanguageSettingsProps) => {
@@ -44,7 +45,7 @@ export const LanguageSettings = ({ language, setCachedStateField, className, ...
 				</div>
 			</SectionHeader>
 
-			<Section>
+			<Section className={props.sectionClassName}>
 				<Select value={language} onValueChange={(value) => setCachedStateField("language", value)}>
 					<SelectTrigger className="w-full">
 						<SelectValue placeholder={t("settings:common.select")} />

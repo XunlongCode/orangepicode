@@ -327,7 +327,7 @@ vscode-dropdown::part(listbox) {
 /* Faded icon buttons in textfields */
 .input-icon-button {
 	cursor: pointer;
-	opacity: 0.65;
+	opacity: 0.9;
 }
 
 .input-icon-button:hover {

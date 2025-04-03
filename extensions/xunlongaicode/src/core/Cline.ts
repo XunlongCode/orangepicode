@@ -396,6 +396,11 @@ export class Cline extends EventEmitter<ClineEvents> {
 				)
 			}
 
+			let {
+				mode,
+			} = (await this.providerRef.deref()?.getState()) ?? {}
+			mode = mode || "chat"
+
 			await this.providerRef.deref()?.updateTaskHistory({
 				id: this.taskId,
 				number: this.taskNumber,
@@ -407,6 +412,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 				cacheReads: apiMetrics.totalCacheReads,
 				totalCost: apiMetrics.totalCost,
 				size: taskDirSize,
+				mode
 			})
 		} catch (error) {
 			console.error("Failed to save cline messages:", error)

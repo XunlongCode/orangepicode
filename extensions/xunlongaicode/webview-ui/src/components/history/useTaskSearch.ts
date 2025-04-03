@@ -6,7 +6,11 @@ import { useExtensionState } from "@/context/ExtensionStateContext"
 
 type SortOption = "newest" | "oldest" | "mostExpensive" | "mostTokens" | "mostRelevant"
 
-export const useTaskSearch = () => {
+type UseTaskSearchOptions = {
+	mode?: string
+}
+
+export const useTaskSearch = (options?: UseTaskSearchOptions) => {
 	const { taskHistory } = useExtensionState()
 	const [searchQuery, setSearchQuery] = useState("")
 	const [sortOption, setSortOption] = useState<SortOption>("newest")
@@ -23,8 +27,11 @@ export const useTaskSearch = () => {
 	}, [searchQuery, sortOption, lastNonRelevantSort])
 
 	const presentableTasks = useMemo(() => {
-		return taskHistory.filter((item) => item.ts && item.task)
-	}, [taskHistory])
+		return taskHistory.filter((item) => item.ts && item.task).filter((item) => {
+			if (!options?.mode) return true
+			return item.mode === options.mode
+		})
+	}, [taskHistory, options?.mode])
 
 	const fzf = useMemo(() => {
 		return new Fzf(presentableTasks, {

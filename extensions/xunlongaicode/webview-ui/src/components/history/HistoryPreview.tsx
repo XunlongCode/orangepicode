@@ -16,7 +16,7 @@ const HistoryPreview = ({ showHistoryView }: HistoryPreviewProps) => {
 	const { t } = useAppTranslation()
 
 	return (
-		<div className="flex flex-col gap-3 shrink-0 mx-5">
+		<div className="flex flex-col gap-3 shrink-0">
 			<div className="flex items-center justify-between text-vscode-descriptionForeground">
 				<div className="flex items-center gap-1">
 					<span className="codicon codicon-comment-discussion scale-90 mr-1" />

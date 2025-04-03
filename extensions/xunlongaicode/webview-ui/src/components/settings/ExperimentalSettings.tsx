@@ -17,6 +17,7 @@ type ExperimentalSettingsProps = HTMLAttributes<HTMLDivElement> & {
 	>
 	experiments: Record<ExperimentId, boolean>
 	setExperimentEnabled: SetExperimentEnabled
+	sectionClassName?: string
 }
 
 export const ExperimentalSettings = ({
@@ -37,7 +38,7 @@ export const ExperimentalSettings = ({
 				</div>
 			</SectionHeader>
 
-			<Section>
+			<Section className={props.sectionClassName}>
 				{Object.entries(experimentConfigsMap)
 					.filter((config) => config[0] !== "DIFF_STRATEGY" && config[0] !== "MULTI_SEARCH_AND_REPLACE")
 					.map((config) => (

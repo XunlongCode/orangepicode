@@ -15,6 +15,7 @@ type ContextManagementSettingsProps = HTMLAttributes<HTMLDivElement> & {
 	maxWorkspaceFiles: number
 	showRooIgnoredFiles?: boolean
 	setCachedStateField: SetCachedStateField<"maxOpenTabsContext" | "maxWorkspaceFiles" | "showRooIgnoredFiles">
+	sectionClassName?: string
 }
 
 export const ContextManagementSettings = ({
@@ -35,7 +36,7 @@ export const ContextManagementSettings = ({
 				</div>
 			</SectionHeader>
 
-			<Section>
+			<Section className={props.sectionClassName}>
 				<div>
 					<span className="block font-medium mb-1">{t("settings:contextManagement.openTabs.label")}</span>
 					<div className="flex items-center gap-2">

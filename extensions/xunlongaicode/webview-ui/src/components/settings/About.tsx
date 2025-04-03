@@ -17,6 +17,7 @@ type AboutProps = HTMLAttributes<HTMLDivElement> & {
 	version: string
 	telemetrySetting: TelemetrySetting
 	setTelemetrySetting: (setting: TelemetrySetting) => void
+	sectionClassName?: string
 }
 
 export const About = ({ version, telemetrySetting, setTelemetrySetting, className, ...props }: AboutProps) => {
@@ -31,7 +32,7 @@ export const About = ({ version, telemetrySetting, setTelemetrySetting, classNam
 				</div>
 			</SectionHeader>
 
-			<Section>
+			<Section className={props.sectionClassName}>
 				<div>
 					<VSCodeCheckbox
 						style={{ marginBottom: "5px" }}

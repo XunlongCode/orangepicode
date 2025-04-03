@@ -10,6 +10,7 @@ import { importUserSettingsFromCursor, importUserSettingsFromVSCode } from '../u
 
 export const ORANGEPICODE_ONBOARDING_VIEWID = "onboarding_view";
 export const ORANGEPICODE_USERMENU_VIEWID = "usermenu_view";
+export const ORANGEPICODE_SETTINGS_VIEWID = "settings_view";
 
 class CoreProvider implements vscode.WebviewViewProvider {
 	private view?: vscode.WebviewView | vscode.WebviewPanel;
@@ -115,6 +116,10 @@ class CoreProvider implements vscode.WebviewViewProvider {
 				}
 				case "hideUsermenu": {
 					await vscode.commands.executeCommand("orangepicode-core.hideUsermenu")
+					break
+				}
+				case "openSettings": {
+					await vscode.commands.executeCommand("orangepiaicode.openSettings")
 					break
 				}
 			}

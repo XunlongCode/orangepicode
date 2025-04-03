@@ -28,6 +28,8 @@ interface TaskHeaderProps {
 	totalCost: number
 	contextTokens: number
 	onClose: () => void
+	style?: React.CSSProperties
+	className?: string
 }
 
 const TaskHeader: React.FC<TaskHeaderProps> = ({
@@ -40,6 +42,8 @@ const TaskHeader: React.FC<TaskHeaderProps> = ({
 	totalCost,
 	contextTokens,
 	onClose,
+	style,
+	className,
 }) => {
 	const { t } = useTranslation()
 	const { apiConfiguration, currentTaskItem } = useExtensionState()
@@ -65,7 +69,7 @@ const TaskHeader: React.FC<TaskHeaderProps> = ({
 	function without triggering re-renders or effect re-runs. This approach
 	ensures that our event listener always has access to the most current state
 	while minimizing performance overhead and potential memory leaks from
-	multiple listener registrations. 
+	multiple listener registrations.
 
 	Sources
 	- https://usehooks-ts.com/react-hook/use-event-listener
@@ -74,7 +78,7 @@ const TaskHeader: React.FC<TaskHeaderProps> = ({
 	- https://stackoverflow.com/questions/55565444/how-to-register-event-with-useeffect-hooks
 
 	Before:
-	
+
 	const updateMaxHeight = useCallback(() => {
 		if (isExpanded && textContainerRef.current) {
 			const maxHeight = window.innerHeight * (3 / 5)
@@ -134,7 +138,7 @@ const TaskHeader: React.FC<TaskHeaderProps> = ({
 	const shouldShowPromptCacheInfo = doesModelSupportPromptCache && apiConfiguration?.apiProvider !== "openrouter"
 
 	return (
-		<div style={{ padding: "10px 13px 10px 13px" }}>
+		<div style={{ padding: "10px 13px 10px 13px", ...style }} className={className}>
 			<div
 				style={{
 					backgroundColor: "var(--vscode-badge-background)",

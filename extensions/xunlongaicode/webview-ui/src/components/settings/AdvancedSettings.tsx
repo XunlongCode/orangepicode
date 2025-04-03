@@ -19,6 +19,7 @@ type AdvancedSettingsProps = HTMLAttributes<HTMLDivElement> & {
 	setCachedStateField: SetCachedStateField<"rateLimitSeconds" | "diffEnabled" | "fuzzyMatchThreshold">
 	experiments: Record<ExperimentId, boolean>
 	setExperimentEnabled: SetExperimentEnabled
+	sectionClassName?: string
 }
 export const AdvancedSettings = ({
 	rateLimitSeconds,
@@ -41,7 +42,7 @@ export const AdvancedSettings = ({
 				</div>
 			</SectionHeader>
 
-			<Section>
+			<Section className={props.sectionClassName}>
 				<div>
 					<div className="flex flex-col gap-2">
 						<span className="font-medium">{t("settings:advanced.rateLimit.label")}</span>

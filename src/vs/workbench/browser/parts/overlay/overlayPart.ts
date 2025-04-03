@@ -111,7 +111,6 @@ export class OverlayPart extends Part implements IOverlayService {
 
 	public show(id: string) {
 		const overlay = this.overlayMap.get(id);
-		console.log(id, overlay);
 		if (overlay) {
 			overlay.show();
 			return overlay;

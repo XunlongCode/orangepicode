@@ -35,6 +35,7 @@ type AutoApproveSettingsProps = HTMLAttributes<HTMLDivElement> & {
 		| "alwaysAllowExecute"
 		| "allowedCommands"
 	>
+	sectionClassName?: string
 }
 
 export const AutoApproveSettings = ({
@@ -75,7 +76,7 @@ export const AutoApproveSettings = ({
 				</div>
 			</SectionHeader>
 
-			<Section>
+			<Section className={props.sectionClassName}>
 				<div>
 					<VSCodeCheckbox
 						checked={alwaysAllowReadOnly}

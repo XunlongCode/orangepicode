@@ -287,7 +287,7 @@ export type NestArray<T, Depth extends number, Acc extends never[] = []> = Acc["
 	? T
 	: NestArray<T[], Depth, [...Acc, never]>
 export type DataType = keyof typeof DataTypeMap
-export type DataArray = import("./maths.js").AnyTypedArray | any[]
+export type DataArray = import("../../src/utils/maths.js").AnyTypedArray | any[]
 declare const DataTypeMap: Readonly<{
 	float32: Float32ArrayConstructor
 	float64: Float64ArrayConstructor
@@ -302,5 +302,5 @@ declare const DataTypeMap: Readonly<{
 	uint64: BigUint64ArrayConstructor
 	bool: Uint8ArrayConstructor
 }>
-export {}
+export { }
 //# sourceMappingURL=tensor.d.ts.map

@@ -35,15 +35,16 @@ const availableGroups = (Object.keys(TOOL_GROUPS) as ToolGroup[]).filter((group)
 type ModeSource = "global" | "project"
 
 type PromptsViewProps = {
-	onDone: () => void
+	onDone?: () => void
+	className?: string
 }
 
 // Helper to get group name regardless of format
-function getGroupName(group: GroupEntry): ToolGroup {
+function getGroupName(group: GroupEntry): ToolGroup | GroupEntry {
 	return Array.isArray(group) ? group[0] : group
 }
 
-const PromptsView = ({ onDone }: PromptsViewProps) => {
+const PromptsView = ({ onDone, className }: PromptsViewProps) => {
 	const { t } = useAppTranslation()
 
 	const {
@@ -404,10 +405,10 @@ const PromptsView = ({ onDone }: PromptsViewProps) => {
 	}
 
 	return (
-		<Tab>
+		<Tab className={className}>
 			<TabHeader className="flex justify-between items-center">
 				<h3 className="text-vscode-foreground m-0">{t("prompts:title")}</h3>
-				<VSCodeButton onClick={onDone}>{t("prompts:done")}</VSCodeButton>
+				{onDone && <VSCodeButton onClick={onDone}>{t("prompts:done")}</VSCodeButton>}
 			</TabHeader>
 
 			<TabContent>
@@ -511,7 +512,7 @@ const PromptsView = ({ onDone }: PromptsViewProps) => {
 					</div>
 					<VSCodeTextArea
 						value={""}
-						onChange={(e) => {}}
+						onChange={(e) => { }}
 						rows={4}
 						resize="vertical"
 						className="w-full"
@@ -599,11 +600,10 @@ const PromptsView = ({ onDone }: PromptsViewProps) => {
 									data-testid={`${modeConfig.slug}-tab`}
 									data-active={isActive ? "true" : "false"}
 									onClick={() => handleModeSwitch(modeConfig)}
-									className={`px-2 py-1 border-none rounded cursor-pointer font-bold ${
-										isActive
+									className={`px-2 py-1 border-none rounded cursor-pointer font-bold ${isActive
 											? "bg-vscode-button-background text-vscode-button-foreground opacity-100"
 											: "bg-transparent text-vscode-foreground opacity-80"
-									}`}>
+										}`}>
 									{modeConfig.name}
 								</button>
 							)

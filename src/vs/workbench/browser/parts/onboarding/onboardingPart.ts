@@ -16,7 +16,7 @@ import {
 } from "../../../services/layout/browser/layoutService.js";
 import { IThemeService } from "../../../../platform/theme/common/themeService.js";
 import { IStorageService } from "../../../../platform/storage/common/storage.js";
-import { $, getActiveWindow } from "../../../../base/browser/dom.js";
+import { $, append, getActiveWindow } from "../../../../base/browser/dom.js";
 import { CancellationTokenSource } from "../../../../base/common/cancellation.js";
 import { IInstantiationService } from "../../../../platform/instantiation/common/instantiation.js";
 import { WebviewExtensionDescription } from "../../../contrib/webview/browser/webview.js";
@@ -35,7 +35,7 @@ const ONBOARDING_VIEWID = "onboarding_view";
 const ONBOARDING_TITLE = "Onboarding";
 
 export class OnboardingPart extends Part {
-	static readonly ID = "workbench.parts.onboarding";
+	static readonly ID = Parts.ORANGEPICODE_ONBOARDING_PART;
 
 	readonly minimumWidth: number = 300;
 	readonly maximumWidth: number = 800;
@@ -99,7 +99,7 @@ export class OnboardingPart extends Part {
 			location: URI.parse(""),
 		};
 
-		// 1. create an IOverlayWebview
+		// 1. create an Webview
 		const webview = this._webviewService!.createWebviewOverlay({
 			title: ONBOARDING_TITLE,
 			options: {
@@ -178,7 +178,8 @@ export class OnboardingPart extends Part {
 		webview.container.style.transition = "opacity 0.3s ease-in";
 	}
 
-	protected override createContentArea(element: HTMLElement): HTMLElement {
+	protected override createContentArea(parent: HTMLElement): HTMLElement {
+		const element = append(parent, $('div.onboarding-part'));
 		// 全屏背景
 		// create the full screen overlay. this serves as a click target for closing onboarding
 		this.element = element;
@@ -203,10 +204,6 @@ export class OnboardingPart extends Part {
 		this.viewOverlayEl.style.right = "0";
 		this.viewOverlayEl.style.bottom = "0";
 		this.element.appendChild(this.viewOverlayEl);
-
-		console.log("OnboardingPart created");
-		console.log(this.isCompleted);
-
 
 		if (!this.isCompleted) {
 			// Create loading overlay with higher z-index and pointer-events handling
@@ -419,7 +416,7 @@ export class OnboardingPart extends Part {
 
 	toJSON(): object {
 		return {
-			type: Parts.ORANGEPICODE_OVERLAY_PART,
+			type: Parts.ORANGEPICODE_ONBOARDING_PART,
 		};
 	}
 }

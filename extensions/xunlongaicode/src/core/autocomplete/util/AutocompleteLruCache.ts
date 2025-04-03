@@ -3,13 +3,13 @@ import { open } from "sqlite"
 import sqlite3 from "sqlite3"
 
 import { DatabaseConnection, truncateSqliteLikePattern } from "../indexing/refreshIndex"
-import { getTabAutocompleteCacheSqlitePath } from "../util/paths"
+import { getTabAutocompleteCacheSqlitePath } from "./paths"
 
 export class AutocompleteLruCache {
 	private static capacity = 1000
 	private mutex = new Mutex()
 
-	constructor(private db: DatabaseConnection) {}
+	constructor(private db: DatabaseConnection) { }
 
 	static async get(): Promise<AutocompleteLruCache> {
 		const db = await open({

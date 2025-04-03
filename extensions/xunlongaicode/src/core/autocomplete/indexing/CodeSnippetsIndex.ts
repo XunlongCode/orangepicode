@@ -6,7 +6,7 @@ import { getFullLanguageName, getParserForFile, getQueryForFile } from "../util/
 import { DatabaseConnection, SqliteDb, tagToString, truncateSqliteLikePattern } from "./refreshIndex"
 import { IndexResultType, MarkCompleteCallback, RefreshIndexResults, type CodebaseIndex } from "./types"
 
-import type { ChunkWithoutID, ContextItem, ContextSubmenuItem, IDE, IndexTag, IndexingProgressUpdate } from "../"
+import type { ChunkWithoutID, ContextItem, ContextSubmenuItem, IDE, IndexTag, IndexingProgressUpdate } from ".."
 import { findUriInDirs, getLastNPathParts, getLastNUriRelativePathParts, getUriPathBasename } from "../util/uri"
 
 type SnippetChunk = ChunkWithoutID & { title: string; signature: string }
@@ -15,7 +15,7 @@ export class CodeSnippetsCodebaseIndex implements CodebaseIndex {
 	relativeExpectedTime: number = 1
 	artifactId = "codeSnippets"
 
-	constructor(private readonly ide: IDE) {}
+	constructor(private readonly ide: IDE) { }
 
 	private static async _createTables(db: DatabaseConnection) {
 		await db.exec(`CREATE TABLE IF NOT EXISTS code_snippets (

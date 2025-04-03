@@ -281,3 +281,6 @@ class TelemetryService {
 
 // Export a singleton instance of the telemetry service wrapper
 export const telemetryService = new TelemetryService()
+
+export const chatViewTelemetryService = new TelemetryService()
+export const codeViewTelemetryService = new TelemetryService()

@@ -1,4 +1,4 @@
-import { SiteIndexingConfig } from "../../"
+import { SiteIndexingConfig } from "../.."
 
 const preIndexedDocs: Record<SiteIndexingConfig["startUrl"], SiteIndexingConfig> = {
 	"https://jinja.palletsprojects.com/en/3.1.x/": {

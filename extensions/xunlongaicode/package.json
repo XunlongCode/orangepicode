@@ -58,14 +58,43 @@
 					"title": "OrangePi AI Code",
 					"icon": "assets/icons/orangepi.svg"
 				}
+			],
+			"auxiliarybar": [
+				{
+					"id": "orangepiaicode-AuxiliaryBarChat",
+					"title": "Chat",
+					"icon": "assets/icons/orangepi.svg"
+				},
+				{
+					"id": "orangepiaicode-AuxiliaryBarCode",
+					"title": "Code",
+					"icon": "assets/icons/orangepi.svg"
+				}
 			]
 		},
 		"views": {
 			"orangepiaicode-ActivityBar": [
 				{
 					"type": "webview",
+					"icon": "assets/icons/orangepi.svg",
 					"id": "orangepiaicode.SidebarProvider",
 					"name": ""
+				}
+			],
+			"orangepiaicode-AuxiliaryBarChat": [
+				{
+					"type": "webview",
+					"icon": "assets/icons/orangepi.svg",
+					"id": "orangepiaicode.AuxiliaryBarChatProvider",
+					"name": "Chat"
+				}
+			],
+			"orangepiaicode-AuxiliaryBarCode": [
+				{
+					"type": "webview",
+					"icon": "assets/icons/orangepi.svg",
+					"id": "orangepiaicode.AuxiliaryBarCodeProvider",
+					"name": "Code"
 				}
 			]
 		},
@@ -109,6 +138,11 @@
 				"command": "orangepiaicode.openInNewTab",
 				"title": "Open In New Tab",
 				"category": "OrangePi AI Code"
+			},
+			{
+				"command": "orangepiaicode.openSettings",
+				"title": "Open Settings",
+				"category": "Core"
 			},
 			{
 				"command": "orangepiaicode.explainCode",
@@ -434,7 +468,7 @@
 		"@types/string-similarity": "^4.0.2",
 		"@typescript-eslint/eslint-plugin": "^7.14.1",
 		"@typescript-eslint/parser": "^7.11.0",
-		"esbuild": "^0.24.0",
+		"esbuild": "^0.25.0",
 		"eslint": "^8.57.0",
 		"glob": "^11.0.1",
 		"husky": "^9.1.7",

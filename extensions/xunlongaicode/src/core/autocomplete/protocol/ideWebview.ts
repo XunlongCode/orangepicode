@@ -8,7 +8,7 @@ import type {
 	EditStatus,
 	MessageContent,
 	RangeInFileWithContents,
-} from "../"
+} from ".."
 
 export type ToIdeFromWebviewProtocol = ToIdeFromWebviewOrCoreProtocol & {
 	openUrl: [string, void]

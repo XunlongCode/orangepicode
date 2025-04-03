@@ -1,5 +1,5 @@
 import { BaseContextProvider } from "."
-import { ContextItem, ContextProviderDescription, ContextProviderExtras } from "../../"
+import { ContextItem, ContextProviderDescription, ContextProviderExtras } from "../.."
 import { retrieveContextItemsFromEmbeddings } from "../retrieval/retrieval"
 
 class CodebaseContextProvider extends BaseContextProvider {
@@ -14,7 +14,7 @@ class CodebaseContextProvider extends BaseContextProvider {
 	async getContextItems(query: string, extras: ContextProviderExtras): Promise<ContextItem[]> {
 		return retrieveContextItemsFromEmbeddings(extras, this.options, undefined)
 	}
-	async load(): Promise<void> {}
+	async load(): Promise<void> { }
 }
 
 export default CodebaseContextProvider

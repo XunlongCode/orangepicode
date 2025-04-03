@@ -6,7 +6,7 @@ import { ApiHandlerOptions, ModelInfo, glamaDefaultModelId, glamaDefaultModelInf
 import { parseApiPrice } from "../../utils/cost"
 import { convertToOpenAiMessages } from "../transform/openai-format"
 import { ApiStream } from "../transform/stream"
-import { SingleCompletionHandler } from "../"
+import { SingleCompletionHandler } from ".."
 import { BaseProvider } from "./base-provider"
 import { CompletionOptions } from "../../core/autocomplete"
 

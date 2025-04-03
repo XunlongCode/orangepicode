@@ -10,7 +10,7 @@ import { convertAnthropicMessageToVertexGemini } from "../transform/vertex-gemin
 import { BaseProvider } from "./base-provider"
 
 import { ANTHROPIC_DEFAULT_MAX_TOKENS } from "./constants"
-import { getModelParams, SingleCompletionHandler } from "../"
+import { getModelParams, SingleCompletionHandler } from ".."
 import { GoogleAuth } from "google-auth-library"
 import { CompletionOptions } from "../../core/autocomplete"
 
@@ -80,24 +80,24 @@ interface VertexMessageStreamEvent {
 		output_tokens: number
 	}
 	content_block?:
-		| {
-				type: "text"
-				text: string
-		  }
-		| {
-				type: "thinking"
-				thinking: string
-		  }
+	| {
+		type: "text"
+		text: string
+	}
+	| {
+		type: "thinking"
+		thinking: string
+	}
 	index?: number
 	delta?:
-		| {
-				type: "text_delta"
-				text: string
-		  }
-		| {
-				type: "thinking_delta"
-				thinking: string
-		  }
+	| {
+		type: "text_delta"
+		text: string
+	}
+	| {
+		type: "thinking_delta"
+		thinking: string
+	}
 }
 
 // https://docs.anthropic.com/en/api/claude-on-vertex-ai
@@ -281,12 +281,12 @@ export class VertexHandler extends BaseProvider implements SingleCompletionHandl
 			// Cache the system prompt if caching is enabled
 			system: useCache
 				? [
-						{
-							text: systemPrompt,
-							type: "text" as const,
-							cache_control: { type: "ephemeral" },
-						},
-					]
+					{
+						text: systemPrompt,
+						type: "text" as const,
+						cache_control: { type: "ephemeral" },
+					},
+				]
 				: systemPrompt,
 			messages: messages.map((message, index) => {
 				// Only cache the last two user messages
@@ -395,14 +395,14 @@ export class VertexHandler extends BaseProvider implements SingleCompletionHandl
 	protected async *_createGeminiComplete(prompt: string, signal: AbortSignal, completionOptions?: CompletionOptions) {
 		try {
 			this.anthropicClient
-		} catch (error) {}
+		} catch (error) { }
 	}
 
 	protected async *_createClaudeComplete(
 		prompt: string,
 		signal: AbortSignal,
 		completionOptions?: CompletionOptions,
-	) {}
+	) { }
 
 	protected async *_createComplete(
 		prompt: string,
@@ -478,12 +478,12 @@ export class VertexHandler extends BaseProvider implements SingleCompletionHandl
 						role: "user",
 						content: useCache
 							? [
-									{
-										type: "text" as const,
-										text: prompt,
-										cache_control: { type: "ephemeral" },
-									},
-								]
+								{
+									type: "text" as const,
+									text: prompt,
+									cache_control: { type: "ephemeral" },
+								},
+							]
 							: prompt,
 					},
 				],

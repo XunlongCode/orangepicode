@@ -3,7 +3,7 @@
  */
 import { ConfigHandler } from "../../config/ConfigHandler.js"
 import { SiteIndexingConfig } from "../../index.js"
-import FileSystemIde from "../../util/filesystem"
+import FileSystemIde from "../../util/filesystem.js"
 import { editConfigJson } from "../../util/paths.js"
 
 import DocsService from "./DocsService.js"
@@ -45,7 +45,7 @@ describe.skip("DocsService Integration Tests", () => {
 			enableDebugLogs: false,
 			remoteConfigServerUrl: "",
 		})
-		configHandler = new ConfigHandler(ide, ideSettingsPromise, async () => {}, Promise.resolve(undefined))
+		configHandler = new ConfigHandler(ide, ideSettingsPromise, async () => { }, Promise.resolve(undefined))
 
 		docsService = DocsService.createSingleton(configHandler, ide)
 

@@ -15,9 +15,28 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
-    "commands": [],
+    "commands": [
+      {
+        "icon": "$(gear)",
+        "category": "Core",
+        "title": "Show Usermenu",
+        "command": "orangepicode-core.showUsermenu"
+      },
+      {
+        "icon": "$(gear)",
+        "category": "Core",
+        "title": "Hide Usermenu",
+        "command": "orangepicode-core.hideUsermenu"
+      },
+      {
+        "icon": "$(gear)",
+        "category": "Core",
+        "title": "Toggle Usermenu",
+        "command": "orangepicode-core.toggleUsermenu"
+      }
+    ],
     "viewsContainers": {
-      "auxiliarybar": [
+      "core": [
         {
           "id": "orangepicode-core",
           "title": "OrangePi Code",
@@ -30,9 +49,17 @@
       "orangepicode-core": [
         {
           "type": "webview",
+          "icon": "$(gear)",
           "id": "onboarding_view",
           "name": "Onboarding",
-          "visibility": "visible"
+          "visibility": "hidden"
+        },
+        {
+          "type": "webview",
+          "icon": "$(gear)",
+          "id": "usermenu_view",
+          "name": "Usermenu",
+          "visibility": "hidden"
         }
       ]
     }

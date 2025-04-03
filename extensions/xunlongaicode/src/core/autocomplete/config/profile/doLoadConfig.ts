@@ -1,7 +1,7 @@
 import fs from "fs"
 
 import { AssistantUnrolled, ConfigResult, ConfigValidationError, ModelRole } from "@continuedev/config-yaml"
-import { ContinueConfig, ContinueRcJson, IDE, IdeSettings, SerializedContinueConfig } from "../../"
+import { ContinueConfig, ContinueRcJson, IDE, IdeSettings, SerializedContinueConfig } from "../.."
 import { ControlPlaneProxyInfo } from "../../control-plane/analytics/IAnalyticsProvider.js"
 import { ControlPlaneClient } from "../../control-plane/client.js"
 import { getControlPlaneEnv } from "../../control-plane/env.js"
@@ -135,7 +135,7 @@ async function injectControlPlaneProxyInfo(
 	Object.keys(config.modelsByRole).forEach((key) => {
 		config.modelsByRole[key as ModelRole].forEach((model) => {
 			if (model.providerName === "continue-proxy") {
-				;(model as ContinueProxy).controlPlaneProxyInfo = info
+				; (model as ContinueProxy).controlPlaneProxyInfo = info
 			}
 		})
 	})
@@ -143,13 +143,13 @@ async function injectControlPlaneProxyInfo(
 	Object.keys(config.selectedModelByRole).forEach((key) => {
 		const model = config.selectedModelByRole[key as ModelRole]
 		if (model?.providerName === "continue-proxy") {
-			;(model as ContinueProxy).controlPlaneProxyInfo = info
+			; (model as ContinueProxy).controlPlaneProxyInfo = info
 		}
 	})
 
 	config.models.forEach((model) => {
 		if (model.providerName === "continue-proxy") {
-			;(model as ContinueProxy).controlPlaneProxyInfo = info
+			; (model as ContinueProxy).controlPlaneProxyInfo = info
 		}
 	})
 

@@ -1,4 +1,4 @@
-import { IDE, RangeInFileWithContents } from "../"
+import { IDE, RangeInFileWithContents } from ".."
 import { PrecalculatedLruCache } from "../util/LruCache"
 import { getFullLanguageName, getParserForFile, getQueryForFile } from "../util/treeSitter"
 

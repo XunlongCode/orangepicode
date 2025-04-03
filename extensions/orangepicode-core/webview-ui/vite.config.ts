@@ -7,7 +7,13 @@ import cssnano from "cssnano"
 
 // https://vite.dev/config/
 export default defineConfig({
-	plugins: [react()],
+	plugins: [
+		react({
+			babel: {
+				configFile: true,
+			},
+		})
+	],
 	css: {
 		postcss: {
 			plugins: [

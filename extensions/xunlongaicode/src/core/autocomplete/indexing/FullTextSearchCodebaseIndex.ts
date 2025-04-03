@@ -1,4 +1,4 @@
-import { BranchAndDir, Chunk, IndexTag, IndexingProgressUpdate } from "../"
+import { BranchAndDir, Chunk, IndexTag, IndexingProgressUpdate } from ".."
 import { RETRIEVAL_PARAMS } from "../util/parameters"
 import { getUriPathBasename } from "../util/uri"
 
@@ -62,7 +62,7 @@ export class FullTextSearchCodebaseIndex implements CodebaseIndex {
 					chunk.content,
 				])
 				await db.run(
-					`INSERT INTO fts_metadata (id, path, cacheKey, chunkId) 
+					`INSERT INTO fts_metadata (id, path, cacheKey, chunkId)
            VALUES (?, ?, ?, ?)
            ON CONFLICT(id) DO UPDATE SET
            path = excluded.path,

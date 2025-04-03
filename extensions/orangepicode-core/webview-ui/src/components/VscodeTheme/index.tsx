@@ -19,9 +19,10 @@ const convertToHslValue = (value?: string, defaultValue?: string) => {
 	return `${round(h, 1)} ${round(s * 100, 1)}% ${round(l * 100, 1)}%`;
 }
 
-const VscodeTheme: FC<PropsWithChildren & { className?: string }> = ({
+const VscodeTheme: FC<PropsWithChildren & { className?: string, style?: React.CSSProperties }> = ({
 	children,
 	className,
+	style,
 }) => {
 	const background = useCssVar({ name: "--vscode-editor-background" });
 	const foreground = useCssVar({ name: "--vscode-editor-foreground" });
@@ -48,6 +49,14 @@ const VscodeTheme: FC<PropsWithChildren & { className?: string }> = ({
 	const chart4 = useCssVar({ name: "--chart-4" });
 	const chart5 = useCssVar({ name: "--chart-5" });
 	const radius = useCssVar({ name: "--radius" });
+	const sidebarBackground = useCssVar({ name: "--vscode-editor-background" });
+	const sidebarForeground = useCssVar({ name: "--vscode-editor-foreground" });
+	const sidebarPrimary = useCssVar({ name: "--vscode-button-background" });
+	const sidebarPrimaryForeground = useCssVar({ name: "--vscode-button-foreground" });
+	const sidebarAccent = useCssVar({ name: "--vscode-list-hoverBackground" });
+	const sidebarAccentForeground = useCssVar({ name: "--vscode-editor-foreground" });
+	const sidebarBorder = useCssVar({ name: "--vscode-input-border" });
+	const sidebarRing = useCssVar({ name: "--vscode-focusBorder" });
 
 	const theme = useVscHlTheme()
 
@@ -96,6 +105,14 @@ const VscodeTheme: FC<PropsWithChildren & { className?: string }> = ({
 			"--chart-4": convertToHslValue(chart4.get(), "43 74% 66%"),
 			"--chart-5": convertToHslValue(chart5.get(), "27 87% 67%"),
 			"--radius": radius.get() ?? "0.5rem",
+			"--sidebar-background": convertToHslValue(sidebarBackground.get(), "0 0% 98%"),
+			"--sidebar-foreground": convertToHslValue(sidebarForeground.get(), "240 5.3% 26.1%"),
+			"--sidebar-primary": convertToHslValue(sidebarPrimary.get(), "240 5.9% 10%"),
+			"--sidebar-primary-foreground": convertToHslValue(sidebarPrimaryForeground.get(), "0 0% 98%"),
+			"--sidebar-accent": convertToHslValue(sidebarAccent.get(), "240 4.8% 95.9%"),
+			"--sidebar-accent-foreground": convertToHslValue(sidebarAccentForeground.get(), "240 5.9% 10%"),
+			"--sidebar-border": convertToHslValue(sidebarBorder.get(), "220 13% 91%"),
+			"--sidebar-ring": convertToHslValue(sidebarRing.get(), "217.2 91.2% 59.8%"),
 		};
 	}, [
 		background,
@@ -123,11 +140,19 @@ const VscodeTheme: FC<PropsWithChildren & { className?: string }> = ({
 		chart4,
 		chart5,
 		radius,
+		sidebarBackground,
+		sidebarForeground,
+		sidebarPrimary,
+		sidebarPrimaryForeground,
+		sidebarAccent,
+		sidebarAccentForeground,
+		sidebarBorder,
+		sidebarRing,
 		theme
 	]);
 
 	return (
-		<div style={themeVariables} className={cn(className, "h-full w-full")}>
+		<div style={{ ...themeVariables, ...style }} className={cn(className, "h-full w-full")}>
 			{children}
 		</div>
 	);

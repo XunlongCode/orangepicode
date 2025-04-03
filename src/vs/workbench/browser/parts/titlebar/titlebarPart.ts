@@ -53,7 +53,7 @@ import { IEditorCommandsContext, IEditorPartOptionsChangeEvent, IToolbarActions 
 import { CodeWindow, mainWindow } from '../../../../base/browser/window.js';
 import {
 	// ACCOUNTS_ACTIVITY_TILE_ACTION,
-	GLOBAL_ACTIVITY_TITLE_ACTION
+	// GLOBAL_ACTIVITY_TITLE_ACTION
 } from './titlebarActions.js';
 import { IView } from '../../../../base/browser/ui/grid/grid.js';
 import { createInstantHoverDelegate } from '../../../../base/browser/ui/hover/hoverDelegateFactory.js';
@@ -704,12 +704,12 @@ export class BrowserTitlebarPart extends Part implements ITitlebarPart {
 
 			const orangeSettingsAction = new Action(
 				ORANGE_SETTING_ID,
-				localize('customSettings', "自定义设置"),
+				localize('manage', "Manage"),
 				'codicon-gear', // 使用与原设置相同的图标
 				true,
 				async () => this.instantiationService.invokeFunction(accessor => {
 					const commandService = accessor.get(ICommandService);
-					return commandService.executeCommand('orangepicode-core.showUsermenu');
+					return commandService.executeCommand('orangepicode-core.toggleUsermenu');
 				})
 			);
 			actions.primary.push(orangeSettingsAction);

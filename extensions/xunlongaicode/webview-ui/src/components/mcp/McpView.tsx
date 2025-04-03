@@ -22,10 +22,11 @@ import McpResourceRow from "./McpResourceRow"
 import McpEnabledToggle from "./McpEnabledToggle"
 
 type McpViewProps = {
-	onDone: () => void
+	onDone?: () => void
+	className?: string
 }
 
-const McpView = ({ onDone }: McpViewProps) => {
+const McpView = ({ onDone, className }: McpViewProps) => {
 	const {
 		mcpServers: servers,
 		alwaysAllowMcp,
@@ -36,10 +37,10 @@ const McpView = ({ onDone }: McpViewProps) => {
 	const { t } = useAppTranslation()
 
 	return (
-		<Tab>
+		<Tab className={className}>
 			<TabHeader className="flex justify-between items-center">
 				<h3 className="text-vscode-foreground m-0">{t("mcp:title")}</h3>
-				<VSCodeButton onClick={onDone}>{t("mcp:done")}</VSCodeButton>
+				{onDone && <VSCodeButton onClick={onDone}>{t("mcp:done")}</VSCodeButton>}
 			</TabHeader>
 
 			<TabContent>
@@ -337,7 +338,7 @@ const ServerRow = ({ server, alwaysAllowMcp }: { server: McpServer; alwaysAllowM
 
 							<VSCodePanelView id="resources-view">
 								{(server.resources && server.resources.length > 0) ||
-								(server.resourceTemplates && server.resourceTemplates.length > 0) ? (
+									(server.resourceTemplates && server.resourceTemplates.length > 0) ? (
 									<div
 										style={{ display: "flex", flexDirection: "column", gap: "8px", width: "100%" }}>
 										{[...(server.resourceTemplates || []), ...(server.resources || [])].map(

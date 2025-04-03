@@ -6,7 +6,7 @@ import * as JSONC from "comment-json"
 import dotenv from "dotenv"
 
 import { DevEventName } from "@continuedev/config-yaml"
-import { IdeType, SerializedContinueConfig } from "../"
+import { IdeType, SerializedContinueConfig } from ".."
 import { defaultConfig, defaultConfigJetBrains } from "../config/default"
 import Types from "../config/types"
 
@@ -293,7 +293,7 @@ export function getPathToRemoteConfig(remoteConfigServerUrl: string): string {
 			typeof remoteConfigServerUrl !== "string" || remoteConfigServerUrl === ""
 				? undefined
 				: new URL(remoteConfigServerUrl)
-	} catch (e) {}
+	} catch (e) { }
 	const dir = path.join(getRemoteConfigsFolderPath(), url?.hostname ?? "None")
 	if (!fs.existsSync(dir)) {
 		fs.mkdirSync(dir)

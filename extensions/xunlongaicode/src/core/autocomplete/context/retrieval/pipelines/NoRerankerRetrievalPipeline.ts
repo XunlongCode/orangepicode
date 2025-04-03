@@ -1,4 +1,4 @@
-import { Chunk } from "../../../"
+import { Chunk } from "../../.."
 import { findUriInDirs } from "../../../util/uri"
 import { requestFilesFromRepoMap } from "../repoMapRequest"
 import { deduplicateChunks } from "../util"

@@ -1,0 +1,10 @@
+{
+	"theme": "Theme",
+	"language": "Language",
+	"settings": "Settings",
+	"keyboardShortcuts": "Keyboard Shortcuts",
+	"checkUpdate": "Check for Updates",
+	"helpDocumentation": "Help Documentation",
+	"contactUs": "Contact Us",
+	"logout": "Log Out"
+}

@@ -13,7 +13,8 @@ export class CloseOnboardingAction extends Action2 {
 	constructor() {
 		super({
 			id: CloseOnboardingAction.ID,
-			title: { value: "Close onboarding", original: "Close onboarding" },
+			category: "Developer",
+			title: { value: "Close Onboarding", original: "Close Onboarding" },
 			f1: true,
 			keybinding: {
 				weight: 200,
@@ -34,7 +35,8 @@ export class ToggleOnboardingAction extends Action2 {
 	constructor() {
 		super({
 			id: ToggleOnboardingAction.ID,
-			title: { value: "Toggle onboarding", original: "Toggle onboarding" },
+			category: "Developer",
+			title: { value: "Toggle Onboarding", original: "Toggle Onboarding" },
 			f1: true,
 			keybinding: {
 				weight: 200,
@@ -55,7 +57,8 @@ export class MarkOnboardingCompletedAction extends Action2 {
 	constructor() {
 		super({
 			id: MarkOnboardingCompletedAction.ID,
-			title: { value: "Mark onboarding complete", original: "Mark onboarding complete" },
+			category: "Developer",
+			title: { value: "Mark Onboarding Complete", original: "Mark Onboarding Complete" },
 			f1: true,
 		});
 	}
@@ -72,6 +75,7 @@ export class ResetOnboardingCompletedKeyAction extends Action2 {
 	constructor() {
 		super({
 			id: ResetOnboardingCompletedKeyAction.ID,
+			category: "Developer",
 			title: { value: "Reset Onboarding Complete Key", original: "Reset Onboarding Complete Key" },
 			f1: true,
 		});
@@ -85,7 +89,7 @@ export class ResetOnboardingCompletedKeyAction extends Action2 {
 		storageService.store(IS_ONBOARDING_COMPLETED_KEY, false, 0, 0);
 		notificationService.notify({
 			severity: Severity.Info,
-			message: 'Successfully reset onboarding complete key',
+			message: 'The onboarding complete key is successfully reset',
 			actions: {
 				primary: [{
 					id: 'reloadWindow',
@@ -108,7 +112,8 @@ export class IsOnboardingCompletedAction extends Action2 {
 	constructor() {
 		super({
 			id: IsOnboardingCompletedAction.ID,
-			title: { value: "Is onboarding complete", original: "Is onboarding complete" },
+			category: "Developer",
+			title: { value: "Get Onboarding Complete Key Value", original: "Get Onboarding Complete Key Value" },
 			f1: true,
 		});
 	}

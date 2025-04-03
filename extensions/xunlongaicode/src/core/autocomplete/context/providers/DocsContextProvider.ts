@@ -1,4 +1,4 @@
-import { BaseContextProvider } from "./"
+import { BaseContextProvider } from "."
 import {
 	Chunk,
 	ContextItem,

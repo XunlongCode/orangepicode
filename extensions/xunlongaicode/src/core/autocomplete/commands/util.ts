@@ -1,4 +1,4 @@
-import { ContextItemWithId, RangeInFileWithContents } from "../"
+import { ContextItemWithId, RangeInFileWithContents } from ".."
 import { findUriInDirs, getUriPathBasename } from "../util/uri"
 import { v4 as uuidv4 } from "uuid"
 

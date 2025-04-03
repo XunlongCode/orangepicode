@@ -85,6 +85,8 @@ export type ClineProviderEvents = {
 export class ClineProvider extends EventEmitter<ClineProviderEvents> implements vscode.WebviewViewProvider {
 	public static readonly sideBarId = "orangepiaicode.SidebarProvider" // used in package.json as the view's id. This value cannot be changed due to how vscode caches views based on their id, and updating the id would break existing instances of the extension.
 	public static readonly tabPanelId = "orangepiaicode.TabPanelProvider"
+	public static readonly chatViewId = "orangepiaicode.AuxiliaryBarChatProvider"
+	public static readonly codeViewId = "orangepiaicode.AuxiliaryBarCodeProvider"
 	private static activeInstances: Set<ClineProvider> = new Set()
 	private disposables: vscode.Disposable[] = []
 	private view?: vscode.WebviewView | vscode.WebviewPanel
@@ -107,7 +109,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 	constructor(
 		readonly context: vscode.ExtensionContext,
 		private readonly outputChannel: vscode.OutputChannel,
-		private readonly renderContext: "sidebar" | "editor" = "sidebar",
+		private readonly renderContext: "sidebar" | "editor" | "chat" | "code" | "settings" = "sidebar",
 	) {
 		super()
 
@@ -385,6 +387,9 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 	}
 
 	async resolveWebviewView(webviewView: vscode.WebviewView | vscode.WebviewPanel) {
+		console.log("ClineProvder resolving webview view");
+		console.log(webviewView);
+
 		this.outputChannel.appendLine("Resolving webview view")
 
 		if (!this.contextProxy.isInitialized) {
@@ -424,8 +429,9 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			localResourceRoots: [this.contextProxy.extensionUri],
 		}
 
+		const isDev = this.context.extensionMode === vscode.ExtensionMode.Development || process.env.VSCODE_DEV === '1'
 		webviewView.webview.html =
-			this.contextProxy.extensionMode === vscode.ExtensionMode.Development
+			isDev
 				? await this.getHMRHtmlContent(webviewView.webview)
 				: this.getHtmlContent(webviewView.webview)
 
@@ -607,7 +613,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 	}
 
 	private async getHMRHtmlContent(webview: vscode.Webview): Promise<string> {
-		const localPort = "5173"
+		const localPort = "5174"
 		const localServerUrl = `localhost:${localPort}`
 
 		// Check if local dev server is running.
@@ -636,7 +642,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			"codicon.css",
 		])
 
-		const file = "src/index.tsx"
+		const file = this.renderContext === "settings" ? "src/settings.tsx" : "src/index.tsx"
 		const scriptUri = `http://${localServerUrl}/${file}`
 
 		const reactRefresh = /*html*/ `
@@ -701,7 +707,8 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			"index.css",
 		])
 		// The JS file from the React build output
-		const scriptUri = getUri(webview, this.contextProxy.extensionUri, ["webview-ui", "build", "assets", "index.js"])
+		const file = this.renderContext === "settings" ? "settings.js" : "index.js"
+		const scriptUri = getUri(webview, this.contextProxy.extensionUri, ["webview-ui", "build", "assets", file])
 
 		// The codicon font from the React build output
 		// https://github.com/microsoft/vscode-extension-samples/blob/main/webview-codicons-sample/src/extension.ts

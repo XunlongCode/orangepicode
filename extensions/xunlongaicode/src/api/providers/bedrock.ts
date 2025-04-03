@@ -7,7 +7,7 @@ import {
 } from "@aws-sdk/client-bedrock-runtime"
 import { fromIni } from "@aws-sdk/credential-providers"
 import { Anthropic } from "@anthropic-ai/sdk"
-import { SingleCompletionHandler } from "../"
+import { SingleCompletionHandler } from ".."
 import {
 	ApiHandlerOptions,
 	BedrockModelId,
@@ -248,10 +248,10 @@ export class AwsBedrockHandler extends BaseProvider implements SingleCompletionH
 				topP: 0.1,
 				...(this.options.awsUsePromptCache
 					? {
-							promptCache: {
-								promptCacheId: this.options.awspromptCacheId || "",
-							},
-						}
+						promptCache: {
+							promptCacheId: this.options.awspromptCacheId || "",
+						},
+					}
 					: {}),
 			},
 		}
@@ -688,16 +688,16 @@ Please check:
 			toolConfig:
 				supportsTools && options.tools
 					? {
-							tools: options.tools.map((tool) => ({
-								toolSpec: {
-									name: tool.function.name,
-									description: tool.function.description,
-									inputSchema: {
-										json: tool.function.parameters,
-									},
+						tools: options.tools.map((tool) => ({
+							toolSpec: {
+								name: tool.function.name,
+								description: tool.function.description,
+								inputSchema: {
+									json: tool.function.parameters,
 								},
-							})),
-						}
+							},
+						})),
+					}
 					: undefined,
 			inferenceConfig: {
 				maxTokens: this.options.includeMaxTokens ? options.maxTokens : undefined,
@@ -838,7 +838,7 @@ Please check:
 					})
 					throw new Error(
 						validation.errorMessage ||
-							"Invalid ARN format. ARN should follow the pattern: arn:aws:bedrock:region:account-id:resource-type/resource-name",
+						"Invalid ARN format. ARN should follow the pattern: arn:aws:bedrock:region:account-id:resource-type/resource-name",
 					)
 				}
 

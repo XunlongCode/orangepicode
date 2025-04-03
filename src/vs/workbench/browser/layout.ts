@@ -271,6 +271,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 	private editorPartView!: ISerializableView;
 	private statusBarPartView!: ISerializableView;
 	private onboardingPartView!: ISerializableView;
+	private overlayPartView!: ISerializableView;
 
 	private environmentService!: IBrowserWorkbenchEnvironmentService;
 	private extensionService!: IExtensionService;
@@ -1521,7 +1522,8 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		const auxiliaryBarPart = this.getPart(Parts.AUXILIARYBAR_PART);
 		const sideBar = this.getPart(Parts.SIDEBAR_PART);
 		const statusBar = this.getPart(Parts.STATUSBAR_PART);
-		const onboardingPart = this.getPart(Parts.ORANGEPICODE_OVERLAY_PART);
+		const onboardingPart = this.getPart(Parts.ORANGEPICODE_ONBOARDING_PART);
+		const overlayPart = this.getPart(Parts.ORANGEPICODE_OVERLAY_PART);
 
 		// View references for all parts
 		this.titleBarPartView = titleBar;
@@ -1533,21 +1535,11 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.auxiliaryBarPartView = auxiliaryBarPart;
 		this.statusBarPartView = statusBar;
 		this.onboardingPartView = onboardingPart;
+		this.overlayPartView = overlayPart
 
-		// Create a new container for onboardingPart
-		const onboardingPartContainer = document.createElement("div");
-		onboardingPartContainer.style.position = "absolute";
-		onboardingPartContainer.style.top = "0";
-		onboardingPartContainer.style.left = "0";
-		onboardingPartContainer.style.right = "0";
-		onboardingPartContainer.style.bottom = "0";
-		onboardingPartContainer.style.zIndex = "-10";
-		onboardingPartContainer.style.display = "absolute";
-		onboardingPartContainer.classList.add("onboarding-part-container");
-		onboardingPartContainer.style.backgroundColor = 'transparent';
-
-		this.mainContainer.appendChild(onboardingPartContainer);
-		onboardingPart.create(onboardingPartContainer);
+		// Create a new container for onboardingPart and overlayPart
+		onboardingPart.create(this.mainContainer);
+		overlayPart.create(this.mainContainer);
 
 		const viewMap = {
 			[Parts.ACTIVITYBAR_PART]: this.activityBarPartView,
@@ -1558,7 +1550,8 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			[Parts.SIDEBAR_PART]: this.sideBarPartView,
 			[Parts.STATUSBAR_PART]: this.statusBarPartView,
 			[Parts.AUXILIARYBAR_PART]: this.auxiliaryBarPartView,
-			[Parts.ORANGEPICODE_OVERLAY_PART]: this.onboardingPartView
+			[Parts.ORANGEPICODE_ONBOARDING_PART]: this.onboardingPartView,
+			[Parts.ORANGEPICODE_OVERLAY_PART]: this.overlayPartView,
 		};
 
 		const fromJSON = ({ type }: { type: Parts }) => viewMap[type];
@@ -1630,6 +1623,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			// Layout the grid widget
 			this.workbenchGrid.layout(this._mainContainerDimension.width, this._mainContainerDimension.height);
 			this.onboardingPartView.layout(this._mainContainerDimension.width, this._mainContainerDimension.height, 0, 0);
+			this.overlayPartView.layout(this._mainContainerDimension.width, this._mainContainerDimension.height, 0, 0);
 			this.initialized = true;
 
 			// Emit as event

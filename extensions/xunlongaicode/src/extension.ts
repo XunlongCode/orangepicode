@@ -19,7 +19,7 @@ import { CodeActionProvider } from "./core/CodeActionProvider"
 import { DIFF_VIEW_URI_SCHEME } from "./integrations/editor/DiffViewProvider"
 import { McpServerManager } from "./services/mcp/McpServerManager"
 import { Battery } from "./core/autocomplete/util/battery"
-import { telemetryService } from "./services/telemetry/TelemetryService"
+import { chatViewTelemetryService, codeViewTelemetryService, telemetryService } from "./services/telemetry/TelemetryService"
 import { TerminalRegistry } from "./integrations/terminal/TerminalRegistry"
 import { API } from "./exports/api"
 
@@ -69,7 +69,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Validate task history on extension activation
 	provider.validateTaskHistory().catch((error) => {
-		outputChannel.appendLine(`Failed to validate task history: ${error}`)
+		outputChannel.appendLine(`Failed to validate sidebar task history: ${error}`)
 	})
 
 	context.subscriptions.push(
@@ -79,6 +79,40 @@ export function activate(context: vscode.ExtensionContext) {
 	)
 
 	registerCommands({ context, outputChannel, provider, battery })
+
+	// chat 模式
+	const chatViewProvider = new ClineProvider(context, outputChannel, "chat")
+	chatViewTelemetryService.setProvider(chatViewProvider)
+
+	chatViewProvider.validateTaskHistory().catch((error) => {
+		outputChannel.appendLine(`Failed to validate chat task history: ${error}`)
+	})
+
+	context.subscriptions.push(
+		vscode.window.registerWebviewViewProvider(ClineProvider.chatViewId, chatViewProvider, {
+			webviewOptions: { retainContextWhenHidden: true },
+		})
+	)
+
+	// 注册chat模式指令
+	// registerCommands({ context, outputChannel, provider: chatViewProvider, battery })
+
+	// code 模式
+	const codeViewProvider = new ClineProvider(context, outputChannel, "code")
+	codeViewTelemetryService.setProvider(codeViewProvider)
+
+	// Validate task history on extension activation
+	codeViewProvider.validateTaskHistory().catch((error) => {
+		outputChannel.appendLine(`Failed to validate code task history: ${error}`)
+	})
+
+	context.subscriptions.push(
+		vscode.window.registerWebviewViewProvider(ClineProvider.codeViewId, codeViewProvider, {
+			webviewOptions: { retainContextWhenHidden: true },
+		}),
+	)
+	// 注册code模式指令
+	// registerCommands({ context, outputChannel, provider: codeViewProvider, battery })
 
 	/**
 	 * We use the text document content provider API to show the left side for diff
@@ -139,7 +173,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// context.subscriptions.push(languageMonitor);
 
 	// Implements the `RooCodeAPI` interface.
-	return new API(outputChannel, provider)
+	return new API(outputChannel, codeViewProvider)
 }
 
 // This method is called when your extension is deactivated

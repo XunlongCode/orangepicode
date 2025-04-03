@@ -1,4 +1,4 @@
-import { CustomCommand, SlashCommand, SlashCommandDescription } from "../"
+import { CustomCommand, SlashCommand, SlashCommandDescription } from ".."
 import { renderTemplatedString } from "../promptFiles/v1/renderTemplatedString"
 import { renderChatMessage } from "../util/messageContent"
 

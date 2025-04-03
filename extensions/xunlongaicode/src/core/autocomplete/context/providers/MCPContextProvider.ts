@@ -1,11 +1,11 @@
-import { BaseContextProvider } from "./"
+import { BaseContextProvider } from "."
 import {
 	ContextItem,
 	ContextProviderDescription,
 	ContextProviderExtras,
 	ContextSubmenuItem,
 	LoadSubmenuItemsArgs,
-} from "../../"
+} from "../.."
 import { MCPManagerSingleton } from "../mcp"
 
 interface MCPContextProviderOptions {

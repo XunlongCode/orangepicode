@@ -1,11 +1,11 @@
-import { BaseContextProvider } from "./"
+import { BaseContextProvider } from "."
 import {
 	ContextItem,
 	ContextProviderDescription,
 	ContextProviderExtras,
 	ContextSubmenuItem,
 	LoadSubmenuItemsArgs,
-} from "../../"
+} from "../.."
 import { walkDirs } from "../../indexing/walkDir"
 import { getUriPathBasename, getShortestUniqueRelativeUriPaths, getUriDescription } from "../../util/uri"
 

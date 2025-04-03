@@ -162,9 +162,5 @@
 		"*": "error",
 		"ts": "warning",
 		"eslint": "warning"
-	},
-	"i18n-ally.localesPaths": [
-		"extensions/orangepicode-core/webview-ui/src/i18n/locales",
-	],
-  "i18n-ally.enabledFrameworks": ["i18next"],
+	}
 }

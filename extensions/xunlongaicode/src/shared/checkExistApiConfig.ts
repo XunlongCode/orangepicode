@@ -1,4 +1,4 @@
-import { ApiConfiguration } from "../shared/api"
+import { ApiConfiguration } from "./api"
 import { SECRET_KEYS } from "./globalState"
 
 export function checkExistKey(config: ApiConfiguration | undefined) {

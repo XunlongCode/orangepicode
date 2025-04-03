@@ -1,4 +1,4 @@
-import { RangeInFileWithContents } from "../../"
+import { RangeInFileWithContents } from "../.."
 import { countTokens } from "../../llm/countTokens"
 import { AutocompleteSnippetDeprecated } from "../../types"
 import { HelperVars } from "../../util/HelperVars"

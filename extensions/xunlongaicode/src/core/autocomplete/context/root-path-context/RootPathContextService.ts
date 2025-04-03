@@ -3,7 +3,7 @@ import { createHash } from "crypto"
 import { LRUCache } from "lru-cache"
 import Parser from "web-tree-sitter"
 
-import { IDE } from "../../"
+import { IDE } from "../.."
 import { getFullLanguageName, getQueryForFile, IGNORE_PATH_PATTERNS, LanguageName } from "../../util/treeSitter"
 import { AutocompleteCodeSnippet, AutocompleteSnippetType } from "../../snippets/types"
 import { AutocompleteSnippetDeprecated } from "../../types"
@@ -33,7 +33,7 @@ export class RootPathContextService {
 	constructor(
 		private readonly importDefinitionsService: ImportDefinitionsService,
 		private readonly ide: IDE,
-	) {}
+	) { }
 
 	private static getNodeId(node: Parser.SyntaxNode): string {
 		return `${node.startIndex}`

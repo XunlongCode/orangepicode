@@ -33,6 +33,7 @@ import TelemetryBanner from "../common/TelemetryBanner"
 import { useAppTranslation } from "@/i18n/TranslationContext"
 import removeMd from "remove-markdown"
 import ChatTextAreaXl from "./ChatTextAreaXl"
+import ChatTextArea2 from './ChatTextArea2'
 
 interface ChatViewProps {
 	isHidden: boolean
@@ -1111,10 +1112,14 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 				display: isHidden ? "none" : "flex",
 				flexDirection: "column",
 				overflow: "hidden",
+				margin: "16px 24px 0"
 			}}>
 			{task ? (
 				<>
 					<TaskHeader
+						style={{
+							padding: "0"
+						}}
 						task={task}
 						tokensIn={apiMetrics.totalTokensIn}
 						tokensOut={apiMetrics.totalTokensOut}
@@ -1144,12 +1149,16 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 						paddingBottom: "10px",
 					}}>
 					{telemetrySetting === "unset" && <TelemetryBanner />}
-					{showAnnouncement && <Announcement version={version} hideAnnouncement={hideAnnouncement} />}
-					<div style={{ padding: "0 20px", flexShrink: 0 }}>
-						<h2>{t("chat:greeting")}</h2>
-						<p>{t("chat:aboutMe")}</p>
+					{/* {showAnnouncement && <Announcement version={version} hideAnnouncement={hideAnnouncement} />} */}
+					<div className='flex flex-col items-center justify-center h-full'>
+						<div
+							style={{ padding: "0", flexShrink: 0 }}
+						>
+							<h2>{t("chat:greeting")}</h2>
+							<p>{t("chat:aboutMe")}</p>
+						</div>
 					</div>
-					{taskHistory.length > 0 && <HistoryPreview showHistoryView={showHistoryView} />}
+					{/* {taskHistory.length > 0 && <HistoryPreview showHistoryView={showHistoryView} />} */}
 				</div>
 			)}
 
@@ -1168,17 +1177,6 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 			//    This ensures it takes its natural height when there's space
 			//    but becomes scrollable when the viewport is too small
 			*/}
-			{!task && (
-				<AutoApproveMenu
-					isExpandedExternal={isAutoApproveMenuExpanded}
-					onExpandChange={handleAutoApproveMenuExpandChange}
-					style={{
-						marginBottom: -2,
-						flex: "0 1 auto", // flex-grow: 0, flex-shrink: 1, flex-basis: auto
-						minHeight: 0,
-					}}
-				/>
-			)}
 
 			{task && (
 				<>
@@ -1209,136 +1207,129 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 							initialTopMostItemIndex={groupedMessages.length - 1}
 						/>
 					</div>
-					<AutoApproveMenu />
-					{showScrollToBottom ? (
-						<div
-							style={{
-								display: "flex",
-								padding: "10px 15px 0px 15px",
-							}}>
-							<ScrollToBottomButton
-								onClick={() => {
-									scrollToBottomSmooth()
-									disableAutoScrollRef.current = false
-								}}
-								title={t("chat:scrollToBottom")}>
-								<span className="codicon codicon-chevron-down" style={{ fontSize: "18px" }}></span>
-							</ScrollToBottomButton>
-						</div>
-					) : (
-						<div
-							style={{
-								opacity:
-									primaryButtonText || secondaryButtonText || isStreaming
-										? enableButtons || (isStreaming && !didClickCancel)
-											? 1
-											: 0.5
-										: 0,
-								display: "flex",
-								padding: `${primaryButtonText || secondaryButtonText || isStreaming ? "10" : "0"}px 15px 0px 15px`,
-							}}>
-							{primaryButtonText && !isStreaming && (
-								<VSCodeButton
-									appearance="primary"
-									disabled={!enableButtons}
+					{
+						!isAutoApproveMenuExpanded && (
+							showScrollToBottom ? (
+								<div
 									style={{
-										flex: secondaryButtonText ? 1 : 2,
-										marginRight: secondaryButtonText ? "6px" : "0",
-									}}
-									title={
-										primaryButtonText === t("chat:retry.title")
-											? t("chat:retry.tooltip")
-											: primaryButtonText === t("chat:save.title")
-												? t("chat:save.tooltip")
-												: primaryButtonText === t("chat:approve.title")
-													? t("chat:approve.tooltip")
-													: primaryButtonText === t("chat:runCommand.title")
-														? t("chat:runCommand.tooltip")
-														: primaryButtonText === t("chat:startNewTask.title")
-															? t("chat:startNewTask.tooltip")
-															: primaryButtonText === t("chat:resumeTask.title")
-																? t("chat:resumeTask.tooltip")
-																: primaryButtonText === t("chat:proceedAnyways.title")
-																	? t("chat:proceedAnyways.tooltip")
-																	: primaryButtonText ===
-																		  t("chat:proceedWhileRunning.title")
-																		? t("chat:proceedWhileRunning.tooltip")
-																		: undefined
-									}
-									onClick={(e) => handlePrimaryButtonClick(inputValue, selectedImages)}>
-									{primaryButtonText}
-								</VSCodeButton>
-							)}
-							{(secondaryButtonText || isStreaming) && (
-								<VSCodeButton
-									appearance="secondary"
-									disabled={!enableButtons && !(isStreaming && !didClickCancel)}
+										display: "flex",
+										padding: "10px 0 0 0",
+									}}>
+									<ScrollToBottomButton
+										onClick={() => {
+											scrollToBottomSmooth()
+											disableAutoScrollRef.current = false
+										}}
+										title={t("chat:scrollToBottom")}>
+										<span className="codicon codicon-chevron-down" style={{ fontSize: "18px" }}></span>
+									</ScrollToBottomButton>
+								</div>
+							) : (
+								<div
 									style={{
-										flex: isStreaming ? 2 : 1,
-										marginLeft: isStreaming ? 0 : "6px",
-									}}
-									title={
-										isStreaming
-											? t("chat:cancel.tooltip")
-											: secondaryButtonText === t("chat:startNewTask.title")
-												? t("chat:startNewTask.tooltip")
-												: secondaryButtonText === t("chat:reject.title")
-													? t("chat:reject.tooltip")
-													: secondaryButtonText === t("chat:terminate.title")
-														? t("chat:terminate.tooltip")
-														: undefined
-									}
-									onClick={(e) => handleSecondaryButtonClick(inputValue, selectedImages)}>
-									{isStreaming ? t("chat:cancel.title") : secondaryButtonText}
-								</VSCodeButton>
-							)}
-						</div>
-					)}
+										opacity:
+											primaryButtonText || secondaryButtonText || isStreaming
+												? enableButtons || (isStreaming && !didClickCancel)
+													? 1
+													: 0.5
+												: 0,
+										display: "flex",
+										padding: `${primaryButtonText || secondaryButtonText || isStreaming ? "10" : "0"}px 0 0 0`,
+									}}>
+									{primaryButtonText && !isStreaming && (
+										<VSCodeButton
+											appearance="primary"
+											disabled={!enableButtons}
+											style={{
+												flex: secondaryButtonText ? 1 : 2,
+												marginRight: secondaryButtonText ? "6px" : "0",
+											}}
+											title={
+												primaryButtonText === t("chat:retry.title")
+													? t("chat:retry.tooltip")
+													: primaryButtonText === t("chat:save.title")
+														? t("chat:save.tooltip")
+														: primaryButtonText === t("chat:approve.title")
+															? t("chat:approve.tooltip")
+															: primaryButtonText === t("chat:runCommand.title")
+																? t("chat:runCommand.tooltip")
+																: primaryButtonText === t("chat:startNewTask.title")
+																	? t("chat:startNewTask.tooltip")
+																	: primaryButtonText === t("chat:resumeTask.title")
+																		? t("chat:resumeTask.tooltip")
+																		: primaryButtonText === t("chat:proceedAnyways.title")
+																			? t("chat:proceedAnyways.tooltip")
+																			: primaryButtonText ===
+																				t("chat:proceedWhileRunning.title")
+																				? t("chat:proceedWhileRunning.tooltip")
+																				: undefined
+											}
+											onClick={(e) => handlePrimaryButtonClick(inputValue, selectedImages)}>
+											{primaryButtonText}
+										</VSCodeButton>
+									)}
+									{(secondaryButtonText || isStreaming) && (
+										<VSCodeButton
+											appearance="secondary"
+											disabled={!enableButtons && !(isStreaming && !didClickCancel)}
+											style={{
+												flex: isStreaming ? 2 : 1,
+												marginLeft: isStreaming ? 0 : "6px",
+											}}
+											title={
+												isStreaming
+													? t("chat:cancel.tooltip")
+													: secondaryButtonText === t("chat:startNewTask.title")
+														? t("chat:startNewTask.tooltip")
+														: secondaryButtonText === t("chat:reject.title")
+															? t("chat:reject.tooltip")
+															: secondaryButtonText === t("chat:terminate.title")
+																? t("chat:terminate.tooltip")
+																: undefined
+											}
+											onClick={(e) => handleSecondaryButtonClick(inputValue, selectedImages)}>
+											{isStreaming ? t("chat:cancel.title") : secondaryButtonText}
+										</VSCodeButton>
+									)}
+								</div>
+							)
+						)
+					}
 				</>
 			)}
 
-			{/* <ChatTextArea
-				ref={textAreaRef}
-				inputValue={inputValue}
-				setInputValue={setInputValue}
-				textAreaDisabled={textAreaDisabled}
-				placeholderText={placeholderText}
-				selectedImages={selectedImages}
-				setSelectedImages={setSelectedImages}
-				onSend={() => handleSendMessage(inputValue, selectedImages)}
-				onSelectImages={selectImages}
-				shouldDisableImages={shouldDisableImages}
-				onHeightChange={() => {
-					if (isAtBottom) {
-						scrollToBottomAuto()
-					}
-				}}
-				mode={mode}
-				setMode={setMode}
-				modeShortcutText={modeShortcutText}
-			/> */}
-			{/* 上面的是插件的原始的代码 ,下面是提供给IDE使用的页面*/}
-			<ChatTextAreaXl
-				ref={textAreaRef}
-				inputValue={inputValue}
-				setInputValue={setInputValue}
-				textAreaDisabled={textAreaDisabled}
-				placeholderText={placeholderText}
-				selectedImages={selectedImages}
-				setSelectedImages={setSelectedImages}
-				onSend={() => handleSendMessage(inputValue, selectedImages)}
-				onSelectImages={selectImages}
-				shouldDisableImages={shouldDisableImages}
-				onHeightChange={() => {
-					if (isAtBottom) {
-						scrollToBottomAuto()
-					}
-				}}
-				mode={mode}
-				setMode={setMode}
-				modeShortcutText={modeShortcutText}
-				onToggleAutoApproveMenu={() => setIsAutoApproveMenuExpanded((prev) => !prev)}
-			/>
+			<div className='my-[16px] bg-secondary rounded-[8px]'>
+				<AutoApproveMenu
+					isExpandedExternal={isAutoApproveMenuExpanded}
+					onExpandChange={handleAutoApproveMenuExpandChange}
+					style={{
+						marginBottom: -2,
+						flex: "0 1 auto", // flex-grow: 0, flex-shrink: 1, flex-basis: auto
+						minHeight: 0,
+					}}
+				/>
+
+				<ChatTextArea2
+					ref={textAreaRef}
+					inputValue={inputValue}
+					setInputValue={setInputValue}
+					textAreaDisabled={textAreaDisabled}
+					placeholderText={placeholderText}
+					selectedImages={selectedImages}
+					setSelectedImages={setSelectedImages}
+					onSend={() => handleSendMessage(inputValue, selectedImages)}
+					onSelectImages={selectImages}
+					shouldDisableImages={shouldDisableImages}
+					onHeightChange={() => {
+						if (isAtBottom) {
+							scrollToBottomAuto()
+						}
+					}}
+					mode={mode}
+					setMode={setMode}
+					modeShortcutText={modeShortcutText}
+				/>
+			</div>
 
 			<div id="roo-portal" />
 		</div>

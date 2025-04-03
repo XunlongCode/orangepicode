@@ -11,6 +11,8 @@ export const Usermenu: FC = () => {
 	const { t, i18n } = useTranslation()
 	const dropdownContiainerRef = useRef<HTMLDivElement>(null);
 	const [open, setOpen] = useState(false)
+	const [themeSubOpen, setThemeSubOpen] = useState(false)
+	const [languageSubOpen, setLanguageSubOpen] = useState(false)
 
 	useEffect(() => {
 		if (dropdownContiainerRef.current) {
@@ -19,30 +21,35 @@ export const Usermenu: FC = () => {
 	}, [dropdownContiainerRef.current])
 
 	// 点击遮罩，关闭菜单
-	const onUsermenuMaskClick = () => {
+	const hideUsermenu = () => {
+		setThemeSubOpen(false)
+		setLanguageSubOpen(false)
+
 		vscode.postMessage({
 			type: "hideUsermenu"
 		})
 	}
 
 	// 选择语言
-	const onSelectLanguage = (lang: string) => {
+	const setLanguage = (lang: string) => {
 		i18n.changeLanguage(lang)
 		vscode.postMessage({
 			type: "setLanguage",
 			language: lang
 		})
+		hideUsermenu()
 	}
 
 	// 点击设置
-	const onSettingClick = () => {
+	const openSettings = () => {
 		vscode.postMessage({
 			type: "openSettings"
 		})
+		hideUsermenu()
 	}
 
 	return <div className='absolute inset-0'>
-		<div className='absolute inset-0' onClick={onUsermenuMaskClick}></div>
+		<div className='absolute inset-0' onClick={hideUsermenu}></div>
 		<div className='absolute w-[240px] h-[460px] right-[24px] top-[45px]'>
 			<VscodeTheme
 				style={{
@@ -82,7 +89,7 @@ export const Usermenu: FC = () => {
 							container={dropdownContiainerRef.current!}
 							className="w-[--radix-dropdown-menu-trigger-width] border-none !animate-none p-0"
 						>
-							<DropdownMenuSub>
+							<DropdownMenuSub open={themeSubOpen} onOpenChange={setThemeSubOpen}>
 								<DropdownMenuSubTrigger className='h-[48px] cursor-pointer'>
 									{t("theme", { ns: "usermenu" })}
 								</DropdownMenuSubTrigger>
@@ -95,45 +102,45 @@ export const Usermenu: FC = () => {
 								</DropdownMenuPortal>
 							</DropdownMenuSub>
 
-							<DropdownMenuSub>
+							<DropdownMenuSub open={languageSubOpen} onOpenChange={setLanguageSubOpen}>
 								<DropdownMenuSubTrigger className='h-[48px] cursor-pointer'>
 									{t("language", { ns: "usermenu" })}
 								</DropdownMenuSubTrigger>
 								<DropdownMenuPortal container={dropdownContiainerRef.current!}>
 									<DropdownMenuSubContent className='!animate-none'>
-										<DropdownMenuItem className='cursor-pointer' onClick={() => onSelectLanguage("en")}>English</DropdownMenuItem>
-										<DropdownMenuItem className='cursor-pointer' onClick={() => onSelectLanguage("zh-CN")}>简体中文</DropdownMenuItem>
+										<DropdownMenuItem className='cursor-pointer' onClick={() => setLanguage("en")}>English</DropdownMenuItem>
+										<DropdownMenuItem className='cursor-pointer' onClick={() => setLanguage("zh-CN")}>简体中文</DropdownMenuItem>
 									</DropdownMenuSubContent>
 								</DropdownMenuPortal>
 							</DropdownMenuSub>
 
 							<DropdownMenuSeparator className='m-0' />
 
-							<DropdownMenuItem className='h-[48px] cursor-pointer' onClick={onSettingClick}>
-							{t("settings", { ns: "usermenu" })}
-						</DropdownMenuItem>
-						<DropdownMenuItem className='h-[48px] cursor-pointer'>
-							{t("keyboardShortcuts", { ns: "usermenu" })}
-						</DropdownMenuItem>
-						<DropdownMenuItem className='h-[48px] cursor-pointer'>
-							{t("checkUpdate", { ns: "usermenu" })}
-						</DropdownMenuItem>
-						<DropdownMenuItem className='h-[48px] cursor-pointer'>
-							{t("helpDocumentation", { ns: "usermenu" })}
-						</DropdownMenuItem>
-						<DropdownMenuItem className='h-[48px] cursor-pointer'>
-							{t("contactUs", { ns: "usermenu" })}
-						</DropdownMenuItem>
+							<DropdownMenuItem className='h-[48px] cursor-pointer' onClick={openSettings}>
+								{t("settings", { ns: "usermenu" })}
+							</DropdownMenuItem>
+							<DropdownMenuItem className='h-[48px] cursor-pointer'>
+								{t("keyboardShortcuts", { ns: "usermenu" })}
+							</DropdownMenuItem>
+							<DropdownMenuItem className='h-[48px] cursor-pointer'>
+								{t("checkUpdate", { ns: "usermenu" })}
+							</DropdownMenuItem>
+							<DropdownMenuItem className='h-[48px] cursor-pointer'>
+								{t("helpDocumentation", { ns: "usermenu" })}
+							</DropdownMenuItem>
+							<DropdownMenuItem className='h-[48px] cursor-pointer'>
+								{t("contactUs", { ns: "usermenu" })}
+							</DropdownMenuItem>
 
-						<DropdownMenuSeparator className='m-0' />
+							<DropdownMenuSeparator className='m-0' />
 
-						<DropdownMenuItem className='h-[48px] cursor-pointer'>
-							{t("logout", { ns: "usermenu" })}
-						</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
-		</div>
-	</VscodeTheme>
+							<DropdownMenuItem className='h-[48px] cursor-pointer'>
+								{t("logout", { ns: "usermenu" })}
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				</div>
+			</VscodeTheme>
 		</div >
 	</div >
 }

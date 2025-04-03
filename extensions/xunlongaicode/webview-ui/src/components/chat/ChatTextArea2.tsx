@@ -24,6 +24,8 @@ import Thumbnails from "../common/Thumbnails"
 import { MAX_IMAGES_PER_MESSAGE } from "./ChatView"
 import ContextMenu from "./ContextMenu"
 import { VolumeX } from "lucide-react"
+import { SvgIcons } from '../../SvgIcons'
+import { cn } from '../../lib/utils'
 
 interface ChatTextAreaProps {
 	inputValue: string
@@ -565,10 +567,31 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 			}
 		})
 
+		const onReference = () => {
+			if (textAreaDisabled) return
+			// 在光标位置插入@符号
+			const newValue =
+				inputValue.slice(0, cursorPosition) + "@" + inputValue.slice(cursorPosition)
+			setInputValue(newValue)
+			// 更新光标位置到@符号后面
+			const newCursorPosition = cursorPosition + 1
+			setCursorPosition(newCursorPosition)
+			setIntendedCursorPosition(newCursorPosition)
+			// 聚焦文本框并触发上下文菜单
+			setTimeout(() => {
+				if (textAreaRef.current) {
+					textAreaRef.current.focus()
+					textAreaRef.current.setSelectionRange(newCursorPosition, newCursorPosition)
+					// 手动触发上下文菜单显示
+					setShowContextMenu(true)
+				}
+			}, 0)
+		}
+
 		return (
 			<div>
 				<div
-					className="chat-text-area"
+					className="chat-text-area border-[2px] border-primary"
 					style={{
 						opacity: textAreaDisabled ? 0.5 : 1,
 						position: "relative",
@@ -579,8 +602,6 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 						margin: "10px 15px",
 						padding: "8px",
 						outline: "none",
-						border: "2px solid var(--vscode-focusBorder)",
-						borderColor: "var(--vscode-focusBorder)",
 						borderRadius: "8px",
 					}}
 					onDrop={async (e) => {
@@ -788,7 +809,6 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							}}
 						/>
 					)}
-
 				</div>
 
 				<div
@@ -800,53 +820,75 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 						paddingTop: "2px",
 						marginLeft: "15px",
 						marginRight: "15px",
+						marginBottom: "15px",
+						gap: "44px",
 					}}>
 					{/* Left side - dropdowns container */}
 					<div
 						style={{
 							display: "flex",
 							alignItems: "center",
-							gap: "4px",
+							gap: "8px",
 							overflow: "hidden",
 							minWidth: 0,
 						}}>
-						{/* Mode selector - fixed width */}
-						<div style={{ flexShrink: 0 }}>
-							<SelectDropdown
-								value={mode}
-								disabled={textAreaDisabled}
-								title={t("chat:selectMode")}
-								options={[
-									{
-										value: "shortcut",
-										label: modeShortcutText,
-										disabled: true,
-										type: DropdownOptionType.SHORTCUT,
-									},
-									...getAllModes(customModes).map((mode) => ({
-										value: mode.slug,
-										label: mode.name,
-										type: DropdownOptionType.ITEM,
-									})),
-									{
-										value: "sep-1",
-										label: t("chat:separator"),
-										type: DropdownOptionType.SEPARATOR,
-									},
-									{
-										value: "promptsButtonClicked",
-										label: t("chat:edit"),
-										type: DropdownOptionType.ACTION,
-									},
-								]}
-								onChange={(value) => {
-									setMode(value as Mode)
-									vscode.postMessage({ type: "mode", text: value })
-								}}
-								shortcutText={modeShortcutText}
-								triggerClassName="w-full"
-							/>
+						<div
+							className={`input-icon-button flex items-center ${textAreaDisabled ? "disabled" : ""
+								}`}
+							title={t("chat:reference")}
+							onClick={() => !textAreaDisabled && onReference()}
+						>
+							<SvgIcons.at />
+							<div className='ml-[4px] text-[12px] font-medium leading-0'>引用</div>
 						</div>
+
+						<div
+							className={`input-icon-button flex items-center ${shouldDisableImages ? "disabled" : ""
+								}`}
+							title={t("chat:addImages")}
+							onClick={() => !shouldDisableImages && onSelectImages()}
+						>
+							<SvgIcons.picture />
+							<div className='ml-[4px] text-[12px] font-medium leading-0'>图片</div>
+						</div>
+
+						<div style={{ display: "flex", alignItems: "center" }}>
+							{isEnhancingPrompt ? (
+								<span
+									className="codicon codicon-loading codicon-modifier-spin"
+									style={{
+										color: "var(--vscode-input-foreground)",
+										opacity: 0.5,
+										fontSize: 16.5,
+										marginRight: 6,
+									}}
+								/>
+							) : (
+								<div
+									role="button"
+									aria-label="enhance prompt"
+									data-testid="enhance-prompt-button"
+									title={t("chat:enhancePrompt")}
+									className={`input-icon-button flex items-center ${textAreaDisabled ? "disabled" : ""
+										}`}
+									onClick={() => !textAreaDisabled && handleEnhancePrompt()}
+								>
+									<SvgIcons.beautify />
+									<div className='ml-[4px] text-[12px] font-medium leading-0'>美化</div>
+								</div>
+							)}
+						</div>
+					</div>
+
+					{/* Right side - action buttons */}
+					<div
+						className='flex-1'
+						style={{
+							display: "flex",
+							alignItems: "center",
+							gap: "16px",
+							flexShrink: 0,
+						}}>
 
 						{/* API configuration selector - flexible width */}
 						<div
@@ -877,57 +919,17 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 									},
 								]}
 								onChange={(value) => vscode.postMessage({ type: "loadApiConfiguration", text: value })}
-								contentClassName="max-h-[300px] overflow-y-auto"
-								triggerClassName="w-full text-ellipsis overflow-hidden"
+								contentClassName={cn("max-h-[300px] overflow-y-auto")}
+								triggerClassName={cn("w-full text-ellipsis overflow-hidden bg-foreground/8 flex-row-reverse justify-between px-[10px] py-0 h-[32px] text-[14px] rounded-[4px]")}
 							/>
 						</div>
-					</div>
-
-					{/* Right side - action buttons */}
-					<div
-						style={{
-							display: "flex",
-							alignItems: "center",
-							gap: "8px",
-							flexShrink: 0,
-						}}>
-						<div style={{ display: "flex", alignItems: "center" }}>
-							{isEnhancingPrompt ? (
-								<span
-									className="codicon codicon-loading codicon-modifier-spin"
-									style={{
-										color: "var(--vscode-input-foreground)",
-										opacity: 0.5,
-										fontSize: 16.5,
-										marginRight: 6,
-									}}
-								/>
-							) : (
-								<span
-									role="button"
-									aria-label="enhance prompt"
-									data-testid="enhance-prompt-button"
-									title={t("chat:enhancePrompt")}
-									className={`input-icon-button ${textAreaDisabled ? "disabled" : ""
-										} codicon codicon-sparkle`}
-									onClick={() => !textAreaDisabled && handleEnhancePrompt()}
-									style={{ fontSize: 16.5 }}
-								/>
-							)}
-						</div>
-						<span
-							className={`input-icon-button ${shouldDisableImages ? "disabled" : ""
-								} codicon codicon-device-camera`}
-							title={t("chat:addImages")}
-							onClick={() => !shouldDisableImages && onSelectImages()}
-							style={{ fontSize: 16.5 }}
-						/>
-						<span
-							className={`input-icon-button ${textAreaDisabled ? "disabled" : ""} codicon codicon-send`}
+						<div
+							className={`input-icon-button ${textAreaDisabled ? "disabled" : ""} bg-gradient-to-r from-primary to-primary-foreground to-[320%] !opacity-100 hover:!to-[999%] w-[30px] h-[22px] rounded-[2px]`}
 							title={t("chat:sendMessage")}
 							onClick={() => !textAreaDisabled && onSend()}
-							style={{ fontSize: 15 }}
-						/>
+						>
+							<SvgIcons.post />
+						</div>
 					</div>
 				</div>
 			</div>

@@ -26,7 +26,7 @@ import Thumbnails from "../common/Thumbnails"
 import { MAX_IMAGES_PER_MESSAGE } from "./ChatView"
 import ContextMenu from "./ContextMenu"
 import { VolumeX } from "lucide-react"
-import { SvgImage } from "@/svgImage"
+import { SvgIcons } from "@/SvgIcons"
 import { VSCodeCheckbox } from "@vscode/webview-ui-toolkit/react"
 
 interface ChatTextAreaProps {
@@ -757,14 +757,14 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							className={`input-icon-button ${textAreaDisabled ? "disabled" : ""}`}
 							title={t("chat:referenceImage")}
 							onClick={() => {}}>
-							<SvgImage.changeButton />
+							<SvgIcons.change />
 						</span>
 						{/* 展开 */}
 						<span
 							className={`input-icon-button ${textAreaDisabled ? "disabled" : ""}`}
 							title={t("chat:referenceImage")}
 							onClick={() => {}}>
-							<SvgImage.expenButton />
+							<SvgIcons.expand />
 						</span>
 					</div>
 				</div>
@@ -919,7 +919,7 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 								color: "var(--vscode-input-foreground)",
 							}}>
 							<span style={{ fontSize: "var(--vscode-editor-font-size)" }}>引用</span>
-							<SvgImage.beautify />
+							<SvgIcons.beautify />
 						</span>
 						{/* 图片上传按钮 */}
 						<span
@@ -933,7 +933,7 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 								color: "var(--vscode-input-foreground)",
 							}}>
 							<span style={{ fontSize: "var(--vscode-editor-font-size)" }}>图片</span>
-							<SvgImage.postPicture />
+							<SvgIcons.picture />
 						</span>
 
 						{/* 美化按钮 */}
@@ -963,7 +963,7 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 										color: "var(--vscode-input-foreground)",
 									}}>
 									<span style={{ fontSize: "var(--vscode-editor-font-size)" }}>美化</span>
-									<SvgImage.beautify />
+									<SvgIcons.beautify />
 								</span>
 							)}
 						</div>
@@ -1104,7 +1104,7 @@ const ChatTextAreaXl = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							title={t("chat:sendMessage")}
 							onClick={() => !textAreaDisabled && onSend()}
 							style={{ fontSize: 15 }}>
-							<SvgImage.postButton />
+							<SvgIcons.post />
 						</span>
 					</div>
 				</div>

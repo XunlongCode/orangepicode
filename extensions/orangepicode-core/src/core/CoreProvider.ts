@@ -7,6 +7,7 @@ import { WebviewMessage } from '../shared/WebviewMessage';
 import { getTheme, getThemeType } from '../utils/getTheme';
 import { v4 as uuidv4 } from 'uuid';
 import { importUserSettingsFromCursor, importUserSettingsFromVSCode } from '../utils/copySettings';
+import { error } from 'console';
 
 export const ORANGEPICODE_ONBOARDING_VIEWID = "onboarding_view";
 export const ORANGEPICODE_USERMENU_VIEWID = "usermenu_view";
@@ -122,6 +123,163 @@ class CoreProvider implements vscode.WebviewViewProvider {
 					await vscode.commands.executeCommand("orangepiaicode.openSettings")
 					break
 				}
+
+				case "login": {
+					try {
+						// 使用 VS Code 认证 API
+						const session = await vscode.authentication.getSession('github', ['repo'], { createIfNone: true });
+						if (session) {
+							console.log("GitHub 登录成功");
+							vscode.window.showInformationMessage("GitHub 登录成功");
+							console.log("GitHub 登录成功 ", session);
+							// 可以将会话信息发送回 webview
+							this.postMessageToWebview({
+								type: "loginSuccess",
+								githubSession: {
+									id: session.id,
+									scopes: session.scopes,
+									account: {
+										label: session.account.label,
+										id: session.account.id
+									}
+								}
+							});
+						}
+					} catch (error) {
+						console.error("GitHub 登录失败:", error);
+						vscode.window.showErrorMessage(`GitHub 登录失败: ${error}`);
+					}
+					break;
+				}
+				case "logout": {
+					try {
+						// 尝试清除 GitHub 认证信息
+						const authConfig = vscode.workspace.getConfiguration('github');
+						authConfig.update('authenticationProvider', undefined, true)
+							.then(() => {
+								console.log("已清除 GitHub 认证信息");
+								vscode.window.showInformationMessage("已清除 GitHub 认证信息，请重启 VS Code 以完成注销");
+
+								// 通知 webview 注销成功
+								this.postMessageToWebview({
+									type: "logoutSuccess"
+								});
+							}, (error) => {
+
+								console.error("清除认证信息失败:", error);
+								vscode.window.showErrorMessage(`注销失败: ${error.message}`);
+							}
+							)
+
+					} catch (error) {
+						console.error("注销失败:", error);
+						vscode.window.showErrorMessage(`注销失败: ${error}`);
+					}
+					break;
+				}
+				case "setTheme": {
+					console.log("Setting theme to:", message["theme"]);
+
+
+
+					var themeName = "";
+					if (message.theme === "darkTheme") {
+						themeName = "OrangePiBlack";
+					}
+					if (message.theme === "lightTheme") {
+						themeName = "OrangePiWhite";
+					}
+					if (message.theme === "orangeTheme") {
+						themeName = "OrangePiOrange";
+					}
+					if (themeName === "") {
+						vscode.window.showErrorMessage(`无效主题`);
+						return;
+					}
+
+
+					// 使用配置方式更改主题
+					vscode.workspace.getConfiguration().update('workbench.colorTheme', themeName, true)
+						.then(
+							() => {
+								vscode.window.showInformationMessage(`已切换到主题: ${themeName}`);
+							},
+							(error) => {
+								console.error("切换主题失败:", error);
+								vscode.window.showErrorMessage(`切换主题失败: ${error.message}`);
+
+								// 如果直接设置失败，尝试打开主题选择器
+								// vscode.commands.executeCommand('workbench.action.selectTheme');
+							}
+						);
+
+					break
+				}
+				case "setLanguage": {
+					console.log("Setting language to:", message["language"]);
+					// 使用正确的命令更改语言
+					if (message["language"] === "en" || message["language"] === "zh-cn") {
+						console.log("当前执行", message["language"]);
+						// 使用 workbench.action.configureLocale 而不是 vscode.setDisplayLanguage
+						vscode.commands.executeCommand('workbench.action.configureLocale', message["language"])
+							.then(
+								() => {
+									const msg = message["language"] === "en"
+										? '已切换到英文界面，VS Code 将重启'
+										: 'Switched to Chinese interface, VS Code will restart';
+									vscode.window.showInformationMessage(msg);
+								},
+								(error) => {
+									// 使用 then 的第二个参数处理错误，而不是使用 catch
+									console.error("Failed to set language:", error);
+									vscode.window.showErrorMessage(`切换语言失败: ${error.message}`);
+								}
+							);
+					} else {
+						console.warn("Unsupported language:", message["language"]);
+					}
+					break;
+				}
+
+
+				case "getGitHubLoginInfo": {
+					try {
+						// 使用 VS Code 认证 API 获取 GitHub 会话信息
+						vscode.authentication.getSession('github', ['repo'], { createIfNone: false })
+							.then(session => {
+								if (session) {
+									console.log("获取到 GitHub 登录信息");
+									// 将登录信息发送回 webview
+									this.postMessageToWebview({
+										type: "gitHubLoginInfo",
+										githubSession: {
+											id: session.id,
+											scopes: session.scopes,
+											account: {
+												label: session.account.label,
+												id: session.account.id
+											}
+										}
+									});
+								} else {
+									console.log("未获取到 GitHub 登录信息，用户可能未登录");
+									this.postMessageToWebview({
+										type: "gitHubLoginInfo",
+										// githubSession: null
+									});
+								}
+							}, error => {
+								console.error("获取 GitHub 登录信息失败:", error);
+								vscode.window.showErrorMessage(`获取 GitHub 登录信息失败: ${error.message}`);
+							})
+
+					} catch (error) {
+						console.error("获取 GitHub 登录信息失败:", error);
+						vscode.window.showErrorMessage(`获取 GitHub 登录信息失败: ${error}`);
+					}
+					break;
+				}
+
 			}
 		})
 	}

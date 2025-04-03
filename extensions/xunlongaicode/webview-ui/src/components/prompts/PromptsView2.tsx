@@ -525,12 +525,12 @@ const PromptsView2 = ({ onDone, className }: PromptsViewProps) => {
 					<div onClick={(e) => e.stopPropagation()} className="flex justify-between items-center mb-3">
 						<h3 className="text-vscode-foreground m-0">{t("prompts:modes.title")}</h3>
 						<div className="flex gap-2">
-							<VSCodeButton
+							{/* <VSCodeButton
 								appearance="icon"
 								onClick={openCreateModeDialog}
 								title={t("prompts:modes.createNewMode")}>
 								<span className="codicon codicon-add"></span>
-							</VSCodeButton>
+							</VSCodeButton> */}
 							<div className="relative inline-block">
 								<VSCodeButton
 									appearance="icon"

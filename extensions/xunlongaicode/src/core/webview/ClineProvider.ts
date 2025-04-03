@@ -512,10 +512,12 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			enableCheckpoints,
 			checkpointStorage,
 			fuzzyMatchThreshold,
-			mode,
+			// mode,
 			customInstructions: globalInstructions,
 			experiments,
 		} = await this.getState()
+
+		const mode = this.renderContext
 
 		const modePrompt = customModePrompts?.[mode] as PromptComponent
 		const effectiveInstructions = [globalInstructions, modePrompt?.customInstructions].filter(Boolean).join("\n\n")

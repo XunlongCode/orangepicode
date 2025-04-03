@@ -20,7 +20,7 @@ export interface ExtensionMessage {
 			label: any,
 			id: any
 		}
-	}
+	} | null
 	messageId?: string
 
 }

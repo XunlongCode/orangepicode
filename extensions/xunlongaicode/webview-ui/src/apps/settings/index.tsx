@@ -88,7 +88,7 @@ const Settings: FC = () => {
 			<div className='w-[24px] shrink-0'></div>
 
 			{/* 右侧内容 */}
-			<div className='pt-[16px] pr-[16px] text-foreground max-h-screen overflow-auto'>
+			<div className='pt-[16px] pr-[16px] text-foreground max-h-screen overflow-auto' key={currentTab}>
 				{currentTab === 0 && <General />}
 				{currentTab === 1 && <OrangePiAI />}
 				{currentTab === 2 && <Prompts />}

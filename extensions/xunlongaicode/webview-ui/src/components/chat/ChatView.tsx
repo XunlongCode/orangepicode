@@ -69,6 +69,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 		alwaysAllowSubtasks,
 		customModes,
 		telemetrySetting,
+		renderContext
 	} = useExtensionState()
 
 	// 添加一个状态来控制 AutoApproveMenu 的展开状态
@@ -1150,12 +1151,24 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 					}}>
 					{telemetrySetting === "unset" && <TelemetryBanner />}
 					{/* {showAnnouncement && <Announcement version={version} hideAnnouncement={hideAnnouncement} />} */}
-					<div className='flex flex-col items-center justify-center h-full'>
+					<div className='flex flex-col justify-center h-full'>
 						<div
 							style={{ padding: "0", flexShrink: 0 }}
 						>
-							<h2>{t("chat:greeting")}</h2>
-							<p>{t("chat:aboutMe")}</p>
+							{/* <h2>{t("chat:greeting")}</h2>
+							<p>{t("chat:aboutMe")}</p> */}
+							{
+								renderContext === "chat" ? <>
+									<h2>{t("chat:chatMode")}</h2>
+									<p>{t("chat:chatModeDescription")}</p>
+								</> : renderContext === "code" ? <>
+									<h2>{t("chat:codeMode")}</h2>
+									<p>{t("chat:codeModeDescription")}</p>
+								</> : <>
+									<h2>{t("chat:greeting")}</h2>
+									<p>{t("chat:aboutMe")}</p>
+								</>
+							}
 						</div>
 					</div>
 					{/* {taskHistory.length > 0 && <HistoryPreview showHistoryView={showHistoryView} />} */}

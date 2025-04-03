@@ -1,5 +1,9 @@
 {
 	"greeting": "OrangePi AI能為您做什麼？",
+	"chatMode": "Chat模式",
+	"codeMode": "Code模式",
+	"chatModeDescription": "隨時對您的代碼庫或編程相關問題提問或尋求建議。",
+	"codeModeDescription": "輕鬆完成從零到一的項目構建。",
 	"task": {
 		"title": "任務",
 		"seeMore": "查看更多",

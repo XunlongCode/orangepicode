@@ -13,6 +13,7 @@ type TerminalSettingsProps = HTMLAttributes<HTMLDivElement> & {
 	terminalOutputLineLimit?: number
 	terminalShellIntegrationTimeout?: number
 	setCachedStateField: SetCachedStateField<"terminalOutputLineLimit" | "terminalShellIntegrationTimeout">
+	sectionClassName?: string
 }
 
 export const TerminalSettings = ({
@@ -33,7 +34,7 @@ export const TerminalSettings = ({
 				</div>
 			</SectionHeader>
 
-			<Section>
+			<Section className={props.sectionClassName}>
 				<div>
 					<label className="block font-medium mb-1">{t("settings:terminal.outputLineLimit.label")}</label>
 					<div className="flex items-center gap-2">

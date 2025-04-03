@@ -23,6 +23,7 @@ type BrowserSettingsProps = HTMLAttributes<HTMLDivElement> & {
 		| "remoteBrowserHost"
 		| "remoteBrowserEnabled"
 	>
+	sectionClassName?: string
 }
 
 export const BrowserSettings = ({
@@ -120,7 +121,7 @@ export const BrowserSettings = ({
 				</div>
 			</SectionHeader>
 
-			<Section>
+			<Section className={props.sectionClassName}>
 				<div>
 					<VSCodeCheckbox
 						checked={browserToolEnabled}

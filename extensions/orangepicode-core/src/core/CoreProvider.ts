@@ -184,13 +184,13 @@ class CoreProvider implements vscode.WebviewViewProvider {
 
 					var themeName = "";
 					if (message.theme === "darkTheme") {
-						themeName = "OrangePiBlack";
+						themeName = "OrangePi Dark";
 					}
 					if (message.theme === "lightTheme") {
-						themeName = "OrangePiWhite";
+						themeName = "OrangePi Light";
 					}
 					if (message.theme === "orangeTheme") {
-						themeName = "OrangePiOrange";
+						themeName = "OrangePi Orange";
 					}
 					if (themeName === "") {
 						vscode.window.showErrorMessage(`无效主题`);

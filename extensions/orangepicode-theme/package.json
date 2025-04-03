@@ -1,7 +1,7 @@
 {
-  "name": "github-vscode-theme",
-  "displayName": "GitHub Theme",
-  "description": "Orange ",
+  "name": "orangepicode-theme",
+  "displayName": "OrangePi Code Theme",
+  "description": "Orange",
   "version": "1.0.0",
   "publisher": "",
   "license": "",
@@ -26,18 +26,18 @@
   "contributes": {
     "themes": [
       {
-        "label": "OrangePiWhite",
+        "label": "OrangePi Light",
         "uiTheme": "vs",
-        "path": "./themes/orangepi-white.json"
+        "path": "./themes/orangepi-light.json"
       },
 
       {
-        "label": "OrangePiBlack",
+        "label": "OrangePi Dark",
         "uiTheme": "vs-dark",
-        "path": "./themes/orangepi-black.json"
+        "path": "./themes/orangepi-dark.json"
       },
       {
-        "label": "OrangePiOrange",
+        "label": "OrangePi Orange",
         "uiTheme": "vs-dark",
         "path": "./themes/orangepi-orange.json"
       }

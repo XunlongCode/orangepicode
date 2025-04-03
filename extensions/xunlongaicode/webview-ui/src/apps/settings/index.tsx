@@ -1,12 +1,12 @@
 import { FC, PropsWithChildren, useState } from 'react'
 import { cn } from '../../lib/utils'
-import Common from './components/Common'
+import General from './components/General'
 import OrangePiAI from './components/OrangePiAI'
 import Prompts from './components/Prompts'
 import MCP from './components/MCP'
 import About from './components/About'
 import { ExtensionStateContextProvider } from '../../context/ExtensionStateContext'
-import TranslationProvider from '../../i18n/TranslationContext'
+import TranslationProvider, { useAppTranslation } from '../../i18n/TranslationContext'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const SideItem: FC<PropsWithChildren & {
@@ -32,13 +32,15 @@ const SideItem: FC<PropsWithChildren & {
 }
 
 const Settings: FC = () => {
+	const { t } = useAppTranslation()
+
 	const [currentTab, setCurrentTab] = useState(0)
 	const labels = {
-		0: "通用",
-		1: "OrangePi AI",
-		2: "提示词",
-		3: "MCP",
-		4: "关于"
+		0: t("general", { ns: "settingsApp" }),
+		1: t("orangePiAI", { ns: "settingsApp" }),
+		2: t("prompts", { ns: "settingsApp" }),
+		3: t("mcp", { ns: "settingsApp" }),
+		4: t("about", { ns: "settingsApp" })
 	}
 
 	return (
@@ -87,7 +89,7 @@ const Settings: FC = () => {
 
 			{/* 右侧内容 */}
 			<div className='pt-[16px] pr-[16px] text-foreground max-h-screen overflow-auto'>
-				{currentTab === 0 && <Common />}
+				{currentTab === 0 && <General />}
 				{currentTab === 1 && <OrangePiAI />}
 				{currentTab === 2 && <Prompts />}
 				{currentTab === 3 && <MCP />}

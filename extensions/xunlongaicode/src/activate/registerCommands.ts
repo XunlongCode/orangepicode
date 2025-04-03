@@ -62,21 +62,39 @@ export type RegisterCommandOptions = {
 	battery: Battery
 }
 
-export const registerCommands = (options: RegisterCommandOptions) => {
+export const registerCommands = (options: RegisterCommandOptions, mode?: "chat" | "code") => {
 	const { context, outputChannel } = options
 
-	for (const [command, callback] of Object.entries(getCommandsMap(options))) {
+	for (const [command, callback] of Object.entries(getCommandsMap(options, mode))) {
 		context.subscriptions.push(vscode.commands.registerCommand(command, callback))
 	}
 }
 
-const getCommandsMap = ({ context, outputChannel, provider, battery }: RegisterCommandOptions) => {
+const getCommandsMap = ({ context, outputChannel, provider, battery }: RegisterCommandOptions, mode?: "chat" | "code") => {
+	const onPlusButtonClicked = async () => {
+		await provider.removeClineFromStack()
+		await provider.postStateToWebview()
+		await provider.postMessageToWebview({ type: "action", action: "chatButtonClicked" })
+	}
+
+	const onHistoryButtonClicked = async () => {
+		await provider.postMessageToWebview({ type: "action", action: "historyButtonClicked" })
+	}
+
+	if (mode === "chat") {
+		return {
+			"orangepiaicode-chat.plusButtonClicked": onPlusButtonClicked,
+			"orangepiaicode-chat.historyButtonClicked": onHistoryButtonClicked
+		}
+	} else if (mode === "code") {
+		return {
+			"orangepiaicode-code.plusButtonClicked": onPlusButtonClicked,
+			"orangepiaicode-code.historyButtonClicked": onHistoryButtonClicked
+		}
+	}
+
 	return {
-		"orangepiaicode.plusButtonClicked": async () => {
-			await provider.removeClineFromStack()
-			await provider.postStateToWebview()
-			await provider.postMessageToWebview({ type: "action", action: "chatButtonClicked" })
-		},
+		"orangepiaicode.plusButtonClicked": onPlusButtonClicked,
 		"orangepiaicode.mcpButtonClicked": () => {
 			provider.postMessageToWebview({ type: "action", action: "mcpButtonClicked" })
 		},
@@ -89,9 +107,7 @@ const getCommandsMap = ({ context, outputChannel, provider, battery }: RegisterC
 		"orangepiaicode.settingsButtonClicked": () => {
 			provider.postMessageToWebview({ type: "action", action: "settingsButtonClicked" })
 		},
-		"orangepiaicode.historyButtonClicked": () => {
-			provider.postMessageToWebview({ type: "action", action: "historyButtonClicked" })
-		},
+		"orangepiaicode.historyButtonClicked": onHistoryButtonClicked,
 		"orangepiaicode.helpButtonClicked": () => {
 			vscode.env.openExternal(vscode.Uri.parse("https://docs.roocode.com"))
 		},

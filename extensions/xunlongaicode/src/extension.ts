@@ -95,7 +95,7 @@ export function activate(context: vscode.ExtensionContext) {
 	)
 
 	// 注册chat模式指令
-	// registerCommands({ context, outputChannel, provider: chatViewProvider, battery })
+	registerCommands({ context, outputChannel, provider: chatViewProvider, battery }, "chat")
 
 	// code 模式
 	const codeViewProvider = new ClineProvider(context, outputChannel, "code")
@@ -112,7 +112,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}),
 	)
 	// 注册code模式指令
-	// registerCommands({ context, outputChannel, provider: codeViewProvider, battery })
+	registerCommands({ context, outputChannel, provider: codeViewProvider, battery }, "code")
 
 	/**
 	 * We use the text document content provider API to show the left side for diff

@@ -73,14 +73,6 @@
 			]
 		},
 		"views": {
-			"orangepiaicode-ActivityBar": [
-				{
-					"type": "webview",
-					"icon": "assets/icons/orangepi.svg",
-					"id": "orangepiaicode.SidebarProvider",
-					"name": ""
-				}
-			],
 			"orangepiaicode-AuxiliaryBarChat": [
 				{
 					"type": "webview",
@@ -188,6 +180,30 @@
 				"command": "orangepiaicode.terminalExplainCommandInCurrentTask",
 				"title": "OrangePi AI Code: Explain This Command (Current Task)",
 				"category": "Terminal"
+			},
+			{
+				"icon": "$(add)",
+				"command": "orangepiaicode-chat.plusButtonClicked",
+				"title": "New Task",
+				"category": "OrangePi AI Code Chat"
+			},
+			{
+				"icon": "$(history)",
+				"command": "orangepiaicode-chat.historyButtonClicked",
+				"title": "History",
+				"category": "OrangePi AI Code Chat"
+			},
+			{
+				"icon": "$(add)",
+				"command": "orangepiaicode-code.plusButtonClicked",
+				"title": "New Task",
+				"category": "OrangePi AI Code Code"
+			},
+			{
+				"icon": "$(history)",
+				"command": "orangepiaicode-code.historyButtonClicked",
+				"title": "History",
+				"category": "OrangePi AI Code Code"
 			}
 		],
 		"menus": {
@@ -270,6 +286,26 @@
 					"command": "orangepiaicode.helpButtonClicked",
 					"group": "navigation@7",
 					"when": "view == orangepiaicode.SidebarProvider"
+				},
+				{
+					"command": "orangepiaicode-chat.plusButtonClicked",
+					"group": "navigation@8",
+					"when": "view == orangepiaicode.AuxiliaryBarChatProvider"
+				},
+				{
+					"command": "orangepiaicode-chat.historyButtonClicked",
+					"group": "navigation@9",
+					"when": "view == orangepiaicode.AuxiliaryBarChatProvider"
+				},
+				{
+					"command": "orangepiaicode-code.plusButtonClicked",
+					"group": "navigation@8",
+					"when": "view == orangepiaicode.AuxiliaryBarCodeProvider"
+				},
+				{
+					"command": "orangepiaicode-code.historyButtonClicked",
+					"group": "navigation@9",
+					"when": "view == orangepiaicode.AuxiliaryBarCodeProvider"
 				}
 			]
 		},

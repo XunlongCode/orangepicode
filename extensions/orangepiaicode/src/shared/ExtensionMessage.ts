@@ -57,6 +57,7 @@ export interface ExtensionMessage {
 	| "remoteBrowserEnabled"
 	| "ttsStart"
 	| "ttsStop"
+	| "gitHubLoginInfo"
 	text?: string
 	action?:
 	| "chatButtonClicked"
@@ -94,6 +95,14 @@ export interface ExtensionMessage {
 	values?: Record<string, any>
 	requestId?: string
 	promptText?: string
+	githubSession?: {
+		id: any,
+		scopes: any,
+		account: {
+			label: any,
+			id: any
+		}
+	} | null
 }
 
 export interface ApiConfigMeta {

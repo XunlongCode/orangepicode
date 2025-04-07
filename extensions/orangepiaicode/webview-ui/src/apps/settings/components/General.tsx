@@ -1,9 +1,10 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Button, Popover, PopoverContent, PopoverTrigger } from '../../../components/ui';
 import { useAppTranslation } from '../../../i18n/TranslationContext';
 import { cn } from '../../../lib/utils';
 import { vscode } from '../../../utils/vscode';
 import { getVscExtensionPath } from '../../../utils';
+import { useWebviewListener } from '../../../hooks/useWebviewListener';
 
 const ThemeItem: FC<{
 	value: { value: string, label: string },
@@ -42,6 +43,23 @@ const LanguageItem: FC<{
 
 const General: FC = () => {
 	const { t } = useAppTranslation()
+	const [userInfo, setUserInfo] = useState<{ label: string; id: string } | null>(null);
+
+	useEffect(() => {
+		vscode.postMessage({
+			type: "getGitHubLoginInfo"
+		})
+	}, [])
+
+	useWebviewListener("gitHubLoginInfo", async (message) => {
+		if (message.githubSession) {
+			// 用户已登录，更新 UI
+			setUserInfo(message.githubSession.account);
+		} else {
+			// 用户未登录
+			setUserInfo(null);
+		}
+	})
 
 	const initLanguage = window.language?.toLocaleLowerCase() === "zh-cn" ? {
 		label: "中文",
@@ -87,15 +105,23 @@ const General: FC = () => {
 			{t("account", { ns: "settingsApp" })}
 		</div>
 
-		<div className='text-[14px] mb-[12px] text-foreground/70'>
-			{t("currentAccount", { ns: "settingsApp" })}：ZZZ
-		</div>
-
-		<div className='mb-[24px]'>
-			<Button className='w-[140px] rounded'>
-				{t("logout", { ns: "settingsApp" })}
-			</Button>
-		</div>
+		{
+			userInfo ? <>
+				<div className='text-[14px] mb-[12px] text-foreground/70'>
+					{t("currentAccount", { ns: "settingsApp" })}: {userInfo?.label}
+				</div>
+				<div className='mb-[24px]'>
+					<Button className='w-[140px] rounded'>
+						{t("logout", { ns: "settingsApp" })}
+					</Button>
+				</div>
+			</> :
+				<div className='mb-[24px]'>
+					<Button className='w-[140px] rounded'>
+						{t("login", { ns: "settingsApp" })}
+					</Button>
+				</div>
+		}
 
 		<div className='font-medium text-[16px] mb-[12px]'>
 			{t("theme", { ns: "settingsApp" })}
@@ -118,7 +144,7 @@ const General: FC = () => {
 			</PopoverTrigger>
 			<PopoverContent className='p-0 bg-secondary border-none w-[var(--radix-popover-trigger-width)] !animate-none'>
 				<ThemeItem
-					value={{ value: "dark", label: t("darkTheme", { ns: "theme" }) }}
+					value={{ value: "dark", label: t("darkTheme", { ns: "theme", }) }}
 					isSelected={currentTheme.value === "dark"}
 					imgSrc={getVscExtensionPath("src/assets/theme-dark.png")}
 					onChange={selectTheme}

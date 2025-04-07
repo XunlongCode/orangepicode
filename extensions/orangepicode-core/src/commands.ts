@@ -41,6 +41,10 @@ const getUsermenuCommandsMap = ({ context, outputChannel, provider }: RegisterCo
 
 	return {
 		'orangepicode-core.showUsermenu': async () => {
+			await provider.postMessageToWebview({
+				type: "onShowUsermenu"
+			})
+
 			await vscode.commands.executeCommand(CREATE_OVERLAY_COMMAND_ID, usermenuOverlayOptions)
 			await vscode.commands.executeCommand(SHOW_OVERLAY_COMMAND_ID, usermenuOverlayOptions.id)
 		},

@@ -129,8 +129,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 						// 使用 VS Code 认证 API
 						const session = await vscode.authentication.getSession('github', ['repo'], { createIfNone: true });
 						if (session) {
-							console.log("GitHub 登录成功");
-							vscode.window.showInformationMessage("GitHub 登录成功");
+							// vscode.window.showInformationMessage("GitHub 登录成功");
 							console.log("GitHub 登录成功 ", session);
 							// 可以将会话信息发送回 webview
 							this.postMessageToWebview({
@@ -147,7 +146,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 						}
 					} catch (error) {
 						console.error("GitHub 登录失败:", error);
-						vscode.window.showErrorMessage(`GitHub 登录失败: ${error}`);
+						// vscode.window.showErrorMessage(`GitHub 登录失败: ${error}`);
 					}
 					break;
 				}
@@ -158,7 +157,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 						authConfig.update('authenticationProvider', undefined, true)
 							.then(() => {
 								console.log("已清除 GitHub 认证信息");
-								vscode.window.showInformationMessage("已清除 GitHub 认证信息，请重启 VS Code 以完成注销");
+								// vscode.window.showInformationMessage("已清除 GitHub 认证信息，请重启 VS Code 以完成注销");
 
 								// 通知 webview 注销成功
 								this.postMessageToWebview({
@@ -179,9 +178,6 @@ class CoreProvider implements vscode.WebviewViewProvider {
 				}
 				case "setTheme": {
 					console.log("Setting theme to:", message["theme"]);
-
-
-
 					var themeName = "";
 					if (message.theme === "darkTheme") {
 						themeName = "OrangePi Dark";
@@ -193,20 +189,19 @@ class CoreProvider implements vscode.WebviewViewProvider {
 						themeName = "OrangePi Orange";
 					}
 					if (themeName === "") {
-						vscode.window.showErrorMessage(`无效主题`);
+						// vscode.window.showErrorMessage(`无效主题`);
 						return;
 					}
-
 
 					// 使用配置方式更改主题
 					vscode.workspace.getConfiguration().update('workbench.colorTheme', themeName, true)
 						.then(
 							() => {
-								vscode.window.showInformationMessage(`已切换到主题: ${themeName}`);
+								// vscode.window.showInformationMessage(`已切换到主题: ${themeName}`);
 							},
 							(error) => {
 								console.error("切换主题失败:", error);
-								vscode.window.showErrorMessage(`切换主题失败: ${error.message}`);
+								// vscode.window.showErrorMessage(`切换主题失败: ${error.message}`);
 
 								// 如果直接设置失败，尝试打开主题选择器
 								// vscode.commands.executeCommand('workbench.action.selectTheme');
@@ -390,7 +385,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
             <meta name="theme-color" content="#000000">
-            <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${webview.cspSource}; style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} data:; script-src 'nonce-${nonce}' https://us-assets.i.posthog.com; connect-src https://openrouter.ai https://us.i.posthog.com https://us-assets.i.posthog.com;">
+            <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${webview.cspSource}; style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} https://avatars.githubusercontent.com data:; script-src 'nonce-${nonce}' https://us-assets.i.posthog.com; connect-src https://openrouter.ai https://us.i.posthog.com https://us-assets.i.posthog.com;">
 						${await this.getHtmlCommonHead(webview, nonce)}
             <title>OrangePi Code Core</title>
           </head>
@@ -435,7 +430,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 			"default-src 'none'",
 			`font-src ${webview.cspSource}`,
 			`style-src ${webview.cspSource} 'unsafe-inline' https://* http://${localServerUrl} http://0.0.0.0:${localPort}`,
-			`img-src ${webview.cspSource} data:`,
+			`img-src ${webview.cspSource} https://avatars.githubusercontent.com data:`,
 			`script-src 'unsafe-eval' https://* https://*.posthog.com http://${localServerUrl} http://0.0.0.0:${localPort} 'nonce-${nonce}'`,
 			`connect-src https://* https://*.posthog.com ws://${localServerUrl} ws://0.0.0.0:${localPort} http://${localServerUrl} http://0.0.0.0:${localPort}`,
 		]

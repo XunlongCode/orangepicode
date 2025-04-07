@@ -3,6 +3,7 @@ export interface ExtensionMessage {
 	type:
 	| "setTheme"
 	| "setThemeType"
+	| "onShowUsermenu"
 	| "importUserSettingsFromVSCodeDone"
 	| "gitHubLoginInfo"  // 添加 GitHub 登录信息消息类型
 	| "importUserSettingsFromCursorDone"

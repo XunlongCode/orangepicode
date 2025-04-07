@@ -7,6 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal
 import { useTranslation } from 'react-i18next';
 import tw from "twin.macro";
 import { useWebviewListener } from '../../hooks/useWebviewListener';
+import { cn } from '../../lib/utils';
 
 export const Usermenu: FC = () => {
 	const { t, i18n } = useTranslation()
@@ -15,8 +16,22 @@ export const Usermenu: FC = () => {
 	const [themeSubOpen, setThemeSubOpen] = useState(false)
 	const [languageSubOpen, setLanguageSubOpen] = useState(false)
 	// 添加用户登录状态和用户信息的状态变量
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [userInfo, setUserInfo] = useState<{ label: string; id: string } | null>(null);
+
+	// 避免两个子菜单同时开启
+	useEffect(() => {
+		if (themeSubOpen) {
+			setLanguageSubOpen(false)
+		}
+		if (languageSubOpen) {
+			setThemeSubOpen(false)
+		}
+	}, [themeSubOpen, languageSubOpen])
+
+	useWebviewListener("onShowUsermenu", async () => {
+		setLanguageSubOpen(false)
+		setThemeSubOpen(false)
+	})
 
 	useEffect(() => {
 		vscode.postMessage({
@@ -24,16 +39,13 @@ export const Usermenu: FC = () => {
 		})
 	}, [])
 
-
 	useWebviewListener("gitHubLoginInfo", async (message) => {
 		if (message.type === "gitHubLoginInfo") {
 			if (message.githubSession) {
 				// 用户已登录，更新 UI
-				setIsLoggedIn(true);
 				setUserInfo(message.githubSession.account);
 			} else {
 				// 用户未登录
-				setIsLoggedIn(false);
 				setUserInfo(null);
 			}
 		}
@@ -47,11 +59,7 @@ export const Usermenu: FC = () => {
 		vscode.postMessage({
 			type: "getGitHubLoginInfo"
 		});
-
-
 	}, [dropdownContiainerRef.current])
-
-
 
 	// 点击遮罩，关闭菜单
 	const hideUsermenu = () => {
@@ -72,9 +80,9 @@ export const Usermenu: FC = () => {
 		})
 		hideUsermenu()
 	}
+
 	//选择主题
 	const onSelectTheme = (theme: string) => {
-
 		vscode.postMessage({
 			type: "setTheme",
 			theme: theme
@@ -89,16 +97,16 @@ export const Usermenu: FC = () => {
 		hideUsermenu()
 	}
 
-
 	// 点击登出
 	const onLogout = () => {
 		vscode.postMessage({
 			type: "logout"
 		})
 	}
+
 	// 点击登录
 	const onLogin = () => {
-		if (isLoggedIn && userInfo) {
+		if (userInfo) {
 			console.log("已经登录过了无须登录");
 			return;
 		}
@@ -106,8 +114,6 @@ export const Usermenu: FC = () => {
 			type: "login"
 		})
 	}
-
-
 
 	// 接受登录成功的回调用
 	useWebviewListener("loginSuccess", async () => {
@@ -124,10 +130,8 @@ export const Usermenu: FC = () => {
 			return
 		}
 		// 登出成功后更新状态
-		setIsLoggedIn(false);
 		setUserInfo(null);
 	})
-
 
 	return <div className='absolute inset-0'>
 		<div className='absolute inset-0' onClick={hideUsermenu}></div>
@@ -140,12 +144,18 @@ export const Usermenu: FC = () => {
 			>
 				<div className='pt-[16px]'>
 					{/* 用户信息 */}
-					<div className='flex h-[56px] items-center px-[16px] border-b border-secondary' onClick={onLogin}>
+					<div className={cn(
+						'flex h-[56px] items-center px-[16px] border-b border-secondary cursor-pointer',
+						{ 'cursor-text': userInfo }
+					)} onClick={onLogin}>
 						<div className='w-[40px] h-[40px] rounded-full overflow-hidden'>
-							<img className='h-full w-full' src={getVscExtensionPath('/src/assets/usermenu/default-avatar.png')} alt="" />
+							{
+								userInfo ? <img className='h-full w-full' src={`https://avatars.githubusercontent.com/u/${userInfo.id}`} alt="" />
+									: <img className='h-full w-full' src={getVscExtensionPath('/src/assets/usermenu/default-avatar.png')} alt="" />
+							}
 						</div>
 						<div className='w-[12px]'></div>
-						{isLoggedIn && userInfo ? userInfo.label : t("notLoggedIn", { ns: "usermenu", defaultValue: "未登录" })}
+						{userInfo ? userInfo.label : t("notLoggedIn", { ns: "usermenu", defaultValue: "未登录" })}
 					</div>
 					{/* 用户菜单 */}
 					<div
@@ -159,7 +169,7 @@ export const Usermenu: FC = () => {
 
 								div[role="menuitem"][data-highlighted],
 								div[role="menuitem"][data-state="open"] {
-									${tw`text-background`};
+									${tw`text-foreground`};
 									background-color: var(--vscode-activityBar-background);
 								}
 							}

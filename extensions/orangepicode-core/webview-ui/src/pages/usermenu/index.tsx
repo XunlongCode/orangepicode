@@ -119,7 +119,7 @@ export const Usermenu: FC = () => {
 
 	return <div className='absolute inset-0'>
 		<div className='absolute inset-0' onClick={hideUsermenu}></div>
-		<div className='absolute w-[240px] h-[460px] right-[24px] top-[45px]'>
+		<div className='absolute w-[240px] h-[468px] right-[24px] top-[45px]'>
 			<VscodeTheme
 				style={{
 					boxShadow: "0px 0px 30px 0px rgba(0, 0, 0, 0.25)"
@@ -163,10 +163,10 @@ export const Usermenu: FC = () => {
 						<DropdownMenuTrigger className='w-full h-0'>.</DropdownMenuTrigger>
 						<DropdownMenuContent
 							container={dropdownContiainerRef.current!}
-							className="w-[--radix-dropdown-menu-trigger-width] border-none !animate-none p-0"
+							className="w-[--radix-dropdown-menu-trigger-width] border-none !animate-none"
 						>
 							<DropdownMenuSub open={themeSubOpen} onOpenChange={setThemeSubOpen}>
-								<DropdownMenuSubTrigger className='h-[48px] cursor-pointer'>
+								<DropdownMenuSubTrigger className='h-[48px] cursor-pointer' onClick={() => setThemeSubOpen(!themeSubOpen)}>
 									{t("theme", { ns: "usermenu" })}
 								</DropdownMenuSubTrigger>
 								<DropdownMenuPortal container={dropdownContiainerRef.current!}>
@@ -179,7 +179,7 @@ export const Usermenu: FC = () => {
 							</DropdownMenuSub>
 
 							<DropdownMenuSub open={languageSubOpen} onOpenChange={setLanguageSubOpen}>
-								<DropdownMenuSubTrigger className='h-[48px] cursor-pointer'>
+								<DropdownMenuSubTrigger className='h-[48px] cursor-pointer' onClick={() => setLanguageSubOpen(!languageSubOpen)}>
 									{t("language", { ns: "usermenu" })}
 								</DropdownMenuSubTrigger>
 								<DropdownMenuPortal container={dropdownContiainerRef.current!}>

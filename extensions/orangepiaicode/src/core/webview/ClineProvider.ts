@@ -765,6 +765,23 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
       `
 	}
 
+	private onWebviewDidLaunch() {
+		vscode.workspace.onDidChangeConfiguration(async (event) => {
+			// 监听主题变化
+			if (event.affectsConfiguration('workbench.colorTheme')) {
+				const theme = vscode.workspace.getConfiguration('workbench').get<string>('colorTheme');
+				if (!theme) {
+					return
+				}
+
+				this.postMessageToWebview({
+					type: "getCurrentThemeSuccess",
+					theme: theme
+				})
+			}
+		})
+	}
+
 	/**
 	 * Sets up an event listener to listen for messages passed from the webview context and
 	 * executes code based on the message that is recieved.
@@ -776,6 +793,8 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			async (message: WebviewMessage) => {
 				switch (message.type) {
 					case "webviewDidLaunch":
+						this.onWebviewDidLaunch()
+
 						// Load custom modes first
 						const customModes = await this.customModesManager.getCustomModes()
 						await this.updateGlobalState("customModes", customModes)

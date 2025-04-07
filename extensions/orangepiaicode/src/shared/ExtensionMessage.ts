@@ -60,6 +60,12 @@ export interface ExtensionMessage {
 	| "githubLoginSuccess"
 	| "githubLogoutSuccess"
 	| "getGitHubSessionSuccess"
+	| "getCurrentThemeSuccess"
+	| "importUserSettingsFromVSCodeDone"
+	| "importUserSettingsFromCursorDone"
+	importUserSettingsFromVSCodeResult?: { ok: boolean, error?: any }
+	importUserSettingsFromCursorResult?: { ok: boolean, error?: any }
+	theme?: string
 	text?: string
 	action?:
 	| "chatButtonClicked"

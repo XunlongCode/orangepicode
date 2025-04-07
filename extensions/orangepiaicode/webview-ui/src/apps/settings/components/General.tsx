@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { Button, Popover, PopoverContent, PopoverTrigger } from '../../../components/ui';
 import { useAppTranslation } from '../../../i18n/TranslationContext';
 import { cn } from '../../../lib/utils';
@@ -19,7 +19,7 @@ const ThemeItem: FC<{
 		{ 'bg-primary': isSelected },
 		className
 	)} onClick={() => onChange(value)}>
-		<img className='w-[33px] mr-[8px]' src={imgSrc} alt="" />
+		{imgSrc && <img className='w-[33px] mr-[8px]' src={imgSrc} alt="" />}
 		<div className='flex justify-between items-center'>
 			<div className='text-base font-medium'>{value.label}</div>
 		</div>
@@ -42,7 +42,7 @@ const LanguageItem: FC<{
 
 
 const General: FC = () => {
-	const { t } = useAppTranslation()
+	const { t, i18n } = useAppTranslation()
 	const [userInfo, setUserInfo] = useState<{ label: string; id: string } | null>(null);
 
 	useEffect(() => {
@@ -63,22 +63,49 @@ const General: FC = () => {
 		value: "en"
 	}
 
-	const [currentTheme, setCurrentTheme] = useState({
-		value: "dark",
-		label: t("darkTheme", { ns: "theme" })
+	const [currentTheme, setCurrentTheme] = useState<{ value: string, label: string }>({
+		value: "",
+		label: ""
 	})
 
 	const [currentLanguage, setCurrentLanguage] = useState(initLanguage)
 	const [langPopverOpen, setLangPopoverOpen] = useState(false)
 	const [themePopverOpen, setThemePopoverOpen] = useState(false)
 
+	useEffect(() => {
+		vscode.postMessage({ type: "getCurrentTheme" })
+	}, [])
+
+	useWebviewListener("getCurrentThemeSuccess", async (message) => {
+		console.log(message);
+
+		if (!message.theme) {
+			return
+		}
+
+		if (
+			message.theme === "OrangePi Dark"
+			|| message.theme === "OrangePi Light"
+			|| message.theme === "OrangePi Orange"
+		) {
+			setCurrentTheme({ value: message.theme, label: message.theme })
+		} else {
+			setCurrentTheme({ value: "", label: message.theme })
+		}
+	})
+
 	const selectTheme = (value: { value: string, label: string }) => {
+		if (!value.value) {
+			return
+		}
+
 		setThemePopoverOpen(false)
 		setCurrentTheme(value)
-		// vscode.postMessage({
-		// 	type: "theme",
-		// 	theme: value.value
-		// })
+
+		vscode.postMessage({
+			type: "setTheme",
+			theme: value.value
+		})
 	}
 
 	const selectLanguage = (value: { value: string, label: string }) => {
@@ -100,6 +127,83 @@ const General: FC = () => {
 	useWebviewListener("githubLogoutSuccess", async () => {
 		setUserInfo(null)
 	})
+
+	// 主题设置
+	const themeOptions = useMemo(() => {
+		if (i18n.language.toLowerCase() === "zh-cn") {
+			return [
+				{ value: "OrangePi Dark", label: "深蓝谧境" },
+				{ value: "OrangePi Light", label: "青云绮梦" },
+				{ value: "OrangePi Orange", label: "橙意无限" }
+			]
+		}
+
+		return [
+			{ value: "OrangePi Dark", label: "OrangePi Dark" },
+			{ value: "OrangePi Light", label: "OrangePi Light" },
+			{ value: "OrangePi Orange", label: "OrangePi Orange" }
+		]
+	}, [i18n.language])
+
+	const getThemePrevImage = (theme: string) => {
+		if (theme === "OrangePi Dark") {
+			return getVscExtensionPath("src/assets/theme-dark.png")
+		} else if (theme === "OrangePi Light") {
+			return getVscExtensionPath("src/assets/theme-light.png")
+		} else if (theme === "OrangePi Orange") {
+			return getVscExtensionPath("src/assets/theme-orange.png")
+		} else {
+			return ""
+		}
+	}
+
+	// 导入设置
+	const [importingFrom, setImportingFrom] = useState<"vscode" | "cursor">()
+	const [isImportingExtensions, setIsImportingExtensions] = useState(false)
+
+	useWebviewListener("importUserSettingsFromVSCodeDone", async (e: any) => {
+		console.log(e);
+		setIsImportingExtensions(false)
+		setImportingFrom(undefined)
+		if (e.error) {
+			console.log(e);
+			return
+		}
+	})
+
+	useWebviewListener("importUserSettingsFromCursorDone", async (e: any) => {
+		console.log(e);
+		setIsImportingExtensions(false)
+		setImportingFrom(undefined)
+		if (e.error) {
+			console.log(e);
+			return
+		}
+	})
+
+	const onImportFromVSCode = async () => {
+		setImportingFrom("vscode")
+		setIsImportingExtensions(true)
+		vscode.postMessage({ type: "importUserSettingsFromVSCode" })
+	}
+
+	const onImportFromCursor = async () => {
+		setImportingFrom("cursor")
+		setIsImportingExtensions(true)
+		vscode.postMessage({ type: "importUserSettingsFromCursor" })
+	}
+
+	const onOpenVSCodeSettings = () => {
+		vscode.postMessage({
+			type: "openVSCodeSettings"
+		})
+	}
+
+	const onOpenVSCodeKeyboardShortcuts = () => {
+		vscode.postMessage({
+			type: "openVSCodeKeyboardShortcuts"
+		})
+	}
 
 	return <div>
 		<div className='text-[24px] font-medium mb-[16px]'>
@@ -139,7 +243,7 @@ const General: FC = () => {
 						className='p-0 !bg-transparent'
 						value={currentTheme}
 						isSelected={false}
-						imgSrc={getVscExtensionPath("src/assets/theme-dark.png")}
+						imgSrc={getThemePrevImage(currentTheme.value)}
 						onChange={selectTheme}
 					/>
 					<div className={cn({ "rotate-180": themePopverOpen })}>
@@ -150,24 +254,17 @@ const General: FC = () => {
 				</div>
 			</PopoverTrigger>
 			<PopoverContent className='p-0 bg-secondary border-none w-[var(--radix-popover-trigger-width)] !animate-none'>
-				<ThemeItem
-					value={{ value: "dark", label: t("darkTheme", { ns: "theme", }) }}
-					isSelected={currentTheme.value === "dark"}
-					imgSrc={getVscExtensionPath("src/assets/theme-dark.png")}
-					onChange={selectTheme}
-				/>
-				<ThemeItem
-					value={{ value: "light", label: t("lightTheme", { ns: "theme" }) }}
-					isSelected={currentTheme.value === "light"}
-					imgSrc={getVscExtensionPath("src/assets/theme-light.png")}
-					onChange={selectTheme}
-				/>
-				<ThemeItem
-					value={{ value: "orange", label: t("orangeTheme", { ns: "theme" }) }}
-					isSelected={currentTheme.value === "orange"}
-					imgSrc={getVscExtensionPath("src/assets/theme-orange.png")}
-					onChange={selectTheme}
-				/>
+				{
+					themeOptions.map((item) => {
+						return <ThemeItem
+							value={item}
+							isSelected={currentTheme.value === item.value}
+							imgSrc={getThemePrevImage(item.value)}
+							onChange={selectTheme}
+							key={item.value}
+						/>
+					})
+				}
 			</PopoverContent>
 		</Popover>
 
@@ -218,10 +315,12 @@ const General: FC = () => {
 		</div>
 
 		<div className='mb-[24px] flex gap-2.5 flex-wrap'>
-			<Button className='w-[140px] rounded h-[34px]'>
+			<Button className='min-w-[140px] rounded h-[34px]' disabled={isImportingExtensions} onClick={onImportFromVSCode}>
+				{isImportingExtensions && importingFrom === "vscode" && <div className='codicon codicon-loading animate-spin'></div>}
 				{t("importFromVSCode", { ns: "settingsApp" })}
 			</Button>
-			<Button className='w-[140px] rounded h-[34px]'>
+			<Button className='min-w-[140px] rounded h-[34px]' disabled={isImportingExtensions} onClick={onImportFromCursor}>
+				{isImportingExtensions && importingFrom === "cursor" && <div className='codicon codicon-loading animate-spin'></div>}
 				{t("importFromCursor", { ns: "settingsApp" })}
 			</Button>
 		</div>
@@ -235,7 +334,7 @@ const General: FC = () => {
 		</div>
 
 		<div className='mb-[24px]'>
-			<Button className='w-[140px] rounded h-[34px]'>
+			<Button className='w-[140px] rounded h-[34px]' onClick={onOpenVSCodeSettings}>
 				{t("goToSettings", { ns: "settingsApp" })}
 			</Button>
 		</div>
@@ -249,7 +348,7 @@ const General: FC = () => {
 		</div>
 
 		<div className='mb-[24px]'>
-			<Button className='w-[140px] rounded h-[34px]'>
+			<Button className='w-[140px] rounded h-[34px]' onClick={onOpenVSCodeKeyboardShortcuts}>
 				{t("goToSettings", { ns: "settingsApp" })}
 			</Button>
 		</div>

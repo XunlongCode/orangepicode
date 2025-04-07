@@ -171,9 +171,9 @@ export const Usermenu: FC = () => {
 								</DropdownMenuSubTrigger>
 								<DropdownMenuPortal container={dropdownContiainerRef.current!}>
 									<DropdownMenuSubContent className='!animate-none'>
-										<DropdownMenuItem className='cursor-pointer' onClick={() => onSelectTheme("darkTheme")}>{t("darkTheme", { ns: "theme" })}</DropdownMenuItem>
-										<DropdownMenuItem className='cursor-pointer' onClick={() => onSelectTheme("lightTheme")}>{t("lightTheme", { ns: "theme" })}</DropdownMenuItem>
-										<DropdownMenuItem className='cursor-pointer' onClick={() => onSelectTheme("orangeTheme")}>{t("orangeTheme", { ns: "theme" })}</DropdownMenuItem>
+										<DropdownMenuItem className='cursor-pointer' onClick={() => onSelectTheme("OrangePi Dark")}>{t("darkTheme", { ns: "theme" })}</DropdownMenuItem>
+										<DropdownMenuItem className='cursor-pointer' onClick={() => onSelectTheme("OrangePi Light")}>{t("lightTheme", { ns: "theme" })}</DropdownMenuItem>
+										<DropdownMenuItem className='cursor-pointer' onClick={() => onSelectTheme("OrangePi Orange")}>{t("orangeTheme", { ns: "theme" })}</DropdownMenuItem>
 									</DropdownMenuSubContent>
 								</DropdownMenuPortal>
 							</DropdownMenuSub>

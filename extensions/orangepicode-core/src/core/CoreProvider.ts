@@ -6,8 +6,6 @@ import { ExtensionMessage } from '../shared/ExtensionMessage';
 import { WebviewMessage } from '../shared/WebviewMessage';
 import { getTheme, getThemeType } from '../utils/getTheme';
 import { v4 as uuidv4 } from 'uuid';
-import { importUserSettingsFromCursor, importUserSettingsFromVSCode } from '../utils/copySettings';
-import { error } from 'console';
 
 export const ORANGEPICODE_ONBOARDING_VIEWID = "onboarding_view";
 export const ORANGEPICODE_USERMENU_VIEWID = "usermenu_view";
@@ -88,13 +86,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 					break;
 				}
 				case "importUserSettingsFromVSCode": {
-					let result
-					try {
-						result = await importUserSettingsFromVSCode()
-					} catch (error) {
-						result = { ok: false, error: error }
-						vscode.window.showErrorMessage(`Failed to import settings: ${error}`)
-					}
+					const result: any = await vscode.commands.executeCommand("orangepicode-core.importUserSettingsFromVSCode")
 					this.postMessageToWebview({
 						type: "importUserSettingsFromVSCodeDone",
 						importUserSettingsFromVSCodeResult: result
@@ -102,15 +94,9 @@ class CoreProvider implements vscode.WebviewViewProvider {
 					break;
 				}
 				case "importUserSettingsFromCursor": {
-					let result
-					try {
-						result = await importUserSettingsFromCursor()
-					} catch (error) {
-						result = { ok: false, error: error }
-						vscode.window.showErrorMessage(`Failed to import settings: ${error}`)
-					}
+					const result: any = await vscode.commands.executeCommand("orangepicode-core.importUserSettingsFromCursor")
 					this.postMessageToWebview({
-						type: "importUserSettingsFromVSCodeDone",
+						type: "importUserSettingsFromCursorDone",
 						importUserSettingsFromCursorResult: result
 					})
 					break
@@ -125,39 +111,10 @@ class CoreProvider implements vscode.WebviewViewProvider {
 				}
 
 				case "setTheme": {
-					console.log("Setting theme to:", message["theme"]);
-					var themeName = "";
-					if (message.theme === "darkTheme") {
-						themeName = "OrangePi Dark";
-					}
-					if (message.theme === "lightTheme") {
-						themeName = "OrangePi Light";
-					}
-					if (message.theme === "orangeTheme") {
-						themeName = "OrangePi Orange";
-					}
-					if (themeName === "") {
-						// vscode.window.showErrorMessage(`无效主题`);
-						return;
-					}
-
-					// 使用配置方式更改主题
-					vscode.workspace.getConfiguration().update('workbench.colorTheme', themeName, true)
-						.then(
-							() => {
-								// vscode.window.showInformationMessage(`已切换到主题: ${themeName}`);
-							},
-							(error) => {
-								console.error("切换主题失败:", error);
-								vscode.window.showErrorMessage(`${error}`);
-
-								// 如果直接设置失败，尝试打开主题选择器
-								// vscode.commands.executeCommand('workbench.action.selectTheme');
-							}
-						);
-
+					await vscode.commands.executeCommand("orangepicode-core.setTheme", message.theme)
 					break
 				}
+
 				case "setLanguage": {
 					console.log("Setting language to:", message["language"]);
 

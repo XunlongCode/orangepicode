@@ -119,6 +119,13 @@ export interface WebviewMessage {
 	| "githubLogin"
 	| "logout"
 	| "getGitHubSession"
+	| "setTheme"
+	| "getCurrentTheme"
+	| "importUserSettingsFromVSCode"
+	| "importUserSettingsFromCursor"
+	| "openVSCodeSettings"
+	| "openVSCodeKeyboardShortcuts"
+	theme?: string
 	text?: string
 	disabled?: boolean
 	askResponse?: ClineAskResponse

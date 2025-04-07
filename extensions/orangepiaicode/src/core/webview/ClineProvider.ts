@@ -2106,6 +2106,46 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 						}
 						break;
 					}
+
+					case "setTheme": {
+						await vscode.commands.executeCommand("orangepicode-core.setTheme", message.theme)
+						break
+					}
+
+					case "getCurrentTheme": {
+						const theme: string = await vscode.commands.executeCommand("orangepicode-core.getCurrentTheme")
+						this.postMessageToWebview({
+							type: "getCurrentThemeSuccess",
+							theme,
+						})
+						break
+					}
+
+					case "importUserSettingsFromVSCode": {
+						const result: any = await vscode.commands.executeCommand("orangepicode-core.importUserSettingsFromVSCode")
+						this.postMessageToWebview({
+							type: "importUserSettingsFromVSCodeDone",
+							importUserSettingsFromVSCodeResult: result
+						})
+						break;
+					}
+					case "importUserSettingsFromCursor": {
+						const result: any = await vscode.commands.executeCommand("orangepicode-core.importUserSettingsFromCursor")
+						this.postMessageToWebview({
+							type: "importUserSettingsFromCursorDone",
+							importUserSettingsFromCursorResult: result
+						})
+						break
+					}
+
+					case "openVSCodeSettings": {
+						await vscode.commands.executeCommand("workbench.action.openSettings")
+						break
+					}
+					case "openVSCodeKeyboardShortcuts": {
+						await vscode.commands.executeCommand("workbench.action.openGlobalKeybindings")
+						break
+					}
 				}
 			},
 			null,

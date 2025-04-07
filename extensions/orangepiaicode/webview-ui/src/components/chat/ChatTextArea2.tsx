@@ -829,7 +829,7 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							display: "flex",
 							alignItems: "center",
 							gap: "8px",
-							// overflow: "hidden",
+							overflow: "hidden",
 							minWidth: 0,
 						}}>
 						<div
@@ -838,7 +838,9 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							title={t("chat:reference")}
 							onClick={() => !textAreaDisabled && onReference()}
 						>
-							<SvgIcons.at />
+							<div className='shrink-0'>
+								<SvgIcons.at />
+							</div>
 							<div className='text-[12px] font-medium break-all text-center line-clamp-1'>
 								{t("referenceButton", { ns: "chat" })}
 							</div>
@@ -850,7 +852,9 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							title={t("chat:addImages")}
 							onClick={() => !shouldDisableImages && onSelectImages()}
 						>
-							<SvgIcons.picture />
+							<div className='shrink-0'>
+								<SvgIcons.picture />
+							</div>
 							<div className='text-[12px] font-medium break-all text-center line-clamp-1'>
 								{t("addImagesButton", { ns: "chat" })}
 							</div>
@@ -877,7 +881,9 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 										}`}
 									onClick={() => !textAreaDisabled && handleEnhancePrompt()}
 								>
-									<SvgIcons.beautify />
+									<div className='shrink-0'>
+										<SvgIcons.beautify />
+									</div>
 									<div className='text-[12px] font-medium break-all text-center line-clamp-1'>
 										{t("enhancePromptButton", { ns: "chat" })}
 									</div>

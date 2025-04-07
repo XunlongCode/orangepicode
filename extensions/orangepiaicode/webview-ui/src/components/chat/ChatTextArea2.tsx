@@ -829,27 +829,31 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							display: "flex",
 							alignItems: "center",
 							gap: "8px",
-							overflow: "hidden",
+							// overflow: "hidden",
 							minWidth: 0,
 						}}>
 						<div
-							className={`input-icon-button flex items-center ${textAreaDisabled ? "disabled" : ""
+							className={`input-icon-button flex items-center flex-wrap justify-center gap-[4px] ${textAreaDisabled ? "disabled" : ""
 								}`}
 							title={t("chat:reference")}
 							onClick={() => !textAreaDisabled && onReference()}
 						>
 							<SvgIcons.at />
-							<div className='ml-[4px] text-[12px] font-medium leading-0'>引用</div>
+							<div className='text-[12px] font-medium leading-none break-all text-center line-clamp-1'>
+								{t("referenceButton", { ns: "chat" })}
+							</div>
 						</div>
 
 						<div
-							className={`input-icon-button flex items-center ${shouldDisableImages ? "disabled" : ""
+							className={`input-icon-button flex items-center flex-wrap justify-center gap-[4px] ${shouldDisableImages ? "disabled" : ""
 								}`}
 							title={t("chat:addImages")}
 							onClick={() => !shouldDisableImages && onSelectImages()}
 						>
 							<SvgIcons.picture />
-							<div className='ml-[4px] text-[12px] font-medium leading-0'>图片</div>
+							<div className='text-[12px] font-medium leading-none break-all text-center line-clamp-1'>
+								{t("addImagesButton", { ns: "chat" })}
+							</div>
 						</div>
 
 						<div style={{ display: "flex", alignItems: "center" }}>
@@ -869,12 +873,14 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 									aria-label="enhance prompt"
 									data-testid="enhance-prompt-button"
 									title={t("chat:enhancePrompt")}
-									className={`input-icon-button flex items-center ${textAreaDisabled ? "disabled" : ""
+									className={`input-icon-button flex items-center flex-wrap justify-center gap-[4px] ${textAreaDisabled ? "disabled" : ""
 										}`}
 									onClick={() => !textAreaDisabled && handleEnhancePrompt()}
 								>
 									<SvgIcons.beautify />
-									<div className='ml-[4px] text-[12px] font-medium leading-0'>美化</div>
+									<div className='text-[12px] font-medium leading-none break-all text-center line-clamp-1'>
+										{t("enhancePromptButton", { ns: "chat" })}
+									</div>
 								</div>
 							)}
 						</div>

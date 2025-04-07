@@ -12,7 +12,8 @@ const ThemeItem: FC<{
 	imgSrc: string,
 	onChange: (value: { value: string, label: string }) => void
 	className?: string
-}> = ({ value, isSelected, imgSrc, onChange, className }) => {
+	labelClassName?: string
+}> = ({ value, isSelected, imgSrc, onChange, className, labelClassName }) => {
 
 	return <button className={cn(
 		'flex-1 p-2 bg-secondary rounded-[8px] text-left flex items-center hover:bg-primary cursor-pointer w-full',
@@ -21,7 +22,7 @@ const ThemeItem: FC<{
 	)} onClick={() => onChange(value)}>
 		{imgSrc && <img className='w-[33px] mr-[8px]' src={imgSrc} alt="" />}
 		<div className='flex justify-between items-center'>
-			<div className='text-base font-medium'>{value.label}</div>
+			<div className={cn('text-base font-medium', labelClassName)}>{value.label}</div>
 		</div>
 	</button>
 }
@@ -30,12 +31,17 @@ const LanguageItem: FC<{
 	value: { value: string, label: string },
 	// isSelected: boolean,
 	onChange: (value: { value: string, label: string }) => void
+	className?: string
 }> = ({
 	value,
 	//  isSelected,
-	onChange
+	onChange,
+	className
 }) => {
-		return <button className={cn('h-[32px] text-left px-[5px] mx-[5px] rounded-[4px] text-sm hover:bg-primary cursor-pointer')} onClick={() => onChange(value)}>
+		return <button className={cn(
+			'h-[32px] text-left px-[5px] mx-[5px] rounded-[4px] text-sm hover:bg-primary cursor-pointer',
+			className
+		)} onClick={() => onChange(value)}>
 			{value.label}
 		</button>
 	}
@@ -220,13 +226,13 @@ const General: FC = () => {
 					{t("currentAccount", { ns: "settingsApp" })}: {userInfo?.label}
 				</div>
 				<div className='mb-[24px]'>
-					<Button className='w-[140px] rounded' onClick={onLogout}>
+					<Button className='min-w-[140px] rounded' onClick={onLogout}>
 						{t("logout", { ns: "settingsApp" })}
 					</Button>
 				</div>
 			</> :
 				<div className='mb-[24px]'>
-					<Button className='w-[140px] rounded'>
+					<Button className='min-w-[140px] rounded'>
 						{t("login", { ns: "settingsApp" })}
 					</Button>
 				</div>
@@ -241,6 +247,7 @@ const General: FC = () => {
 				<div className='w-full h-8 bg-secondary flex items-center justify-between rounded px-[10px] cursor-pointer'>
 					<ThemeItem
 						className='p-0 !bg-transparent'
+						labelClassName='line-clamp-1 break-all'
 						value={currentTheme}
 						isSelected={false}
 						imgSrc={getThemePrevImage(currentTheme.value)}
@@ -274,7 +281,7 @@ const General: FC = () => {
 
 		<Popover open={langPopverOpen} onOpenChange={setLangPopoverOpen}>
 			<PopoverTrigger className='w-full max-w-[320px] h-8 bg-secondary flex items-center justify-between rounded px-[10px] cursor-pointer'>
-				<div className='text-sm'>
+				<div className='text-sm line-clamp-1'>
 					{currentLanguage.label}
 				</div>
 				<div className={cn({ "rotate-180": langPopverOpen })}>
@@ -334,7 +341,7 @@ const General: FC = () => {
 		</div>
 
 		<div className='mb-[24px]'>
-			<Button className='w-[140px] rounded h-[34px]' onClick={onOpenVSCodeSettings}>
+			<Button className='min-w-[140px] rounded h-[34px]' onClick={onOpenVSCodeSettings}>
 				{t("goToSettings", { ns: "settingsApp" })}
 			</Button>
 		</div>
@@ -348,7 +355,7 @@ const General: FC = () => {
 		</div>
 
 		<div className='mb-[24px]'>
-			<Button className='w-[140px] rounded h-[34px]' onClick={onOpenVSCodeKeyboardShortcuts}>
+			<Button className='min-w-[140px] rounded h-[34px]' onClick={onOpenVSCodeKeyboardShortcuts}>
 				{t("goToSettings", { ns: "settingsApp" })}
 			</Button>
 		</div>

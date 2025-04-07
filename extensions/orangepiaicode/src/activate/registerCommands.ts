@@ -235,6 +235,13 @@ const openClineInNewTab = async ({ context, outputChannel }: Omit<RegisterComman
 
 const openSettings = async ({ context, outputChannel }: Omit<RegisterCommandOptions, "provider" | "battery">) => {
 	outputChannel.appendLine("Opening Settings in new tab")
+
+	// 如果面板已经创建，则直接显示
+	if (settingsPanel) {
+		settingsPanel.reveal()
+		return
+	}
+
 	// (This example uses webviewProvider activation event which is necessary to
 	// deserialize cached webview, but since we use retainContextWhenHidden, we
 	// don't need to use that event).

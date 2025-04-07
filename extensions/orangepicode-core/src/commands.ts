@@ -61,10 +61,26 @@ const getUsermenuCommandsMap = ({ context, outputChannel, provider }: RegisterCo
 		},
 		"orangepicode-core.openSettingsInNewTab": async () => {
 			openSettingsInNewTab({ context, outputChannel })
+		},
+		"orangepicode-core.github.login": async () => {
+			return await vscode.authentication.getSession('github', ['repo'], { createIfNone: true })
+		},
+		"orangepicode-core.github.logout": async () => {
+			const authConfig = vscode.workspace.getConfiguration('github')
+			await authConfig.update('authenticationProvider', undefined, true)
+
+			await provider.postMessageToWebview({
+				type: "githubLogoutSuccess"
+			})
+			return true
+		},
+		"orangepicode-core.github.getSession": async () => {
+			return await vscode.authentication.getSession('github', ['repo'], { createIfNone: false })
 		}
 	}
 }
 
+// 已弃用，请查看orangepiaicode插件里的实现
 const openSettingsInNewTab = async ({ context, outputChannel }: Omit<RegisterCommandOptions, "provider">) => {
 	outputChannel.appendLine("Opening Settings in new tab")
 	// (This example uses webviewProvider activation event which is necessary to

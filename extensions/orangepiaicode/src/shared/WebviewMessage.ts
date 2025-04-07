@@ -116,7 +116,9 @@ export interface WebviewMessage {
 	| "browserConnectionResult"
 	| "remoteBrowserEnabled"
 	| "language"
-	| "getGitHubLoginInfo"
+	| "githubLogin"
+	| "logout"
+	| "getGitHubSession"
 	text?: string
 	disabled?: boolean
 	askResponse?: ClineAskResponse

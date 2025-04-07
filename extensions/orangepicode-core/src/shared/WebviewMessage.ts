@@ -13,9 +13,9 @@ export interface WebviewMessage {
 	| "setLanguage"
 	| "hideUsermenu"
 	| "openSettings"
-	| "login"
+	| "githubLogin"
+	| "getGitHubSession"  // 添加获取 GitHub 登录信息的消息类型
 	| "logout"
-	| "getGitHubLoginInfo"  // 添加获取 GitHub 登录信息的消息类型
 
 	messageId?: string
 	theme?: string

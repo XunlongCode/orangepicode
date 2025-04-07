@@ -1,4 +1,4 @@
-import vscode from 'vscode';
+import vscode, { AuthenticationSession } from 'vscode';
 import { getUri } from '../utils/getUri';
 import { getNonce } from '../utils/getNonce';
 import axios from 'axios';
@@ -124,58 +124,6 @@ class CoreProvider implements vscode.WebviewViewProvider {
 					break
 				}
 
-				case "login": {
-					try {
-						// 使用 VS Code 认证 API
-						const session = await vscode.authentication.getSession('github', ['repo'], { createIfNone: true });
-						if (session) {
-							// vscode.window.showInformationMessage("GitHub 登录成功");
-							console.log("GitHub 登录成功 ", session);
-							// 可以将会话信息发送回 webview
-							this.postMessageToWebview({
-								type: "loginSuccess",
-								githubSession: {
-									id: session.id,
-									scopes: session.scopes,
-									account: {
-										label: session.account.label,
-										id: session.account.id
-									}
-								}
-							});
-						}
-					} catch (error) {
-						console.error("GitHub 登录失败:", error);
-						// vscode.window.showErrorMessage(`GitHub 登录失败: ${error}`);
-					}
-					break;
-				}
-				case "logout": {
-					try {
-						// 尝试清除 GitHub 认证信息
-						const authConfig = vscode.workspace.getConfiguration('github');
-						authConfig.update('authenticationProvider', undefined, true)
-							.then(() => {
-								console.log("已清除 GitHub 认证信息");
-								// vscode.window.showInformationMessage("已清除 GitHub 认证信息，请重启 VS Code 以完成注销");
-
-								// 通知 webview 注销成功
-								this.postMessageToWebview({
-									type: "logoutSuccess"
-								});
-							}, (error) => {
-
-								console.error("清除认证信息失败:", error);
-								vscode.window.showErrorMessage(`注销失败: ${error.message}`);
-							}
-							)
-
-					} catch (error) {
-						console.error("注销失败:", error);
-						vscode.window.showErrorMessage(`注销失败: ${error}`);
-					}
-					break;
-				}
 				case "setTheme": {
 					console.log("Setting theme to:", message["theme"]);
 					var themeName = "";
@@ -201,7 +149,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 							},
 							(error) => {
 								console.error("切换主题失败:", error);
-								// vscode.window.showErrorMessage(`切换主题失败: ${error.message}`);
+								vscode.window.showErrorMessage(`${error}`);
 
 								// 如果直接设置失败，尝试打开主题选择器
 								// vscode.commands.executeCommand('workbench.action.selectTheme');
@@ -260,50 +208,64 @@ class CoreProvider implements vscode.WebviewViewProvider {
 							);
 					} else {
 						console.warn("不支持的语言:", message["language"]);
-						vscode.window.showWarningMessage(`不支持的语言: ${message["language"]}`);
+						vscode.window.showWarningMessage(`Unsupported language ${message["language"]}`);
 					}
 					break;
 				}
 
-
-				case "getGitHubLoginInfo": {
+				case "githubLogin": {
 					try {
-						// 使用 VS Code 认证 API 获取 GitHub 会话信息
-						vscode.authentication.getSession('github', ['repo'], { createIfNone: false })
-							.then(session => {
-								if (session) {
-									console.log("获取到 GitHub 登录信息");
-									// 将登录信息发送回 webview
-									this.postMessageToWebview({
-										type: "gitHubLoginInfo",
-										githubSession: {
-											id: session.id,
-											scopes: session.scopes,
-											account: {
-												label: session.account.label,
-												id: session.account.id
-											}
-										}
-									});
-								} else {
-									console.log("未获取到 GitHub 登录信息，用户可能未登录");
-									this.postMessageToWebview({
-										type: "gitHubLoginInfo",
-										githubSession: null
-									});
-								}
-							}, error => {
-								console.error("获取 GitHub 登录信息失败:", error);
-								vscode.window.showErrorMessage(`获取 GitHub 登录信息失败: ${error.message}`);
-							})
+						const session: AuthenticationSession = await vscode.commands.executeCommand("orangepicode-core.github.login")
+						console.log("orangepicode-core.github.login session", session);
+						if (!session) {
+							break
+						}
 
+						await this.postMessageToWebview({
+							type: "githubLoginSuccess",
+						});
 					} catch (error) {
-						console.error("获取 GitHub 登录信息失败:", error);
-						vscode.window.showErrorMessage(`获取 GitHub 登录信息失败: ${error}`);
+						console.error("GitHub 登录失败:", error);
+						vscode.window.showErrorMessage(`${error}`);
+					}
+					break;
+				}
+				case "logout": {
+					try {
+						// 退出github登录
+						await vscode.commands.executeCommand("orangepicode-core.github.logout")
+						// 退出其他的登录...
+					} catch (error) {
+						console.error("退出登录失败:", error);
+						vscode.window.showErrorMessage(`${error}`);
 					}
 					break;
 				}
 
+				case "getGitHubSession": {
+					try {
+						const session: AuthenticationSession = await vscode.commands.executeCommand('orangepicode-core.github.getSession')
+						if (!session) {
+							return
+						}
+
+						await this.postMessageToWebview({
+							type: "getGitHubSessionSuccess",
+							githubSession: {
+								id: session.id,
+								scopes: session.scopes,
+								account: {
+									label: session.account.label,
+									id: session.account.id
+								}
+							}
+						})
+					} catch (error) {
+						console.error("获取 GitHub 登录信息失败:", error)
+						vscode.window.showErrorMessage(`${error}`)
+					}
+					break;
+				}
 			}
 		})
 	}

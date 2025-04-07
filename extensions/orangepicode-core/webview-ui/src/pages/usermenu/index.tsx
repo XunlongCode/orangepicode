@@ -15,6 +15,7 @@ export const Usermenu: FC = () => {
 	const [open, setOpen] = useState(false)
 	const [themeSubOpen, setThemeSubOpen] = useState(false)
 	const [languageSubOpen, setLanguageSubOpen] = useState(false)
+
 	// 添加用户登录状态和用户信息的状态变量
 	const [userInfo, setUserInfo] = useState<{ label: string; id: string } | null>(null);
 
@@ -35,30 +36,18 @@ export const Usermenu: FC = () => {
 
 	useEffect(() => {
 		vscode.postMessage({
-			type: "getGitHubLoginInfo"
+			type: "getGitHubSession"
 		})
 	}, [])
 
-	useWebviewListener("gitHubLoginInfo", async (message) => {
-		if (message.type === "gitHubLoginInfo") {
-			if (message.githubSession) {
-				// 用户已登录，更新 UI
-				setUserInfo(message.githubSession.account);
-			} else {
-				// 用户未登录
-				setUserInfo(null);
-			}
-		}
+	useWebviewListener("getGitHubSessionSuccess", async (message) => {
+		setUserInfo(message.githubSession?.account ?? null);
 	})
 
 	useEffect(() => {
 		if (dropdownContiainerRef.current) {
 			setOpen(true)
 		}
-		// 组件加载时获取 GitHub 登录信息
-		vscode.postMessage({
-			type: "getGitHubLoginInfo"
-		});
 	}, [dropdownContiainerRef.current])
 
 	// 点击遮罩，关闭菜单
@@ -110,27 +99,22 @@ export const Usermenu: FC = () => {
 			console.log("已经登录过了无须登录");
 			return;
 		}
+
 		vscode.postMessage({
-			type: "login"
+			type: "githubLogin"
 		})
 	}
 
 	// 接受登录成功的回调用
-	useWebviewListener("loginSuccess", async () => {
+	useWebviewListener("githubLoginSuccess", async () => {
 		vscode.postMessage({
-			type: "getGitHubLoginInfo"
+			type: "getGitHubSession"
 		})
 	})
 
 	// 接受登出的回掉
-	useWebviewListener("logoutSuccess", async (e: any) => {
-		console.log(e);
-		if (e.error) {
-			console.log(e);
-			return
-		}
-		// 登出成功后更新状态
-		setUserInfo(null);
+	useWebviewListener("githubLogoutSuccess", async () => {
+		setUserInfo(null)
 	})
 
 	return <div className='absolute inset-0'>

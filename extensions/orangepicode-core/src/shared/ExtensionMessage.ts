@@ -5,11 +5,11 @@ export interface ExtensionMessage {
 	| "setThemeType"
 	| "onShowUsermenu"
 	| "importUserSettingsFromVSCodeDone"
-	| "gitHubLoginInfo"  // 添加 GitHub 登录信息消息类型
+	| "getGitHubSessionSuccess"  // 添加 GitHub 登录信息消息类型
 	| "importUserSettingsFromCursorDone"
 	| "changeLanguage"
-	| "loginSuccess"
-	| "logoutSuccess"
+	| "githubLoginSuccess"
+	| "githubLogoutSuccess"
 	theme?: any
 	themeType?: string
 	importUserSettingsFromVSCodeResult?: { ok: boolean, error?: any }

@@ -57,7 +57,9 @@ export interface ExtensionMessage {
 	| "remoteBrowserEnabled"
 	| "ttsStart"
 	| "ttsStop"
-	| "gitHubLoginInfo"
+	| "githubLoginSuccess"
+	| "githubLogoutSuccess"
+	| "getGitHubSessionSuccess"
 	text?: string
 	action?:
 	| "chatButtonClicked"

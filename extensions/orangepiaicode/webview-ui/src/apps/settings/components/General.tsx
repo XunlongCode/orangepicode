@@ -47,18 +47,12 @@ const General: FC = () => {
 
 	useEffect(() => {
 		vscode.postMessage({
-			type: "getGitHubLoginInfo"
+			type: "getGitHubSession"
 		})
 	}, [])
 
-	useWebviewListener("gitHubLoginInfo", async (message) => {
-		if (message.githubSession) {
-			// 用户已登录，更新 UI
-			setUserInfo(message.githubSession.account);
-		} else {
-			// 用户未登录
-			setUserInfo(null);
-		}
+	useWebviewListener("getGitHubSessionSuccess", async (message) => {
+		setUserInfo(message.githubSession?.account ?? null);
 	})
 
 	const initLanguage = window.language?.toLocaleLowerCase() === "zh-cn" ? {
@@ -87,7 +81,6 @@ const General: FC = () => {
 		// })
 	}
 
-
 	const selectLanguage = (value: { value: string, label: string }) => {
 		setCurrentLanguage(value)
 		vscode.postMessage({
@@ -95,6 +88,18 @@ const General: FC = () => {
 			text: value.value.toLowerCase()
 		})
 	}
+
+	// 点击登出
+	const onLogout = () => {
+		vscode.postMessage({
+			type: "logout"
+		})
+	}
+
+	// 接受登出的回掉
+	useWebviewListener("githubLogoutSuccess", async () => {
+		setUserInfo(null)
+	})
 
 	return <div>
 		<div className='text-[24px] font-medium mb-[16px]'>
@@ -111,7 +116,7 @@ const General: FC = () => {
 					{t("currentAccount", { ns: "settingsApp" })}: {userInfo?.label}
 				</div>
 				<div className='mb-[24px]'>
-					<Button className='w-[140px] rounded'>
+					<Button className='w-[140px] rounded' onClick={onLogout}>
 						{t("logout", { ns: "settingsApp" })}
 					</Button>
 				</div>
@@ -128,18 +133,20 @@ const General: FC = () => {
 		</div>
 
 		<Popover open={themePopverOpen} onOpenChange={setThemePopoverOpen}>
-			<PopoverTrigger className='w-full max-w-[320px] h-8 bg-secondary flex items-center justify-between rounded px-[10px] cursor-pointer'>
-				<ThemeItem
-					className='p-0 !bg-transparent'
-					value={currentTheme}
-					isSelected={false}
-					imgSrc={getVscExtensionPath("src/assets/theme-dark.png")}
-					onChange={selectTheme}
-				/>
-				<div className={cn({ "rotate-180": themePopverOpen })}>
-					<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M12.2368 4.70752L7 9.94434L1.76318 4.70752" stroke="#DADDE5" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round" />
-					</svg>
+			<PopoverTrigger asChild className='w-full max-w-[320px]'>
+				<div className='w-full h-8 bg-secondary flex items-center justify-between rounded px-[10px] cursor-pointer'>
+					<ThemeItem
+						className='p-0 !bg-transparent'
+						value={currentTheme}
+						isSelected={false}
+						imgSrc={getVscExtensionPath("src/assets/theme-dark.png")}
+						onChange={selectTheme}
+					/>
+					<div className={cn({ "rotate-180": themePopverOpen })}>
+						<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M12.2368 4.70752L7 9.94434L1.76318 4.70752" stroke="#DADDE5" strokeWidth="1.67" strokeLinecap="round" strokeLinejoin="round" />
+						</svg>
+					</div>
 				</div>
 			</PopoverTrigger>
 			<PopoverContent className='p-0 bg-secondary border-none w-[var(--radix-popover-trigger-width)] !animate-none'>
@@ -175,7 +182,7 @@ const General: FC = () => {
 				</div>
 				<div className={cn({ "rotate-180": langPopverOpen })}>
 					<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M12.2368 4.70752L7 9.94434L1.76318 4.70752" stroke="#DADDE5" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round" />
+						<path d="M12.2368 4.70752L7 9.94434L1.76318 4.70752" stroke="#DADDE5" strokeWidth="1.67" strokeLinecap="round" strokeLinejoin="round" />
 					</svg>
 				</div>
 			</PopoverTrigger>

@@ -2047,6 +2047,65 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 						await this.postStateToWebview()
 						break
 					}
+
+					case "githubLogin": {
+						try {
+							const session: vscode.AuthenticationSession = await vscode.commands.executeCommand("orangepicode-core.github.login")
+							console.log("orangepicode-core.github.login session", session);
+							if (!session) {
+								break
+							}
+
+							await this.postMessageToWebview({
+								type: "githubLoginSuccess",
+							});
+						} catch (error) {
+							console.error("GitHub 登录失败:", error);
+							vscode.window.showErrorMessage(`${error}`);
+						}
+						break;
+					}
+					case "logout": {
+						try {
+							// 退出github登录
+							await vscode.commands.executeCommand("orangepicode-core.github.logout")
+							// 通知webview
+							this.postMessageToWebview({
+								type: "githubLogoutSuccess",
+							})
+
+							// 退出其他的登录...
+						} catch (error) {
+							console.error("退出登录失败:", error);
+							vscode.window.showErrorMessage(`${error}`);
+						}
+						break;
+					}
+
+					case "getGitHubSession": {
+						try {
+							const session: vscode.AuthenticationSession = await vscode.commands.executeCommand('orangepicode-core.github.getSession')
+							if (!session) {
+								return
+							}
+
+							await this.postMessageToWebview({
+								type: "getGitHubSessionSuccess",
+								githubSession: {
+									id: session.id,
+									scopes: session.scopes,
+									account: {
+										label: session.account.label,
+										id: session.account.id
+									}
+								}
+							})
+						} catch (error) {
+							console.error("获取 GitHub 登录信息失败:", error)
+							vscode.window.showErrorMessage(`${error}`)
+						}
+						break;
+					}
 				}
 			},
 			null,

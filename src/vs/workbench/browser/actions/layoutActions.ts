@@ -46,7 +46,7 @@ const panelRightIcon = registerIcon('panel-right', Codicon.layoutSidebarRight, l
 const panelRightOffIcon = registerIcon('panel-right-off', Codicon.layoutSidebarRightOff, localize('panelRightOff', "Represents side bar in the right position toggled off"));
 const panelIcon = registerIcon('panel-bottom', Codicon.layoutPanel, localize('panelBottom', "Represents the bottom panel"));
 const statusBarIcon = registerIcon('statusBar', Codicon.layoutStatusbar, localize('statusBarIcon', "Represents the status bar"));
-const orangepiIcon = registerIcon('orangepi', Codicon.archive, localize('orangepiIcon', "Represents the OrangePi overlay"));
+const orangePiIcon = registerIcon('orangePi', Codicon.archive, localize('orangePiIcon', "Represents the OrangePi"));
 
 const panelAlignmentLeftIcon = registerIcon('panel-align-left', Codicon.layoutPanelLeft, localize('panelBottomLeft', "Represents the bottom panel alignment set to the left"));
 const panelAlignmentRightIcon = registerIcon('panel-align-right', Codicon.layoutPanelRight, localize('panelBottomRight', "Represents the bottom panel alignment set to the right"));
@@ -1386,7 +1386,7 @@ ToggleVisibilityActions.push(...[
 	CreateToggleLayoutItem(ToggleAuxiliaryBarAction.ID, AuxiliaryBarVisibleContext, localize('secondarySideBar', "Secondary Side Bar"), { whenA: ContextKeyExpr.equals('config.workbench.sideBar.location', 'left'), iconA: panelRightIcon, iconB: panelLeftIcon }),
 	CreateToggleLayoutItem(TogglePanelAction.ID, PanelVisibleContext, localize('panel', "Panel"), panelIcon),
 	CreateToggleLayoutItem(ToggleStatusbarVisibilityAction.ID, ContextKeyExpr.equals('config.workbench.statusBar.visible', true), localize('statusBar', "Status Bar"), statusBarIcon),
-	CreateToggleLayoutItem(ToggleOnboardingAction.ID, OrangePiVisibleContext, 'OrangePi', orangepiIcon),
+	CreateToggleLayoutItem(ToggleOnboardingAction.ID, OrangePiVisibleContext, 'OrangePi', orangePiIcon),
 ]);
 
 const MoveSideBarActions: CustomizeLayoutItem[] = [

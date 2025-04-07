@@ -833,25 +833,25 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							minWidth: 0,
 						}}>
 						<div
-							className={`input-icon-button flex items-center flex-wrap justify-center gap-[4px] ${textAreaDisabled ? "disabled" : ""
+							className={`input-icon-button flex items-center justify-center gap-[4px] ${textAreaDisabled ? "disabled" : ""
 								}`}
 							title={t("chat:reference")}
 							onClick={() => !textAreaDisabled && onReference()}
 						>
 							<SvgIcons.at />
-							<div className='text-[12px] font-medium leading-none break-all text-center line-clamp-1'>
+							<div className='text-[12px] font-medium break-all text-center line-clamp-1'>
 								{t("referenceButton", { ns: "chat" })}
 							</div>
 						</div>
 
 						<div
-							className={`input-icon-button flex items-center flex-wrap justify-center gap-[4px] ${shouldDisableImages ? "disabled" : ""
+							className={`input-icon-button flex items-center justify-center gap-[4px] ${shouldDisableImages ? "disabled" : ""
 								}`}
 							title={t("chat:addImages")}
 							onClick={() => !shouldDisableImages && onSelectImages()}
 						>
 							<SvgIcons.picture />
-							<div className='text-[12px] font-medium leading-none break-all text-center line-clamp-1'>
+							<div className='text-[12px] font-medium break-all text-center line-clamp-1'>
 								{t("addImagesButton", { ns: "chat" })}
 							</div>
 						</div>
@@ -873,12 +873,12 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 									aria-label="enhance prompt"
 									data-testid="enhance-prompt-button"
 									title={t("chat:enhancePrompt")}
-									className={`input-icon-button flex items-center flex-wrap justify-center gap-[4px] ${textAreaDisabled ? "disabled" : ""
+									className={`input-icon-button flex items-center justify-center gap-[4px] ${textAreaDisabled ? "disabled" : ""
 										}`}
 									onClick={() => !textAreaDisabled && handleEnhancePrompt()}
 								>
 									<SvgIcons.beautify />
-									<div className='text-[12px] font-medium leading-none break-all text-center line-clamp-1'>
+									<div className='text-[12px] font-medium break-all text-center line-clamp-1'>
 										{t("enhancePromptButton", { ns: "chat" })}
 									</div>
 								</div>
@@ -888,7 +888,7 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 
 					{/* Right side - action buttons */}
 					<div
-						className='flex-1'
+						className='flex-1 flex items-center justify-end'
 						style={{
 							display: "flex",
 							alignItems: "center",
@@ -902,6 +902,7 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 								flex: "1 1 auto",
 								minWidth: 0,
 								overflow: "hidden",
+								maxWidth: 160
 							}}>
 							<SelectDropdown
 								value={currentApiConfigName || ""}

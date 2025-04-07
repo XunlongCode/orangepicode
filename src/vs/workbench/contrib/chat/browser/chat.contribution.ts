@@ -44,22 +44,16 @@ import '../common/promptSyntax/languageFeatures/promptLinkProvider.js';
 import '../common/promptSyntax/languageFeatures/promptPathAutocompletion.js';
 import { PromptsService } from '../common/promptSyntax/service/promptsService.js';
 import { IPromptsService } from '../common/promptSyntax/service/types.js';
-// import './promptSyntax/contributions/usePromptCommand.js';
-// import './promptSyntax/contributions/createPromptCommand/createPromptCommand.js';
+import './promptSyntax/contributions/usePromptCommand.js';
+import './promptSyntax/contributions/createPromptCommand/createPromptCommand.js';
 import { LanguageModelToolsExtensionPointHandler } from '../common/tools/languageModelToolsContribution.js';
 import { BuiltinToolsContribution } from '../common/tools/tools.js';
 import { IVoiceChatService, VoiceChatService } from '../common/voiceChatService.js';
 import { EditsChatAccessibilityHelp, PanelChatAccessibilityHelp, QuickChatAccessibilityHelp } from './actions/chatAccessibilityHelp.js';
-import {
-	CopilotTitleBarMenuRendering,
-	// registerChatActions
-} from './actions/chatActions.js';
-import {
-	ACTION_ID_NEW_CHAT,
-	// registerNewChatActions
-} from './actions/chatClearActions.js';
+import { CopilotTitleBarMenuRendering, registerChatActions } from './actions/chatActions.js';
+import { ACTION_ID_NEW_CHAT, registerNewChatActions } from './actions/chatClearActions.js';
 import { CodeBlockActionRendering, registerChatCodeBlockActions, registerChatCodeCompareBlockActions } from './actions/chatCodeblockActions.js';
-// import { registerChatContextActions } from './actions/chatContextActions.js';
+import { registerChatContextActions } from './actions/chatContextActions.js';
 import { registerChatCopyActions } from './actions/chatCopyActions.js';
 import { registerChatDeveloperActions } from './actions/chatDeveloperActions.js';
 import { ChatSubmitAction, registerChatExecuteActions } from './actions/chatExecuteActions.js';
@@ -67,7 +61,7 @@ import { registerChatFileTreeActions } from './actions/chatFileTreeActions.js';
 import { ChatGettingStartedContribution } from './actions/chatGettingStarted.js';
 import { registerChatExportActions } from './actions/chatImportExport.js';
 import { registerMoveActions } from './actions/chatMoveActions.js';
-// import { registerQuickChatActions } from './actions/chatQuickInputActions.js';
+import { registerQuickChatActions } from './actions/chatQuickInputActions.js';
 import { registerChatTitleActions } from './actions/chatTitleActions.js';
 import { IChatAccessibilityService, IChatCodeBlockContextProviderService, IChatWidgetService, IQuickChatService } from './chat.js';
 import { ChatAccessibilityService } from './chatAccessibilityService.js';
@@ -75,7 +69,7 @@ import './chatAttachmentModel.js';
 import { ChatMarkdownAnchorService, IChatMarkdownAnchorService } from './chatContentParts/chatMarkdownAnchorService.js';
 import { ChatInputBoxContentProvider } from './chatEdinputInputContentProvider.js';
 import { ChatEditingEditorAccessibility } from './chatEditing/chatEditingEditorAccessibility.js';
-// import { registerChatEditorActions } from './chatEditing/chatEditingEditorActions.js';
+import { registerChatEditorActions } from './chatEditing/chatEditingEditorActions.js';
 import { ChatEditingEditorOverlay } from './chatEditing/chatEditingEditorOverlay.js';
 import { ChatEditingService } from './chatEditing/chatEditingServiceImpl.js';
 import { ChatEditor, IChatEditorOptions } from './chatEditor.js';
@@ -482,20 +476,20 @@ registerWorkbenchContribution2(ChatEditingEditorAccessibility.ID, ChatEditingEdi
 registerWorkbenchContribution2(ChatEditingEditorOverlay.ID, ChatEditingEditorOverlay, WorkbenchPhase.AfterRestored);
 registerWorkbenchContribution2(ChatEditingEditorContextKeys.ID, ChatEditingEditorContextKeys, WorkbenchPhase.AfterRestored);
 
-// registerChatActions();
+registerChatActions();
 registerChatCopyActions();
 registerChatCodeBlockActions();
 registerChatCodeCompareBlockActions();
 registerChatFileTreeActions();
 registerChatTitleActions();
 registerChatExecuteActions();
-// registerQuickChatActions();
+registerQuickChatActions();
 registerChatExportActions();
 registerMoveActions();
-// registerNewChatActions();
-// registerChatContextActions();
+registerNewChatActions();
+registerChatContextActions();
 registerChatDeveloperActions();
-// registerChatEditorActions();
+registerChatEditorActions();
 registerChatToolActions();
 
 registerEditorFeature(ChatPasteProvidersFeature);

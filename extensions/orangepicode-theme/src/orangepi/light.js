@@ -36,14 +36,14 @@ const whiteColor = {
 		"titleBar.activeBackground": "#E0ECFA",
 		// "titleBar.inactiveForeground": "#FFF",
 		"titleBar.inactiveBackground": "#E0ECFA",
-		// "titleBar.border": "#e1e4e8",
+		// "titleBar.border": "#e1e4e8", // 顶部的边框
 		"activityBar.foreground": "#2f363d",
 		"activityBar.inactiveForeground": "#959da5",
 		"activityBar.background": "#E0ECFA",
 		"activityBarBadge.foreground": "#fff",
 		"activityBarBadge.background": "#2188ff",
 		"activityBar.activeBorder": "#f9826c",
-		// "activityBar.border": "#e1e4e8",
+		// "activityBar.border": "#e1e4e8",//活动栏的边框
 		"sideBar.foreground": "#586069",
 		"sideBar.background": "#FFF",
 		"sideBar.border": "#e1e4e8",

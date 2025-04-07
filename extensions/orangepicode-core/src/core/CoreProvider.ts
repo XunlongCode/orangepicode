@@ -1,4 +1,4 @@
-import vscode from 'vscode';
+import vscode, { AuthenticationSession } from 'vscode';
 import { getUri } from '../utils/getUri';
 import { getNonce } from '../utils/getNonce';
 import axios from 'axios';
@@ -6,8 +6,6 @@ import { ExtensionMessage } from '../shared/ExtensionMessage';
 import { WebviewMessage } from '../shared/WebviewMessage';
 import { getTheme, getThemeType } from '../utils/getTheme';
 import { v4 as uuidv4 } from 'uuid';
-import { importUserSettingsFromCursor, importUserSettingsFromVSCode } from '../utils/copySettings';
-import { error } from 'console';
 
 export const ORANGEPICODE_ONBOARDING_VIEWID = "onboarding_view";
 export const ORANGEPICODE_USERMENU_VIEWID = "usermenu_view";
@@ -88,13 +86,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 					break;
 				}
 				case "importUserSettingsFromVSCode": {
-					let result
-					try {
-						result = await importUserSettingsFromVSCode()
-					} catch (error) {
-						result = { ok: false, error: error }
-						vscode.window.showErrorMessage(`Failed to import settings: ${error}`)
-					}
+					const result: any = await vscode.commands.executeCommand("orangepicode-core.importUserSettingsFromVSCode")
 					this.postMessageToWebview({
 						type: "importUserSettingsFromVSCodeDone",
 						importUserSettingsFromVSCodeResult: result
@@ -102,15 +94,9 @@ class CoreProvider implements vscode.WebviewViewProvider {
 					break;
 				}
 				case "importUserSettingsFromCursor": {
-					let result
-					try {
-						result = await importUserSettingsFromCursor()
-					} catch (error) {
-						result = { ok: false, error: error }
-						vscode.window.showErrorMessage(`Failed to import settings: ${error}`)
-					}
+					const result: any = await vscode.commands.executeCommand("orangepicode-core.importUserSettingsFromCursor")
 					this.postMessageToWebview({
-						type: "importUserSettingsFromVSCodeDone",
+						type: "importUserSettingsFromCursorDone",
 						importUserSettingsFromCursorResult: result
 					})
 					break
@@ -124,97 +110,11 @@ class CoreProvider implements vscode.WebviewViewProvider {
 					break
 				}
 
-				case "login": {
-					try {
-						// 使用 VS Code 认证 API
-						const session = await vscode.authentication.getSession('github', ['repo'], { createIfNone: true });
-						if (session) {
-							console.log("GitHub 登录成功");
-							vscode.window.showInformationMessage("GitHub 登录成功");
-							console.log("GitHub 登录成功 ", session);
-							// 可以将会话信息发送回 webview
-							this.postMessageToWebview({
-								type: "loginSuccess",
-								githubSession: {
-									id: session.id,
-									scopes: session.scopes,
-									account: {
-										label: session.account.label,
-										id: session.account.id
-									}
-								}
-							});
-						}
-					} catch (error) {
-						console.error("GitHub 登录失败:", error);
-						vscode.window.showErrorMessage(`GitHub 登录失败: ${error}`);
-					}
-					break;
-				}
-				case "logout": {
-					try {
-						// 尝试清除 GitHub 认证信息
-						const authConfig = vscode.workspace.getConfiguration('github');
-						authConfig.update('authenticationProvider', undefined, true)
-							.then(() => {
-								console.log("已清除 GitHub 认证信息");
-								vscode.window.showInformationMessage("已清除 GitHub 认证信息，请重启 VS Code 以完成注销");
-
-								// 通知 webview 注销成功
-								this.postMessageToWebview({
-									type: "logoutSuccess"
-								});
-							}, (error) => {
-
-								console.error("清除认证信息失败:", error);
-								vscode.window.showErrorMessage(`注销失败: ${error.message}`);
-							}
-							)
-
-					} catch (error) {
-						console.error("注销失败:", error);
-						vscode.window.showErrorMessage(`注销失败: ${error}`);
-					}
-					break;
-				}
 				case "setTheme": {
-					console.log("Setting theme to:", message["theme"]);
-
-
-
-					var themeName = "";
-					if (message.theme === "darkTheme") {
-						themeName = "OrangePi Dark";
-					}
-					if (message.theme === "lightTheme") {
-						themeName = "OrangePi Light";
-					}
-					if (message.theme === "orangeTheme") {
-						themeName = "OrangePi Orange";
-					}
-					if (themeName === "") {
-						vscode.window.showErrorMessage(`无效主题`);
-						return;
-					}
-
-
-					// 使用配置方式更改主题
-					vscode.workspace.getConfiguration().update('workbench.colorTheme', themeName, true)
-						.then(
-							() => {
-								vscode.window.showInformationMessage(`已切换到主题: ${themeName}`);
-							},
-							(error) => {
-								console.error("切换主题失败:", error);
-								vscode.window.showErrorMessage(`切换主题失败: ${error.message}`);
-
-								// 如果直接设置失败，尝试打开主题选择器
-								// vscode.commands.executeCommand('workbench.action.selectTheme');
-							}
-						);
-
+					await vscode.commands.executeCommand("orangepicode-core.setTheme", message.theme)
 					break
 				}
+
 				case "setLanguage": {
 					console.log("Setting language to:", message["language"]);
 
@@ -265,50 +165,64 @@ class CoreProvider implements vscode.WebviewViewProvider {
 							);
 					} else {
 						console.warn("不支持的语言:", message["language"]);
-						vscode.window.showWarningMessage(`不支持的语言: ${message["language"]}`);
+						vscode.window.showWarningMessage(`Unsupported language ${message["language"]}`);
 					}
 					break;
 				}
 
-
-				case "getGitHubLoginInfo": {
+				case "githubLogin": {
 					try {
-						// 使用 VS Code 认证 API 获取 GitHub 会话信息
-						vscode.authentication.getSession('github', ['repo'], { createIfNone: false })
-							.then(session => {
-								if (session) {
-									console.log("获取到 GitHub 登录信息");
-									// 将登录信息发送回 webview
-									this.postMessageToWebview({
-										type: "gitHubLoginInfo",
-										githubSession: {
-											id: session.id,
-											scopes: session.scopes,
-											account: {
-												label: session.account.label,
-												id: session.account.id
-											}
-										}
-									});
-								} else {
-									console.log("未获取到 GitHub 登录信息，用户可能未登录");
-									this.postMessageToWebview({
-										type: "gitHubLoginInfo",
-										githubSession: null
-									});
-								}
-							}, error => {
-								console.error("获取 GitHub 登录信息失败:", error);
-								vscode.window.showErrorMessage(`获取 GitHub 登录信息失败: ${error.message}`);
-							})
+						const session: AuthenticationSession = await vscode.commands.executeCommand("orangepicode-core.github.login")
+						console.log("orangepicode-core.github.login session", session);
+						if (!session) {
+							break
+						}
 
+						await this.postMessageToWebview({
+							type: "githubLoginSuccess",
+						});
 					} catch (error) {
-						console.error("获取 GitHub 登录信息失败:", error);
-						vscode.window.showErrorMessage(`获取 GitHub 登录信息失败: ${error}`);
+						console.error("GitHub 登录失败:", error);
+						vscode.window.showErrorMessage(`${error}`);
+					}
+					break;
+				}
+				case "logout": {
+					try {
+						// 退出github登录
+						await vscode.commands.executeCommand("orangepicode-core.github.logout")
+						// 退出其他的登录...
+					} catch (error) {
+						console.error("退出登录失败:", error);
+						vscode.window.showErrorMessage(`${error}`);
 					}
 					break;
 				}
 
+				case "getGitHubSession": {
+					try {
+						const session: AuthenticationSession = await vscode.commands.executeCommand('orangepicode-core.github.getSession')
+						if (!session) {
+							return
+						}
+
+						await this.postMessageToWebview({
+							type: "getGitHubSessionSuccess",
+							githubSession: {
+								id: session.id,
+								scopes: session.scopes,
+								account: {
+									label: session.account.label,
+									id: session.account.id
+								}
+							}
+						})
+					} catch (error) {
+						console.error("获取 GitHub 登录信息失败:", error)
+						vscode.window.showErrorMessage(`${error}`)
+					}
+					break;
+				}
 			}
 		})
 	}
@@ -390,7 +304,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
             <meta name="theme-color" content="#000000">
-            <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${webview.cspSource}; style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} data:; script-src 'nonce-${nonce}' https://us-assets.i.posthog.com; connect-src https://openrouter.ai https://us.i.posthog.com https://us-assets.i.posthog.com;">
+            <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${webview.cspSource}; style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} https://avatars.githubusercontent.com data:; script-src 'nonce-${nonce}' https://us-assets.i.posthog.com; connect-src https://openrouter.ai https://us.i.posthog.com https://us-assets.i.posthog.com;">
 						${await this.getHtmlCommonHead(webview, nonce)}
             <title>OrangePi Code Core</title>
           </head>
@@ -435,7 +349,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 			"default-src 'none'",
 			`font-src ${webview.cspSource}`,
 			`style-src ${webview.cspSource} 'unsafe-inline' https://* http://${localServerUrl} http://0.0.0.0:${localPort}`,
-			`img-src ${webview.cspSource} data:`,
+			`img-src ${webview.cspSource} https://avatars.githubusercontent.com data:`,
 			`script-src 'unsafe-eval' https://* https://*.posthog.com http://${localServerUrl} http://0.0.0.0:${localPort} 'nonce-${nonce}'`,
 			`connect-src https://* https://*.posthog.com ws://${localServerUrl} ws://0.0.0.0:${localPort} http://${localServerUrl} http://0.0.0.0:${localPort}`,
 		]

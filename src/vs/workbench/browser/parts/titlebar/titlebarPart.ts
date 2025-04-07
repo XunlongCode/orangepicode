@@ -700,6 +700,7 @@ export class BrowserTitlebarPart extends Part implements ITitlebarPart {
 			// 	actions.primary.push(GLOBAL_ACTIVITY_TITLE_ACTION);
 			// }
 
+			// actions.primary.push(ACCOUNTS_ACTIVITY_TILE_ACTION);
 			// actions.primary.push(GLOBAL_ACTIVITY_TITLE_ACTION);
 
 			const orangeSettingsAction = new Action(

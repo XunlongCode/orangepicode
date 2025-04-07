@@ -1,15 +1,16 @@
-import vscode from 'vscode';
-import CoreProvider, { ORANGEPICODE_SETTINGS_VIEWID } from './core/CoreProvider';
+import vscode from 'vscode'
+import CoreProvider, { ORANGEPICODE_SETTINGS_VIEWID } from './core/CoreProvider'
+import { importUserSettingsFromCursor, importUserSettingsFromVSCode } from './utils/copySettings'
 
-export const CREATE_OVERLAY_COMMAND_ID = 'workbench.action.createOverlay';
-export const SHOW_OVERLAY_COMMAND_ID = 'workbench.action.showOverlay';
-export const HIDE_OVERLAY_COMMAND_ID = 'workbench.action.hideOverlay';
-export const TOGGLE_OVERLAY_COMMAND_ID = 'workbench.action.toggleOverlay';
+export const CREATE_OVERLAY_COMMAND_ID = 'workbench.action.createOverlay'
+export const SHOW_OVERLAY_COMMAND_ID = 'workbench.action.showOverlay'
+export const HIDE_OVERLAY_COMMAND_ID = 'workbench.action.hideOverlay'
+export const TOGGLE_OVERLAY_COMMAND_ID = 'workbench.action.toggleOverlay'
 
 export type CreateOverlayOptions = {
-	id?: string;
-	viewId?: string;
-	styles?: Record<string, string>;
+	id?: string
+	viewId?: string
+	styles?: Record<string, string>
 }
 
 export type RegisterCommandOptions = {
@@ -41,6 +42,10 @@ const getUsermenuCommandsMap = ({ context, outputChannel, provider }: RegisterCo
 
 	return {
 		'orangepicode-core.showUsermenu': async () => {
+			await provider.postMessageToWebview({
+				type: "onShowUsermenu"
+			})
+
 			await vscode.commands.executeCommand(CREATE_OVERLAY_COMMAND_ID, usermenuOverlayOptions)
 			await vscode.commands.executeCommand(SHOW_OVERLAY_COMMAND_ID, usermenuOverlayOptions.id)
 		},
@@ -57,10 +62,64 @@ const getUsermenuCommandsMap = ({ context, outputChannel, provider }: RegisterCo
 		},
 		"orangepicode-core.openSettingsInNewTab": async () => {
 			openSettingsInNewTab({ context, outputChannel })
+		},
+		"orangepicode-core.github.login": async () => {
+			return await vscode.authentication.getSession('github', ['repo'], { createIfNone: true })
+		},
+		"orangepicode-core.github.logout": async () => {
+			const authConfig = vscode.workspace.getConfiguration('github')
+			await authConfig.update('authenticationProvider', undefined, true)
+
+			await provider.postMessageToWebview({
+				type: "githubLogoutSuccess"
+			})
+			return true
+		},
+		"orangepicode-core.github.getSession": async () => {
+			return await vscode.authentication.getSession('github', ['repo'], { createIfNone: false })
+		},
+		"orangepicode-core.setTheme": async (theme: string) => {
+			console.log("Setting theme to:", theme)
+			if (!theme) {
+				vscode.window.showErrorMessage("Invalid theme")
+				return
+			}
+
+			try {
+				// 使用配置方式更改主题
+				await vscode.workspace.getConfiguration().update('workbench.colorTheme', theme, true)
+			} catch (error) {
+				console.error("切换主题失败:", error)
+				vscode.window.showErrorMessage(`${error}`)
+			}
+		},
+		"orangepicode-core.getCurrentTheme": async () => {
+			return vscode.workspace.getConfiguration().get('workbench.colorTheme')
+		},
+		"orangepicode-core.importUserSettingsFromVSCode": async () => {
+			let result
+			try {
+				result = await importUserSettingsFromVSCode()
+			} catch (error) {
+				result = { ok: false, error: error }
+				vscode.window.showErrorMessage(`Failed to import settings: ${error}`)
+			}
+			return result
+		},
+		"orangepicode-core.importUserSettingsFromCursor": async () => {
+			let result
+			try {
+				result = await importUserSettingsFromCursor()
+			} catch (error) {
+				result = { ok: false, error: error }
+				vscode.window.showErrorMessage(`Failed to import settings: ${error}`)
+			}
+			return result
 		}
 	}
 }
 
+// 已弃用，请查看orangepiaicode插件里的实现
 const openSettingsInNewTab = async ({ context, outputChannel }: Omit<RegisterCommandOptions, "provider">) => {
 	outputChannel.appendLine("Opening Settings in new tab")
 	// (This example uses webviewProvider activation event which is necessary to

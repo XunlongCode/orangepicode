@@ -7,6 +7,7 @@
 	"account": "账户",
 	"currentAccount": "当前登录账号",
 	"logout": "退出登录",
+	"login": "登录",
 	"theme": "主题",
 	"language": "语言",
 	"importSettings": "导入配置",

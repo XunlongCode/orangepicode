@@ -44,8 +44,8 @@ import '../common/promptSyntax/languageFeatures/promptLinkProvider.js';
 import '../common/promptSyntax/languageFeatures/promptPathAutocompletion.js';
 import { PromptsService } from '../common/promptSyntax/service/promptsService.js';
 import { IPromptsService } from '../common/promptSyntax/service/types.js';
-// import './promptSyntax/contributions/usePromptCommand.js';
-// import './promptSyntax/contributions/createPromptCommand/createPromptCommand.js';
+import './promptSyntax/contributions/usePromptCommand.js';
+import './promptSyntax/contributions/createPromptCommand/createPromptCommand.js';
 import { LanguageModelToolsExtensionPointHandler } from '../common/tools/languageModelToolsContribution.js';
 import { BuiltinToolsContribution } from '../common/tools/tools.js';
 import { IVoiceChatService, VoiceChatService } from '../common/voiceChatService.js';
@@ -56,7 +56,7 @@ import {
 } from './actions/chatActions.js';
 import {
 	ACTION_ID_NEW_CHAT,
-	// registerNewChatActions
+	//  registerNewChatActions
 } from './actions/chatClearActions.js';
 import { CodeBlockActionRendering, registerChatCodeBlockActions, registerChatCodeCompareBlockActions } from './actions/chatCodeblockActions.js';
 // import { registerChatContextActions } from './actions/chatContextActions.js';

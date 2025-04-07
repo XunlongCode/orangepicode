@@ -57,6 +57,15 @@ export interface ExtensionMessage {
 	| "remoteBrowserEnabled"
 	| "ttsStart"
 	| "ttsStop"
+	| "githubLoginSuccess"
+	| "githubLogoutSuccess"
+	| "getGitHubSessionSuccess"
+	| "getCurrentThemeSuccess"
+	| "importUserSettingsFromVSCodeDone"
+	| "importUserSettingsFromCursorDone"
+	importUserSettingsFromVSCodeResult?: { ok: boolean, error?: any }
+	importUserSettingsFromCursorResult?: { ok: boolean, error?: any }
+	theme?: string
 	text?: string
 	action?:
 	| "chatButtonClicked"
@@ -94,6 +103,14 @@ export interface ExtensionMessage {
 	values?: Record<string, any>
 	requestId?: string
 	promptText?: string
+	githubSession?: {
+		id: any,
+		scopes: any,
+		account: {
+			label: any,
+			id: any
+		}
+	} | null
 }
 
 export interface ApiConfigMeta {

@@ -765,6 +765,23 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
       `
 	}
 
+	private onWebviewDidLaunch() {
+		vscode.workspace.onDidChangeConfiguration(async (event) => {
+			// 监听主题变化
+			if (event.affectsConfiguration('workbench.colorTheme')) {
+				const theme = vscode.workspace.getConfiguration('workbench').get<string>('colorTheme');
+				if (!theme) {
+					return
+				}
+
+				this.postMessageToWebview({
+					type: "getCurrentThemeSuccess",
+					theme: theme
+				})
+			}
+		})
+	}
+
 	/**
 	 * Sets up an event listener to listen for messages passed from the webview context and
 	 * executes code based on the message that is recieved.
@@ -776,6 +793,8 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			async (message: WebviewMessage) => {
 				switch (message.type) {
 					case "webviewDidLaunch":
+						this.onWebviewDidLaunch()
+
 						// Load custom modes first
 						const customModes = await this.customModesManager.getCustomModes()
 						await this.updateGlobalState("customModes", customModes)
@@ -2045,6 +2064,105 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 						const isOptedIn = telemetrySetting === "enabled"
 						telemetryService.updateTelemetryState(isOptedIn)
 						await this.postStateToWebview()
+						break
+					}
+
+					case "githubLogin": {
+						try {
+							const session: vscode.AuthenticationSession = await vscode.commands.executeCommand("orangepicode-core.github.login")
+							console.log("orangepicode-core.github.login session", session);
+							if (!session) {
+								break
+							}
+
+							await this.postMessageToWebview({
+								type: "githubLoginSuccess",
+							});
+						} catch (error) {
+							console.error("GitHub 登录失败:", error);
+							vscode.window.showErrorMessage(`${error}`);
+						}
+						break;
+					}
+					case "logout": {
+						try {
+							// 退出github登录
+							await vscode.commands.executeCommand("orangepicode-core.github.logout")
+							// 通知webview
+							this.postMessageToWebview({
+								type: "githubLogoutSuccess",
+							})
+
+							// 退出其他的登录...
+						} catch (error) {
+							console.error("退出登录失败:", error);
+							vscode.window.showErrorMessage(`${error}`);
+						}
+						break;
+					}
+
+					case "getGitHubSession": {
+						try {
+							const session: vscode.AuthenticationSession = await vscode.commands.executeCommand('orangepicode-core.github.getSession')
+							if (!session) {
+								return
+							}
+
+							await this.postMessageToWebview({
+								type: "getGitHubSessionSuccess",
+								githubSession: {
+									id: session.id,
+									scopes: session.scopes,
+									account: {
+										label: session.account.label,
+										id: session.account.id
+									}
+								}
+							})
+						} catch (error) {
+							console.error("获取 GitHub 登录信息失败:", error)
+							vscode.window.showErrorMessage(`${error}`)
+						}
+						break;
+					}
+
+					case "setTheme": {
+						await vscode.commands.executeCommand("orangepicode-core.setTheme", message.theme)
+						break
+					}
+
+					case "getCurrentTheme": {
+						const theme: string = await vscode.commands.executeCommand("orangepicode-core.getCurrentTheme")
+						this.postMessageToWebview({
+							type: "getCurrentThemeSuccess",
+							theme,
+						})
+						break
+					}
+
+					case "importUserSettingsFromVSCode": {
+						const result: any = await vscode.commands.executeCommand("orangepicode-core.importUserSettingsFromVSCode")
+						this.postMessageToWebview({
+							type: "importUserSettingsFromVSCodeDone",
+							importUserSettingsFromVSCodeResult: result
+						})
+						break;
+					}
+					case "importUserSettingsFromCursor": {
+						const result: any = await vscode.commands.executeCommand("orangepicode-core.importUserSettingsFromCursor")
+						this.postMessageToWebview({
+							type: "importUserSettingsFromCursorDone",
+							importUserSettingsFromCursorResult: result
+						})
+						break
+					}
+
+					case "openVSCodeSettings": {
+						await vscode.commands.executeCommand("workbench.action.openSettings")
+						break
+					}
+					case "openVSCodeKeyboardShortcuts": {
+						await vscode.commands.executeCommand("workbench.action.openGlobalKeybindings")
 						break
 					}
 				}

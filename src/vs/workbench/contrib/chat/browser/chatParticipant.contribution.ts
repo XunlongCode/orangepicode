@@ -44,7 +44,7 @@ const chatViewContainer: ViewContainer = Registry.as<IViewContainersRegistry>(Vi
 	order: 100,
 }, ViewContainerLocation.AuxiliaryBar, { isDefault: true, doNotRegisterOpenCommand: true });
 
-const chatViewDescriptor: IViewDescriptor[] = [{
+export const chatViewDescriptor: IViewDescriptor[] = [{
 	id: ChatViewId,
 	containerIcon: chatViewContainer.icon,
 	containerTitle: chatViewContainer.title.value,
@@ -72,7 +72,7 @@ const chatViewDescriptor: IViewDescriptor[] = [{
 		ChatContextKeys.extensionInvalid
 	)
 }];
-Registry.as<IViewsRegistry>(ViewExtensions.ViewsRegistry).registerViews(chatViewDescriptor, chatViewContainer);
+// Registry.as<IViewsRegistry>(ViewExtensions.ViewsRegistry).registerViews(chatViewDescriptor, chatViewContainer);
 
 // --- Edits Container &  View Registration
 
@@ -86,7 +86,7 @@ const editsViewContainer: ViewContainer = Registry.as<IViewContainersRegistry>(V
 	order: 101,
 }, ViewContainerLocation.AuxiliaryBar, { doNotRegisterOpenCommand: true });
 
-const editsViewDescriptor: IViewDescriptor[] = [{
+export const editsViewDescriptor: IViewDescriptor[] = [{
 	id: 'workbench.panel.chat.view.edits',
 	containerIcon: editsViewContainer.icon,
 	containerTitle: editsViewContainer.title.value,
@@ -113,7 +113,7 @@ const editsViewDescriptor: IViewDescriptor[] = [{
 		ChatContextKeys.editingParticipantRegistered
 	)
 }];
-Registry.as<IViewsRegistry>(ViewExtensions.ViewsRegistry).registerViews(editsViewDescriptor, editsViewContainer);
+// Registry.as<IViewsRegistry>(ViewExtensions.ViewsRegistry).registerViews(editsViewDescriptor, editsViewContainer);
 
 const chatParticipantExtensionPoint = extensionsRegistry.ExtensionsRegistry.registerExtensionPoint<IRawChatParticipantContribution[]>({
 	extensionPoint: 'chatParticipants',

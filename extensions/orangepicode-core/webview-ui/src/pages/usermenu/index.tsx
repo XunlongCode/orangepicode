@@ -93,6 +93,7 @@ export const Usermenu: FC = () => {
 		vscode.postMessage({
 			type: "logout"
 		})
+		hideUsermenu()
 	}
 
 	// 点击登录

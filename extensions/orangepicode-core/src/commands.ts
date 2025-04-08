@@ -1,4 +1,4 @@
-import vscode from 'vscode'
+import vscode, { AuthenticationGetSessionOptions } from 'vscode'
 import CoreProvider, { ORANGEPICODE_SETTINGS_VIEWID } from './core/CoreProvider'
 import { importUserSettingsFromCursor, importUserSettingsFromVSCode } from './utils/copySettings'
 
@@ -67,6 +67,10 @@ const getLanguagePackById = (id: string): LanguagePack => {
 	}
 }
 
+const getGithubSession = async (options?: AuthenticationGetSessionOptions) => {
+	return await vscode.authentication.getSession('github', ['read:user', 'user:email'], options)
+}
+
 const getUsermenuCommandsMap = ({ context, outputChannel, provider }: RegisterCommandOptions) => {
 	const usermenuOverlayOptions: CreateOverlayOptions = {
 		id: "orangepicode-core-usermenu",
@@ -103,11 +107,18 @@ const getUsermenuCommandsMap = ({ context, outputChannel, provider }: RegisterCo
 			openSettingsInNewTab({ context, outputChannel })
 		},
 		"orangepicode-core.github.login": async () => {
-			return await vscode.authentication.getSession('github', ['repo'], { createIfNone: true })
+			const githubSession = await getGithubSession({
+				forceNewSession: true
+			})
+			return githubSession
 		},
 		"orangepicode-core.github.logout": async () => {
-			const authConfig = vscode.workspace.getConfiguration('github')
-			await authConfig.update('authenticationProvider', undefined, true)
+			// 退出登录 GitHub
+			const githubSession = await getGithubSession({ createIfNone: false })
+			if (githubSession) {
+				await vscode.commands.executeCommand('_signOutOfAccountWithoutConfirmation',
+					{ providerId: 'github', accountLabel: githubSession.account.label })
+			}
 
 			await provider.postMessageToWebview({
 				type: "githubLogoutSuccess"
@@ -115,7 +126,7 @@ const getUsermenuCommandsMap = ({ context, outputChannel, provider }: RegisterCo
 			return true
 		},
 		"orangepicode-core.github.getSession": async () => {
-			return await vscode.authentication.getSession('github', ['repo'], { createIfNone: false })
+			return await getGithubSession({ createIfNone: false })
 		},
 		"orangepicode-core.setTheme": async (theme: string) => {
 			console.log("Setting theme to:", theme)

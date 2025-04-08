@@ -52,3 +52,31 @@ export class SignOutOfAccountAction extends Action2 {
 		}
 	}
 }
+
+export class SignOutOfAccountActionWithoutConfirmation extends Action2 {
+	constructor() {
+		super({
+			id: '_signOutOfAccountWithoutConfirmation',
+			title: localize('signOutOfAccount', "Sign out of account"),
+			f1: false
+		});
+	}
+
+	override async run(accessor: ServicesAccessor, { providerId, accountLabel }: { providerId: string; accountLabel: string }): Promise<void> {
+		const authenticationService = accessor.get(IAuthenticationService);
+		const authenticationUsageService = accessor.get(IAuthenticationUsageService);
+		const authenticationAccessService = accessor.get(IAuthenticationAccessService);
+
+		if (!providerId || !accountLabel) {
+			throw new Error('Invalid arguments. Expected: { providerId: string; accountLabel: string }');
+		}
+
+		const allSessions = await authenticationService.getSessions(providerId);
+		const sessions = allSessions.filter(s => s.account.label === accountLabel);
+
+		const removeSessionPromises = sessions.map(session => authenticationService.removeSession(providerId, session.id));
+		await Promise.all(removeSessionPromises);
+		authenticationUsageService.removeAccountUsage(providerId, accountLabel);
+		authenticationAccessService.removeAllowedExtensions(providerId, accountLabel);
+	}
+}

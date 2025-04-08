@@ -66,18 +66,42 @@ const General: FC = () => {
 		label: ""
 	})
 
-	const [currentLanguage, setCurrentLanguage] = useState(window.language?.toLocaleLowerCase() === "zh-cn" ? {
-		label: "中文",
-		value: "zh-CN"
-	} : {
+	const [currentLanguage, setCurrentLanguage] = useState({
 		label: "English",
 		value: "en"
 	})
 	const [langPopverOpen, setLangPopoverOpen] = useState(false)
 	const [themePopverOpen, setThemePopoverOpen] = useState(false)
 
+	const getCurrentLanguage = () => {
+		const languageId = window.language?.toLocaleLowerCase() ?? "en"
+		switch (languageId) {
+			case "zh-cn":
+				return {
+					label: "中文",
+					value: "zh-CN"
+				}
+
+			case "en":
+				return {
+					label: "English",
+					value: "en"
+				}
+
+			default:
+				return {
+					label: languageId,
+					value: languageId
+				}
+		}
+	}
+
 	useEffect(() => {
 		vscode.postMessage({ type: "getCurrentTheme" })
+
+		setCurrentLanguage(
+			getCurrentLanguage()
+		)
 	}, [])
 
 	useWebviewListener("getCurrentThemeSuccess", async (message) => {

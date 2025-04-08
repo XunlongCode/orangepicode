@@ -12,7 +12,7 @@ import { IExtensionManifest } from '../../../../platform/extensions/common/exten
 import { SyncDescriptor } from '../../../../platform/instantiation/common/descriptors.js';
 import { Registry } from '../../../../platform/registry/common/platform.js';
 import { IWorkbenchContribution, WorkbenchPhase, registerWorkbenchContribution2 } from '../../../common/contributions.js';
-import { SignOutOfAccountAction } from './actions/signOutOfAccountAction.js';
+import { SignOutOfAccountAction, SignOutOfAccountActionWithoutConfirmation } from './actions/signOutOfAccountAction.js';
 import { IAuthenticationService } from '../../../services/authentication/common/authentication.js';
 import { IBrowserWorkbenchEnvironmentService } from '../../../services/environment/browser/environmentService.js';
 import { Extensions, IExtensionFeatureTableRenderer, IExtensionFeaturesRegistry, IRenderedData, IRowData, ITableData } from '../../../services/extensionManagement/common/extensionFeatures.js';
@@ -115,6 +115,7 @@ class AuthenticationContribution extends Disposable implements IWorkbenchContrib
 
 	private _registerActions(): void {
 		this._register(registerAction2(SignOutOfAccountAction));
+		this._register(registerAction2(SignOutOfAccountActionWithoutConfirmation));
 		this._register(registerAction2(ManageTrustedExtensionsForAccountAction));
 		this._register(registerAction2(ManageAccountPreferencesForExtensionAction));
 	}

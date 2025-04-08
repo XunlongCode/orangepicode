@@ -407,3 +407,10 @@
 	border-radius: 16px;
 	text-align: center;
 }
+
+/* Custom */
+.monaco-workbench .part.titlebar > .titlebar-container > .titlebar-center > .window-title > .command-center .action-item.command-center-center {
+	height: 30px;
+	justify-content: start;
+	padding: 0 10px;
+}

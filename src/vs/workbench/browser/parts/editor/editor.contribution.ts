@@ -175,8 +175,8 @@ registerAction2(ChangeLanguageAction);
 registerAction2(ChangeEOLAction);
 registerAction2(ChangeEncodingAction);
 
-// registerAction2(NavigateForwardAction);
-// registerAction2(NavigateBackwardsAction);
+registerAction2(NavigateForwardAction);
+registerAction2(NavigateBackwardsAction);
 
 registerAction2(OpenNextEditor);
 registerAction2(OpenPreviousEditor);

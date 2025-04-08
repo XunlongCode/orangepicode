@@ -627,37 +627,6 @@ export class BrowserTitlebarPart extends Part implements ITitlebarPart {
 
 		const updateToolBarActions = () => {
 			const actions: IToolbarActions = { primary: [], secondary: [] };
-			// 创建导航操作
-			const navigationActions: IAction[] = [];
-
-			// 方法1：使用 Action 类创建简单操作
-			const backAction = new Action(
-				'workbench.action.navigateBack',
-				localize('navigateBack', "Go Back"),
-				'codicon-arrow-left',
-				true,
-				async () => this.instantiationService.invokeFunction(accessor => {
-					const commandService = accessor.get(ICommandService);
-					return commandService.executeCommand('workbench.action.navigateBack');
-				})
-			);
-
-			const forwardAction = new Action(
-				'workbench.action.navigateForward',
-				localize('navigateForward', "Go Forward"),
-				'codicon-arrow-right',
-				true,
-				async () => this.instantiationService.invokeFunction(accessor => {
-					const commandService = accessor.get(ICommandService);
-					return commandService.executeCommand('workbench.action.navigateForward');
-				})
-			);
-
-			navigationActions.push(backAction);
-			navigationActions.push(forwardAction);
-
-			// 将导航按钮添加到主要操作的开头
-			actions.primary.push(...navigationActions);
 
 			// --- Editor Actions
 			if (this.editorActionsEnabled) {

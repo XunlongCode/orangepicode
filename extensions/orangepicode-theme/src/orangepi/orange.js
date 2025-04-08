@@ -83,8 +83,8 @@ const orange_color = {
 		"statusBar.debuggingBackground": "#f9826c",
 		"statusBar.debuggingForeground": "#fff",
 		"statusBarItem.prominentBackground": "#e8eaed",
-		"statusBarItem.remoteForeground": "#586069",
-		"statusBarItem.remoteBackground": "#fff",
+		"statusBarItem.remoteForeground": "#FFF2D7",
+		"statusBarItem.remoteBackground": "#FFF2D7", //底部左下角打开命令行的颜色
 		"editorGroupHeader.tabsBackground": "#f6f8fa",
 		"editorGroupHeader.tabsBorder": "#e1e4e8",
 		"editorGroup.border": "#e1e4e8",

@@ -74,7 +74,7 @@
     "statusBar.debuggingForeground": "#fff",
     "statusBarItem.prominentBackground": "#282e34",
     "statusBarItem.remoteForeground": "#d1d5da",
-    "statusBarItem.remoteBackground": "#24292e",
+    "statusBarItem.remoteBackground": "#31343E",
     "editorGroupHeader.tabsBackground": "#1f2428",
     "editorGroupHeader.tabsBorder": "#1b1f23",
     "editorGroup.border": "#1b1f23",

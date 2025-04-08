@@ -32,14 +32,23 @@ export const Usermenu: FC = () => {
 	}, [themeSubOpen, languageSubOpen])
 
 	useWebviewListener("onShowUsermenu", async () => {
+		// 聚焦到windows
+		window.focus()
 		setLanguageSubOpen(false)
 		setThemeSubOpen(false)
 	})
 
 	useEffect(() => {
+		// 监听网页失焦
+		window.addEventListener("blur", hideUsermenu)
+
 		vscode.postMessage({
 			type: "getGitHubSession"
 		})
+
+		return () => {
+			window.removeEventListener("blur", hideUsermenu)
+		}
 	}, [])
 
 	useWebviewListener("getGitHubSessionSuccess", async (message) => {

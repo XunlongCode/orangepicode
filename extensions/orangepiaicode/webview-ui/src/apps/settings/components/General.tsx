@@ -233,7 +233,7 @@ const General: FC = () => {
 		})
 	}
 
-	return <div>
+	return <div className='text-vscode-foreground'>
 		<div className='text-[24px] font-medium mb-[16px]'>
 			{t("general", { ns: "settingsApp" })}
 		</div>
@@ -244,7 +244,7 @@ const General: FC = () => {
 
 		{
 			userInfo ? <>
-				<div className='text-[14px] mb-[12px] text-foreground/70'>
+				<div className='text-[14px] mb-[12px] text-vscode-foreground/70'>
 					{t("currentAccount", { ns: "settingsApp" })}: {userInfo?.label}
 				</div>
 				<div className='mb-[24px]'>
@@ -313,7 +313,7 @@ const General: FC = () => {
 				</div>
 			</PopoverTrigger>
 			<PopoverContent className='p-0 border-none w-[var(--radix-popover-trigger-width)] !animate-none'>
-				<div className='w-full flex flex-col text-foreground bg-secondary'>
+				<div className='w-full flex flex-col text-vscode-foreground bg-secondary'>
 					<div className='h-[5px]'></div>
 					<LanguageItem
 						value={{ value: "zh-CN", label: "简体中文" }}
@@ -339,7 +339,7 @@ const General: FC = () => {
 			{t("importSettings", { ns: "settingsApp" })}
 		</div>
 
-		<div className='text-[14px] mb-[12px] text-foreground/70'>
+		<div className='text-[14px] mb-[12px] text-vscode-foreground/70'>
 			{t("importSettingsDescription", { ns: "settingsApp" })}
 		</div>
 
@@ -358,7 +358,7 @@ const General: FC = () => {
 			{t("editorSettings", { ns: "settingsApp" })}
 		</div>
 
-		<div className='text-[14px] mb-[12px] text-foreground/70'>
+		<div className='text-[14px] mb-[12px] text-vscode-foreground/70'>
 			{t("editorSettingsDescription", { ns: "settingsApp" })}
 		</div>
 
@@ -368,11 +368,11 @@ const General: FC = () => {
 			</Button>
 		</div>
 
-		<div className='text-[14px] mb-[12px] text-foreground/70'>
+		<div className='text-[14px] mb-[12px] text-vscode-foreground/70'>
 			{t("keyboardShortcutsSettings", { ns: "settingsApp" })}
 		</div>
 
-		<div className='text-[14px] mb-[12px] text-foreground/70'>
+		<div className='text-[14px] mb-[12px] text-vscode-foreground/70'>
 			{t("keyboardShortcutsSettingsDescription", { ns: "settingsApp" })}
 		</div>
 

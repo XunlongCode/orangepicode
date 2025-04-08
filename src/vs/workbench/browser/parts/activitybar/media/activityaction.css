@@ -12,7 +12,7 @@
 .monaco-workbench .activitybar > .content .composite-bar > .monaco-action-bar .action-item::after {
 	position: absolute;
 	content: '';
-	width: 48px;
+	width: 4px;
 	height: 2px;
 	display: none;
 	background-color: transparent;

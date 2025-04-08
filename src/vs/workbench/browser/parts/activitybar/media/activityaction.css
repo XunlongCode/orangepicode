@@ -232,3 +232,7 @@
 	height: calc(100% - 12px);
 	left: 6px;
 }
+
+.monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item.checked .active-item-indicator::before {
+	border: none;
+}

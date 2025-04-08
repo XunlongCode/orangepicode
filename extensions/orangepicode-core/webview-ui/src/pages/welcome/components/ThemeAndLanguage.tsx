@@ -7,11 +7,13 @@ import { Button } from '../../../components/ui/button';
 import { useTranslation } from 'react-i18next';
 import { vscode } from '../../../utils/vscode';
 
+type LableValue = { value: string, label: string }
+
 const ThemeItem: FC<{
-	value: { value: string, label: string },
+	value: LableValue,
 	isSelected: boolean,
 	imgSrc: string,
-	onChange: (value: { value: string, label: string }) => void
+	onChange: (value: LableValue) => void
 }> = ({ value, isSelected, imgSrc, onChange }) => {
 
 	return <button className={cn(
@@ -29,9 +31,9 @@ const ThemeItem: FC<{
 }
 
 const LanguageItem: FC<{
-	value: { value: string, label: string },
+	value: LableValue,
 	// isSelected: boolean,
-	onChange: (value: { value: string, label: string }) => void
+	onChange: (value: LableValue) => void
 }> = ({
 	value,
 	//  isSelected,
@@ -42,7 +44,11 @@ const LanguageItem: FC<{
 		</button>
 	}
 
-const ThemeAndLanguage: FC<{ onNext: () => void }> = ({ onNext }) => {
+const ThemeAndLanguage: FC<{
+	onNext: () => void
+	language: LableValue
+	setLanguage: (language: LableValue) => void
+}> = ({ onNext, language, setLanguage }) => {
 	const { t, i18n } = useTranslation()
 
 	const [currentTheme, setCurrentTheme] = useState({
@@ -50,18 +56,7 @@ const ThemeAndLanguage: FC<{ onNext: () => void }> = ({ onNext }) => {
 		label: t("darkTheme", { ns: "theme" })
 	})
 
-	const initLanguage = window.language?.toLocaleLowerCase() === "zh-cn" ? {
-		label: "中文",
-		value: "zh-CN"
-	} : {
-		label: "English",
-		value: "en"
-	}
-
-	const [currentLanguage, setCurrentLanguage] = useState(initLanguage)
-	const [langPopverOpen, setLangPopoverOpen] = useState(false)
-
-	const selectTheme = (value: { value: string, label: string }) => {
+	const selectTheme = (value: LableValue) => {
 		setCurrentTheme(value)
 		vscode.postMessage({
 			type: "setTheme",
@@ -69,13 +64,11 @@ const ThemeAndLanguage: FC<{ onNext: () => void }> = ({ onNext }) => {
 		})
 	}
 
-	const selectLanguage = (value: { value: string, label: string }) => {
-		setCurrentLanguage(value)
+	const [langPopverOpen, setLangPopoverOpen] = useState(false)
+
+	const selectLanguage = (value: LableValue) => {
+		setLanguage(value)
 		i18n.changeLanguage(value.value)
-		vscode.postMessage({
-			type: "setLanguage",
-			language: value.value.toLowerCase()
-		})
 	}
 
 	return <div>
@@ -114,11 +107,11 @@ const ThemeAndLanguage: FC<{ onNext: () => void }> = ({ onNext }) => {
 			<Popover open={langPopverOpen} onOpenChange={setLangPopoverOpen}>
 				<PopoverTrigger className='w-full h-8 bg-secondary flex items-center justify-between rounded px-[10px]'>
 					<div className='text-sm'>
-						{currentLanguage.label}
+						{language.label}
 					</div>
 					<div className={cn({ "rotate-180": langPopverOpen })}>
 						<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path d="M12.2368 4.70752L7 9.94434L1.76318 4.70752" stroke="#DADDE5" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round" />
+							<path d="M12.2368 4.70752L7 9.94434L1.76318 4.70752" stroke="#DADDE5" strokeWidth="1.67" strokeLinecap="round" strokeLinejoin="round" />
 						</svg>
 					</div>
 				</PopoverTrigger>

@@ -1712,9 +1712,13 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 						await this.postStateToWebview()
 						break
 					case "language":
-						changeLanguage(message.text ?? "en")
-						await this.updateGlobalState("language", message.text)
-						await this.postStateToWebview()
+						// changeLanguage(message.text ?? "en")
+						// await this.updateGlobalState("language", message.text)
+						// await this.postStateToWebview()
+						await vscode.commands.executeCommand(
+							"orangepicode-core.setLanguageById",
+							message.text,
+						)
 						break
 					case "showRooIgnoredFiles":
 						await this.updateGlobalState("showRooIgnoredFiles", message.bool ?? true)

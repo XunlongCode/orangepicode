@@ -10,7 +10,7 @@ import { IExtensionManifest } from '../../../../platform/extensions/common/exten
 import { SyncDescriptor } from '../../../../platform/instantiation/common/descriptors.js';
 import { Registry } from '../../../../platform/registry/common/platform.js';
 import { IWorkbenchContribution } from '../../../common/contributions.js';
-import { ClearDisplayLanguageAction, ConfigureDisplayLanguageAction } from './localizationsActions.js';
+import { ClearDisplayLanguageAction, ConfigureDisplayLanguageAction, SetDisplayLanguageAction } from './localizationsActions.js';
 import { IExtensionFeatureTableRenderer, IRenderedData, ITableData, IRowData, IExtensionFeaturesRegistry, Extensions } from '../../../services/extensionManagement/common/extensionFeatures.js';
 import { ExtensionsRegistry } from '../../../services/extensions/common/extensionsRegistry.js';
 
@@ -21,6 +21,7 @@ export class BaseLocalizationWorkbenchContribution extends Disposable implements
 		// Register action to configure locale and related settings
 		registerAction2(ConfigureDisplayLanguageAction);
 		registerAction2(ClearDisplayLanguageAction);
+		registerAction2(SetDisplayLanguageAction);
 
 		ExtensionsRegistry.registerExtensionPoint({
 			extensionPoint: 'localizations',

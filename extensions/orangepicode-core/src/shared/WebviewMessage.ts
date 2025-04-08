@@ -21,4 +21,5 @@ export interface WebviewMessage {
 	theme?: string
 	themeType?: string
 	language?: string
+	setLanguageSkipDialog?: boolean
 }

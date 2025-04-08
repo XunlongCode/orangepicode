@@ -8,6 +8,13 @@ import AccountLogin from './components/AccountLogin';
 
 const Welcome: FC = () => {
 	const [currentStep, setCurrentStep] = useState(0)
+	const [language, setLanguage] = useState(window.language?.toLocaleLowerCase() === "zh-cn" ? {
+		label: "中文",
+		value: "zh-CN"
+	} : {
+		label: "English",
+		value: "en"
+	})
 
 	useEffect(() => {
 		vscode.postMessage({ type: "hideOnboardingLoading" })
@@ -19,6 +26,11 @@ const Welcome: FC = () => {
 
 	const onCompletion = () => {
 		vscode.postMessage({ type: 'completeOnboarding' })
+		vscode.postMessage({
+			type: "setLanguage",
+			language: language.value,
+			setLanguageSkipDialog: true
+		})
 	}
 
 	const onNext = () => {
@@ -33,7 +45,11 @@ const Welcome: FC = () => {
 	return (
 		<VscodeTheme className="flex flex-col h-full w-full select-none items-center justify-center bg-background text-foreground p-5">
 			{currentStep === 0 && <SplashScreen onNext={onNext} />}
-			{currentStep === 1 && <ThemeAndLanguage onNext={onNext} />}
+			{currentStep === 1 && <ThemeAndLanguage
+				onNext={onNext}
+				language={language}
+				setLanguage={setLanguage}
+			/>}
 			{currentStep === 2 && <ImportSettings onNext={onNext} />}
 			{currentStep === 3 && <AccountLogin onNext={onNext} />}
 		</VscodeTheme>

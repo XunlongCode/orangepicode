@@ -116,58 +116,16 @@ class CoreProvider implements vscode.WebviewViewProvider {
 				}
 
 				case "setLanguage": {
-					console.log("Setting language to:", message["language"]);
-
-					// 通过安装语言包扩展来切换语言
-					if (message["language"] === "en" || message["language"] === "zh-CN") {
-						console.log("当前执行", message["language"]);
-
-						// 根据语言选择对应的语言包扩展ID
-						const languageExtensionId = message["language"] === "en"
-							? "ms-ceintl.vscode-language-pack-en"
-							: "MS-CEINTL.vscode-language-pack-zh-hans";
-
-						// 显示正在切换语言的消息
-						vscode.window.showInformationMessage(`正在切换到${message["language"] === "en" ? "英文" : "中文"}界面...`);
-
-						// 使用命令安装语言包扩展
-						vscode.commands.executeCommand('workbench.extensions.installExtension', languageExtensionId)
-							.then(
-								() => {
-									// 安装成功后，直接修改配置文件
-									return vscode.workspace.getConfiguration().update('locale', message["language"], vscode.ConfigurationTarget.Global);
-								}
-							)
-							.then(
-								() => {
-									const msg = message["language"] === "en"
-										? '已切换到英文界面，请重启 VS Code 以应用更改'
-										: '已切换到中文界面，请重启 VS Code 以应用更改';
-									vscode.window.showInformationMessage(msg);
-
-									// 提示用户重启 VS Code
-									vscode.window.showInformationMessage('需要重启 VS Code 以应用语言更改', '重启').then(selection => {
-										if (selection === '重启') {
-											vscode.commands.executeCommand('workbench.action.reloadWindow');
-										}
-									});
-								},
-								(error) => {
-									console.error("Failed to set language:", error);
-									vscode.window.showErrorMessage(`切换语言失败: ${error.message}`);
-
-									// 如果失败，尝试打开语言设置界面
-									vscode.commands.executeCommand('workbench.action.configureLocale')
-										.then(() => {
-											vscode.window.showInformationMessage(`请在设置中手动将语言设置为: ${message["language"]}`);
-										});
-								}
-							);
-					} else {
-						console.warn("不支持的语言:", message["language"]);
-						vscode.window.showWarningMessage(`Unsupported language ${message["language"]}`);
+					if (!message.language) {
+						return
 					}
-					break;
+
+					await vscode.commands.executeCommand(
+						"orangepicode-core.setLanguageById",
+						message.language,
+						message.setLanguageSkipDialog
+					)
+					break
 				}
 
 				case "githubLogin": {

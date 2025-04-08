@@ -1113,7 +1113,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 				display: isHidden ? "none" : "flex",
 				flexDirection: "column",
 				overflow: "hidden",
-				margin: "16px 24px 0"
+				padding: "16px 24px 0",
 			}}>
 			{task ? (
 				<>
@@ -1311,7 +1311,12 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 				</>
 			)}
 
-			<div className='my-[16px] bg-secondary rounded-[8px]'>
+			<div
+				className='my-[16px] bg-vscode-background rounded-[8px]'
+				style={{
+					boxShadow: "0px 0px 20px 0px #00000033"
+				}}
+			>
 				<AutoApproveMenu
 					isExpandedExternal={isAutoApproveMenuExpanded}
 					onExpandChange={handleAutoApproveMenuExpandChange}

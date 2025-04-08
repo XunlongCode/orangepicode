@@ -61,20 +61,18 @@ const General: FC = () => {
 		setUserInfo(message.githubSession?.account ?? null);
 	})
 
-	const initLanguage = window.language?.toLocaleLowerCase() === "zh-cn" ? {
-		label: "中文",
-		value: "zh-CN"
-	} : {
-		label: "English",
-		value: "en"
-	}
-
 	const [currentTheme, setCurrentTheme] = useState<{ value: string, label: string }>({
 		value: "",
 		label: ""
 	})
 
-	const [currentLanguage, setCurrentLanguage] = useState(initLanguage)
+	const [currentLanguage, setCurrentLanguage] = useState(window.language?.toLocaleLowerCase() === "zh-cn" ? {
+		label: "中文",
+		value: "zh-CN"
+	} : {
+		label: "English",
+		value: "en"
+	})
 	const [langPopverOpen, setLangPopoverOpen] = useState(false)
 	const [themePopverOpen, setThemePopoverOpen] = useState(false)
 
@@ -115,10 +113,10 @@ const General: FC = () => {
 	}
 
 	const selectLanguage = (value: { value: string, label: string }) => {
-		setCurrentLanguage(value)
+		// setCurrentLanguage(value)
 		vscode.postMessage({
 			type: "language",
-			text: value.value.toLowerCase()
+			text: value.value
 		})
 	}
 

@@ -117,3 +117,22 @@ export class ClearDisplayLanguageAction extends Action2 {
 		await localeService.clearLocalePreference();
 	}
 }
+
+export class SetDisplayLanguageAction extends Action2 {
+	public static readonly ID = 'workbench.action.setLocale';
+
+	constructor() {
+		super({
+			id: SetDisplayLanguageAction.ID,
+			title: "Set Display Language",
+			metadata: {
+				description: ""
+			}
+		})
+	}
+
+	public async run(accessor: ServicesAccessor, languagePackItem: ILanguagePackItem, skipDialog = false): Promise<void> {
+		const localeService: ILocaleService = accessor.get(ILocaleService);
+		await localeService.setLocale(languagePackItem, skipDialog)
+	}
+}

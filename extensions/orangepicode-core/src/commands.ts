@@ -19,6 +19,25 @@ export type RegisterCommandOptions = {
 	provider: CoreProvider
 }
 
+export type LanguagePack = {
+	id: string; // "zh-cn",
+	label?: string; // "中文(简体)",
+	description?: string; // "(zh-cn)",
+	extensionId?: string; // "ms-ceintl.vscode-language-pack-zh-hans",
+	/**
+	 * [
+				{
+					"tooltip": "More Info",
+					"iconClass": "codicon-info"
+				}
+			]
+	 */
+	buttons?: {
+		tooltip: string;
+		iconClass: string;
+	}[];
+}
+
 export const registerUsermenuCommands = (options: RegisterCommandOptions) => {
 	const { context } = options
 
@@ -27,6 +46,26 @@ export const registerUsermenuCommands = (options: RegisterCommandOptions) => {
 	}
 }
 
+const getLanguagePackById = (id: string): LanguagePack => {
+	id = id.toLowerCase()
+
+	switch (id) {
+		case "zh-cn":
+			return {
+				id: "zh-cn",
+				label: "中文(简体)",
+				description: "(zh-cn)",
+				extensionId: "ms-ceintl.vscode-language-pack-zh-hans",
+			}
+
+		default:
+			return {
+				id: id,
+				label: id,
+				description: `${id}`,
+			}
+	}
+}
 
 const getUsermenuCommandsMap = ({ context, outputChannel, provider }: RegisterCommandOptions) => {
 	const usermenuOverlayOptions: CreateOverlayOptions = {
@@ -115,6 +154,13 @@ const getUsermenuCommandsMap = ({ context, outputChannel, provider }: RegisterCo
 				vscode.window.showErrorMessage(`Failed to import settings: ${error}`)
 			}
 			return result
+		},
+		"orangepicode-core.setLanguageById": async (languageId: string, skipDialog?: boolean) => {
+			await vscode.commands.executeCommand(
+				"workbench.action.setLocale",
+				getLanguagePackById(languageId),
+				Boolean(skipDialog)
+			)
 		}
 	}
 }

@@ -10,7 +10,9 @@ import { useWebviewListener } from '../../hooks/useWebviewListener';
 import { cn } from '../../lib/utils';
 
 export const Usermenu: FC = () => {
-	const { t, i18n } = useTranslation()
+	const { t,
+		// i18n
+	} = useTranslation()
 	const dropdownContiainerRef = useRef<HTMLDivElement>(null);
 	const [open, setOpen] = useState(false)
 	const [themeSubOpen, setThemeSubOpen] = useState(false)
@@ -62,7 +64,7 @@ export const Usermenu: FC = () => {
 
 	// 选择语言
 	const setLanguage = (lang: string) => {
-		i18n.changeLanguage(lang)
+		// i18n.changeLanguage(lang)
 		vscode.postMessage({
 			type: "setLanguage",
 			language: lang

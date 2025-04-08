@@ -4,7 +4,7 @@ import { useAppTranslation } from '../../../i18n/TranslationContext';
 const About: FC = () => {
 	const { t } = useAppTranslation()
 
-	return <div>
+	return <div className='text-vscode-foreground'>
 		<div className='text-[24px] font-medium mb-[24px]'>
 			{t("aboutOrangePiAICode", { ns: "settingsApp" })}
 		</div>

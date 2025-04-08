@@ -46,7 +46,7 @@ const Settings: FC = () => {
 	return (
 		<div className='flex'>
 			{/* 左侧菜单栏 */}
-			<div className='flex flex-col text-[14px] font-medium text-foreground space-y-[4px] mx-[8px] my-[16px]'>
+			<div className='flex flex-col text-[14px] font-medium text-vscode-foreground space-y-[4px] mx-[8px] my-[16px]'>
 				<SideItem
 					value={0}
 					active={currentTab === 0}

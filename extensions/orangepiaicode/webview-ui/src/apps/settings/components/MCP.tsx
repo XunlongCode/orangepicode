@@ -7,7 +7,7 @@ const MCP: FC = () => {
 	const { t } = useAppTranslation()
 
 	return <div>
-		<div className='text-[24px] font-medium mb-[16px]'>
+		<div className='text-[24px] font-medium mb-[16px] text-vscode-foreground'>
 			{t("mcp", { ns: "settingsApp" })}
 		</div>
 		<McpView2 className={cn("relative")} />

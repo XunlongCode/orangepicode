@@ -226,7 +226,7 @@
 
 .monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item.checked .active-item-indicator {
 	border-radius: 4px;
-	background-color:color-mix(in oklab, var(--vscode-activityBar-foreground) 6%, transparent);
+	background-color: color-mix(in oklab, var(--vscode-activityBar-foreground) 6%, transparent);
 	overflow: hidden;
 	width: calc(100% - 12px);
 	height: calc(100% - 12px);

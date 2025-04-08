@@ -340,3 +340,32 @@
 	margin: 12px;
 	text-align: center;
 }
+
+/* Custom */
+.monaco-workbench .pane-composite-part.part.auxiliarybar > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item {
+	text-transform: none;
+}
+
+.monaco-workbench .pane-composite-part.part.auxiliarybar > .title {
+	margin-top: 12px;
+	height: 28px;
+}
+
+.monaco-workbench .pane-composite-part.part.auxiliarybar > .title .title-actions,
+.monaco-workbench .pane-composite-part.part.auxiliarybar > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item
+{
+	height: 28px;
+}
+
+.monaco-workbench .pane-composite-part.part.auxiliarybar > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .actions-container {
+	gap: 16px;
+}
+
+.monaco-workbench .pane-composite-part.part.auxiliarybar > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item.checked .active-item-indicator {
+	display: none;
+}
+
+.monaco-workbench .pane-composite-part.part.auxiliarybar > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item.checked {
+	background-color: color-mix(in oklab, var(--vscode-activityBar-foreground) 6%, transparent);
+	border-radius: 4px;
+}

@@ -205,7 +205,16 @@ class CoreProvider implements vscode.WebviewViewProvider {
 
 		const language = vscode.env.language;
 
+		const codiconsUri = getUri(webview, this.context.extensionUri, [
+			"node_modules",
+			"@vscode",
+			"codicons",
+			"dist",
+			"codicon.css",
+		])
+
 		return /* html */`
+			<link href="${codiconsUri}" rel="stylesheet" />
 			<script nonce="${nonce}">localStorage.setItem("ide", '"vscode"')</script>
 			<script nonce="${nonce}">window.vscExtensionUrl = "${vscExtensionUrl}"</script>
 			<script nonce="${nonce}">window.isOnboardingCompleted = ${isOnboardingCompleted}</script>
@@ -250,14 +259,6 @@ class CoreProvider implements vscode.WebviewViewProvider {
 		*/
 		const nonce = getNonce()
 
-		const codiconsUri = getUri(webview, this.context.extensionUri, [
-			"node_modules",
-			"@vscode",
-			"codicons",
-			"dist",
-			"codicon.css",
-		])
-
 		const codiconsJsUri = getUri(webview, this.context.extensionUri, [
 			"webview-ui",
 			"build",
@@ -283,7 +284,6 @@ class CoreProvider implements vscode.WebviewViewProvider {
             <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${webview.cspSource}; style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} https://avatars.githubusercontent.com data:; script-src 'nonce-${nonce}' https://us-assets.i.posthog.com; connect-src https://openrouter.ai https://us.i.posthog.com https://us-assets.i.posthog.com;">
 						${await this.getHtmlCommonHead(webview, nonce)}
 						<link nonce="${nonce}" rel="modulepreload" crossorigin href="${codiconsJsUri}">
-						<link href="${codiconsUri}" rel="stylesheet" />
 						<link rel="stylesheet" type="text/css" href="${stylesUri}">
             <title>OrangePi Code Core</title>
           </head>

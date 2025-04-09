@@ -11,6 +11,7 @@
   "private": true,
   "scripts": {
     "start-all": "python3 scripts/start_terminals.py",
+    "start-build": "python3 scripts/start_build.py",
     "test": "echo Please run any of the test scripts from the scripts folder.",
     "test-browser": "npx playwright install && node test/unit/browser/index.js",
     "test-browser-no-install": "node test/unit/browser/index.js",

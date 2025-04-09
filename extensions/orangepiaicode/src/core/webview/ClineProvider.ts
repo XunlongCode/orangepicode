@@ -626,16 +626,24 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			"codicon.css",
 		])
 
+		const codiconsJsUri = getUri(webview, this.context.extensionUri, [
+			"webview-ui",
+			"build",
+			"assets",
+			"codicon.js",
+		])
+
 		const stylesUri = getUri(webview, this.context.extensionUri, [
 			"webview-ui",
 			"build",
 			"assets",
-			"index.css",
+			this.renderContext === "settings" ? "settings.css" : "index.css",
 		])
 
 		const language = vscode.env.language;
 
 		return /* html */`
+			<link rel="modulepreload" crossorigin href="${codiconsJsUri}">
 			<link href="${codiconsUri}" rel="stylesheet" />
 			<link rel="stylesheet" type="text/css" href="${stylesUri}">
 			<script nonce="${nonce}">window.vscExtensionUrl = "${vscExtensionUrl}"</script>

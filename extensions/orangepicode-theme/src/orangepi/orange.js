@@ -3,7 +3,7 @@
 
 
 const orange_color = {
-	"name": "OrangePi orange",
+	"name": "OrangePi Orange",
 	"colors": {
 		"focusBorder": "#2188ff",
 		"foreground": "#444d56",

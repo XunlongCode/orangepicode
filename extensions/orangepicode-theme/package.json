@@ -38,7 +38,7 @@
       },
       {
         "label": "OrangePi Orange",
-        "uiTheme": "vs-dark",
+        "uiTheme": "vs",
         "path": "./themes/orangepi-orange.json"
       }
     ]

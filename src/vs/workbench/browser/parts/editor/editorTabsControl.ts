@@ -100,7 +100,8 @@ export abstract class EditorTabsControl extends Themable implements IEditorTabsC
 	protected readonly treeItemsTransfer = LocalSelectionTransfer.getInstance<DraggedTreeItemsIdentifier>();
 
 	private static readonly EDITOR_TAB_HEIGHT = {
-		normal: 35 as const,
+		// normal: 35 as const,
+		normal: 44 as const,
 		compact: 22 as const
 	};
 
@@ -465,6 +466,11 @@ export abstract class EditorTabsControl extends Themable implements IEditorTabsC
 
 	protected updateTabHeight(): void {
 		this.parent.style.setProperty('--editor-group-tab-height', `${this.tabHeight}px`);
+
+		if (this.groupsView.partOptions.tabHeight === 'default') {
+			this.parent.style.setProperty('--editor-group-tab-inner-height', `${this.tabHeight - 16}px`);
+			this.parent.style.setProperty('--editor-group-tab-padding-y', `8px`);
+		}
 	}
 
 	updateOptions(oldOptions: IEditorPartOptions, newOptions: IEditorPartOptions): void {

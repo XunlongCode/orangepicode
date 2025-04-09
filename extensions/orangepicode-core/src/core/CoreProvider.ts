@@ -197,6 +197,13 @@ class CoreProvider implements vscode.WebviewViewProvider {
 			"codicon.css",
 		])
 
+		const codiconsJsUri = getUri(webview, this.context.extensionUri, [
+			"webview-ui",
+			"build",
+			"assets",
+			"codicon.js",
+		])
+
 		const stylesUri = getUri(webview, this.context.extensionUri, [
 			"webview-ui",
 			"build",
@@ -208,6 +215,7 @@ class CoreProvider implements vscode.WebviewViewProvider {
 		const language = vscode.env.language;
 
 		return /* html */`
+			<link rel="modulepreload" crossorigin href="${codiconsJsUri}">
 			<link href="${codiconsUri}" rel="stylesheet" />
 			<link rel="stylesheet" type="text/css" href="${stylesUri}">
 			<script nonce="${nonce}">localStorage.setItem("ide", '"vscode"')</script>

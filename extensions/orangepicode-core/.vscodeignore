@@ -24,6 +24,8 @@ webview-ui/package-lock.json
 webview-ui/node_modules/**
 **/.gitignore
 
+!webview-ui/src/assets/**
+
 # Fix issue where codicons don't get packaged
 !node_modules/@vscode/codicons/dist/codicon.css
 !node_modules/@vscode/codicons/dist/codicon.ttf

@@ -38,3 +38,7 @@ fs.mkdir("./themes", { recursive: true })
 		// fs.writeFile("./themes/dark.json", JSON.stringify(darkTheme, null, 2)),
 	]))
 	.catch(() => process.exit(1))
+
+fs.mkdir("./build", {
+	recursive: true
+})

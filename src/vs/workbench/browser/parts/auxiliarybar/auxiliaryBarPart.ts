@@ -172,6 +172,23 @@ export class AuxiliaryBarPart extends AbstractPaneCompositePart {
 
 		container.style.borderLeftWidth = borderColor && !isPositionLeft ? '1px' : '0px';
 		container.style.borderRightWidth = borderColor && isPositionLeft ? '1px' : '0px';
+
+		// Custom
+		if (container.parentElement) {
+			container.parentElement.style.backgroundColor = "var(--vscode-activityBar-background)"
+		};
+		container.style.borderRadius = "8px";
+		container.style.marginRight = "4px";
+		container.style.marginLeft = "4px";
+		container.style.marginTop = "4px";
+		container.style.marginBottom = "4px";
+	}
+
+	override layout(width: number, height: number, top: number, left: number): void {
+		width = width - 8;
+		height = height - 8;
+
+		super.layout(width, height, top, left);
 	}
 
 	protected getCompositeBarOptions(): IPaneCompositeBarOptions {

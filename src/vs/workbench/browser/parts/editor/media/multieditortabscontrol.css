@@ -587,7 +587,3 @@
 .monaco-workbench .part.editor > .content .editor-group-container > .title:not(.two-tab-bars) .tabs-container > .tab.active.tab-border-bottom > .tab-border-bottom-container {
 	display: none;
 }
-
-.monaco-workbench .part.editor > .content .editor-group-container > .title .monaco-icon-label::before {
-	height: auto;
-}

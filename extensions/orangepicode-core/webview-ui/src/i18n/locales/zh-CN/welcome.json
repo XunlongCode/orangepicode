@@ -13,5 +13,6 @@
 	"skip": "跳过",
 	"accountSignIn": "账号登录",
 	"accountSignInDescription": "支持Google账号、Github账号、邮箱账号进行登录。",
-	"signIn": "登录"
+	"signIn": "登录",
+	"complete": "完成"
 }

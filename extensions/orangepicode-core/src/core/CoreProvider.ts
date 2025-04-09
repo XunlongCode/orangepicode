@@ -63,6 +63,17 @@ class CoreProvider implements vscode.WebviewViewProvider {
 		})
 
 		vscode.workspace.onDidChangeConfiguration(async () => { })
+
+		vscode.authentication.onDidChangeSessions(async (e) => {
+			// github登录成功
+			const session: AuthenticationSession = await vscode.commands.executeCommand('orangepicode-core.github.getSession')
+			if (session) {
+				this.postMessageToWebview({
+					type: "githubLoginSuccess",
+				})
+			}
+			// 其他登录成功...
+		})
 	}
 
 	private setWebviewMessageListener(webview: vscode.Webview) {

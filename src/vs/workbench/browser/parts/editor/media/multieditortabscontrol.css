@@ -550,6 +550,10 @@
 	--editor-group-tab-height: 44px;
 }
 
+.monaco-workbench .part.editor > .content .editor-group-container > .title .editor-actions {
+	--editor-group-tab-height: 44px;
+}
+
 .monaco-workbench .part.editor > .content .editor-group-container.active > .title .tabs-container > .tab {
 	margin: 8px 0;
 	padding: 6px 12px;

@@ -543,3 +543,43 @@
 .monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container > .tab:first-child.drop-target-right::before {
 	width: 2px;
 }
+
+/* Custom */
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container {
+	gap: 10px;
+	--editor-group-tab-height: 44px;
+}
+
+.monaco-workbench .part.editor > .content .editor-group-container.active > .title .tabs-container > .tab {
+	margin: 8px 0;
+	padding: 6px 12px;
+	border-radius: 4px;
+}
+
+.monaco-workbench .part.editor > .content .editor-group-container.active > .title .tabs-container > .tab.active {
+	background-color: color-mix(in oklab, var(--vscode-activityBar-foreground) 8%, transparent);
+}
+
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container > .tab {
+	height: auto;
+}
+
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container > .tab .tab-label {
+	line-height: normal;
+}
+
+.monaco-workbench .part.editor > .content .editor-group-container > .title .monaco-icon-label::before {
+	height: auto;
+}
+
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container > .tab > .tab-actions > .monaco-action-bar {
+	height: auto;
+}
+
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container > .tab.active.tab-border-top:not(:focus) > .tab-border-top-container, .monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container > .tab.selected.tab-border-top:not(:focus) > .tab-border-top-container {
+	display: none;
+}
+
+.monaco-workbench .part.editor > .content .editor-group-container > .title:not(.two-tab-bars) .tabs-container > .tab.active.tab-border-bottom > .tab-border-bottom-container {
+	display: none;
+}

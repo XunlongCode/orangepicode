@@ -17,6 +17,11 @@ const Welcome: FC = () => {
 	})
 
 	useEffect(() => {
+		vscode.postMessage({
+			type: "setTheme",
+			theme: "OrangePi Dark"
+		})
+
 		vscode.postMessage({ type: "hideOnboardingLoading" })
 
 		return () => {

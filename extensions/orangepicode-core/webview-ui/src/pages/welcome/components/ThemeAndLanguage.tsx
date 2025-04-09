@@ -52,7 +52,7 @@ const ThemeAndLanguage: FC<{
 	const { t, i18n } = useTranslation()
 
 	const [currentTheme, setCurrentTheme] = useState({
-		value: "dark",
+		value: "OrangePi Dark",
 		label: t("darkTheme", { ns: "theme" })
 	})
 

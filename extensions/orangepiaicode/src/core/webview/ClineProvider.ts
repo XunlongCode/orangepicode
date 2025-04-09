@@ -618,34 +618,9 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 		const vscExtensionUrl: string = getUri(webview, this.context.extensionUri, ["webview-ui"])
 			.toString();
 
-		const codiconsUri = getUri(webview, this.context.extensionUri, [
-			"node_modules",
-			"@vscode",
-			"codicons",
-			"dist",
-			"codicon.css",
-		])
-
-		const codiconsJsUri = getUri(webview, this.context.extensionUri, [
-			"webview-ui",
-			"build",
-			"assets",
-			"codicon.js",
-		])
-
-		const stylesUri = getUri(webview, this.context.extensionUri, [
-			"webview-ui",
-			"build",
-			"assets",
-			this.renderContext === "settings" ? "settings.css" : "index.css",
-		])
-
 		const language = vscode.env.language;
 
 		return /* html */`
-			<link rel="modulepreload" crossorigin href="${codiconsJsUri}">
-			<link href="${codiconsUri}" rel="stylesheet" />
-			<link rel="stylesheet" type="text/css" href="${stylesUri}">
 			<script nonce="${nonce}">window.vscExtensionUrl = "${vscExtensionUrl}"</script>
 			<script nonce="${nonce}">window.language = "${language}"</script>
 		`
@@ -752,6 +727,28 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 		*/
 		const nonce = getNonce()
 
+		const codiconsUri = getUri(webview, this.context.extensionUri, [
+			"node_modules",
+			"@vscode",
+			"codicons",
+			"dist",
+			"codicon.css",
+		])
+
+		const codiconsJsUri = getUri(webview, this.context.extensionUri, [
+			"webview-ui",
+			"build",
+			"assets",
+			"codicon.js",
+		])
+
+		const stylesUri = getUri(webview, this.context.extensionUri, [
+			"webview-ui",
+			"build",
+			"assets",
+			this.renderContext === "settings" ? "settings.css" : "index.css",
+		])
+
 		// Tip: Install the es6-string-html VS Code extension to enable code highlighting below
 		return /*html*/ `
         <!DOCTYPE html>
@@ -762,6 +759,9 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
             <meta name="theme-color" content="#000000">
             <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${webview.cspSource}; style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} data:; script-src 'nonce-${nonce}' https://us-assets.i.posthog.com; connect-src https://openrouter.ai https://us.i.posthog.com https://us-assets.i.posthog.com;">
             ${await this.getHtmlCommonHead(webview, nonce)}
+						<link nonce="${nonce}" rel="modulepreload" crossorigin href="${codiconsJsUri}">
+						<link href="${codiconsUri}" rel="stylesheet" />
+						<link rel="stylesheet" type="text/css" href="${stylesUri}">
             <title>OrangePi AI Code</title>
           </head>
           <body>

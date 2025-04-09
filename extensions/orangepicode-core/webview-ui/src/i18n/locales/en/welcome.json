@@ -13,5 +13,6 @@
 	"skip": "Skip",
 	"accountSignIn": "Account Sign-In",
 	"accountSignInDescription": "Sign in with Google, GitHub, or email.",
-	"signIn": "Sign In"
+	"signIn": "Sign In",
+	"complete": "Get Started"
 }

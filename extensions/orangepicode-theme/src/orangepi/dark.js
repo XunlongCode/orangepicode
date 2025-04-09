@@ -1,5 +1,5 @@
 const blackColor = {
-	"name": "OrangePi black",
+	"name": "OrangePi Dark",
 	"colors": {
 		"focusBorder": "#005cc5",
 		"foreground": "#d1d5da",

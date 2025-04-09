@@ -36,6 +36,10 @@ export const Usermenu: FC = () => {
 		window.focus()
 		setLanguageSubOpen(false)
 		setThemeSubOpen(false)
+
+		vscode.postMessage({
+			type: "getGitHubSession"
+		})
 	})
 
 	useEffect(() => {
@@ -151,7 +155,7 @@ export const Usermenu: FC = () => {
 							}
 						</div>
 						<div className='w-[12px]'></div>
-						{userInfo ? userInfo.label : t("notLoggedIn", { ns: "usermenu", defaultValue: "未登录" })}
+						{userInfo ? userInfo.label : t("notLoggedIn", { ns: "usermenu" })}
 					</div>
 					{/* 用户菜单 */}
 					<div

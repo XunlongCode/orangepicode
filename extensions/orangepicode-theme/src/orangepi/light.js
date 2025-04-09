@@ -1,5 +1,5 @@
 const whiteColor = {
-	"name": "OrangePi White",
+	"name": "OrangePi Light",
 	"colors": {
 		"focusBorder": "#2188ff",
 		"foreground": "#444d56",

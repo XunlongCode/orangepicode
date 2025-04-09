@@ -63,6 +63,17 @@ class CoreProvider implements vscode.WebviewViewProvider {
 		})
 
 		vscode.workspace.onDidChangeConfiguration(async () => { })
+
+		vscode.authentication.onDidChangeSessions(async (e) => {
+			// github登录成功
+			const session: AuthenticationSession = await vscode.commands.executeCommand('orangepicode-core.github.getSession')
+			if (session) {
+				this.postMessageToWebview({
+					type: "githubLoginSuccess",
+				})
+			}
+			// 其他登录成功...
+		})
 	}
 
 	private setWebviewMessageListener(webview: vscode.Webview) {
@@ -189,6 +200,11 @@ class CoreProvider implements vscode.WebviewViewProvider {
 		const vscExtensionUrl: string = getUri(webview, this.context.extensionUri, ["webview-ui"])
 			.toString();
 		const isOnboardingCompleted = await vscode.commands.executeCommand("workbench.action.isOnboardingCompleted")
+
+		const currentTheme = await getTheme(this.context);
+
+		const language = vscode.env.language;
+
 		const codiconsUri = getUri(webview, this.context.extensionUri, [
 			"node_modules",
 			"@vscode",
@@ -197,19 +213,8 @@ class CoreProvider implements vscode.WebviewViewProvider {
 			"codicon.css",
 		])
 
-		const stylesUri = getUri(webview, this.context.extensionUri, [
-			"webview-ui",
-			"build",
-			"assets",
-			"index.css",
-		])
-		const currentTheme = await getTheme(this.context);
-
-		const language = vscode.env.language;
-
 		return /* html */`
 			<link href="${codiconsUri}" rel="stylesheet" />
-			<link rel="stylesheet" type="text/css" href="${stylesUri}">
 			<script nonce="${nonce}">localStorage.setItem("ide", '"vscode"')</script>
 			<script nonce="${nonce}">window.vscExtensionUrl = "${vscExtensionUrl}"</script>
 			<script nonce="${nonce}">window.isOnboardingCompleted = ${isOnboardingCompleted}</script>
@@ -254,6 +259,20 @@ class CoreProvider implements vscode.WebviewViewProvider {
 		*/
 		const nonce = getNonce()
 
+		const codiconsJsUri = getUri(webview, this.context.extensionUri, [
+			"webview-ui",
+			"build",
+			"assets",
+			"codicon.js",
+		])
+
+		const stylesUri = getUri(webview, this.context.extensionUri, [
+			"webview-ui",
+			"build",
+			"assets",
+			"index.css",
+		])
+
 		// Tip: Install the es6-string-html VS Code extension to enable code highlighting below
 		return /*html*/ `
         <!DOCTYPE html>
@@ -264,6 +283,8 @@ class CoreProvider implements vscode.WebviewViewProvider {
             <meta name="theme-color" content="#000000">
             <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${webview.cspSource}; style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} https://avatars.githubusercontent.com data:; script-src 'nonce-${nonce}' https://us-assets.i.posthog.com; connect-src https://openrouter.ai https://us.i.posthog.com https://us-assets.i.posthog.com;">
 						${await this.getHtmlCommonHead(webview, nonce)}
+						<link nonce="${nonce}" rel="modulepreload" crossorigin href="${codiconsJsUri}">
+						<link rel="stylesheet" type="text/css" href="${stylesUri}">
             <title>OrangePi Code Core</title>
           </head>
           <body>

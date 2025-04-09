@@ -17,7 +17,7 @@ export default defineConfig({
 		reportCompressedSize: false,
 		rollupOptions: {
 			input: {
-				main: path.resolve(__dirname, "index.html"),
+				index: path.resolve(__dirname, "index.html"),
 				settings: path.resolve(__dirname, "settings.html"),
 			},
 			output: {

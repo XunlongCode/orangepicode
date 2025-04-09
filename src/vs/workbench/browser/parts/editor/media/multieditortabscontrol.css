@@ -588,6 +588,6 @@
 	display: none;
 }
 
-.monaco-workbench .part.editor > .content .editor-group-container > .title div.monaco-icon-label::before {
+.monaco-workbench .part.editor > .content .editor-group-container > .title .monaco-icon-label::before {
 	height: auto;
 }

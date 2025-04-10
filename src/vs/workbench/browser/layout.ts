@@ -302,6 +302,9 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		protected readonly parent: HTMLElement
 	) {
 		super();
+
+		// Custom
+		this.mainContainer.style.backgroundColor = "var(--vscode-activityBar-background)";
 	}
 
 	protected initLayout(accessor: ServicesAccessor): void {

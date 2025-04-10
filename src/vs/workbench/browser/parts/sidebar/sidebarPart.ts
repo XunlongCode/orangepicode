@@ -151,9 +151,9 @@ export class SidebarPart extends AbstractPaneCompositePart {
 		container.style.outlineColor = this.getColor(SIDE_BAR_DRAG_AND_DROP_BACKGROUND) ?? '';
 
 		// Custom
-		if (container.parentElement) {
-			container.parentElement.style.backgroundColor = "var(--vscode-activityBar-background)"
-		};
+		// if (container.parentElement) {
+		// 	container.parentElement.style.backgroundColor = "var(--vscode-activityBar-background)"
+		// };
 		container.style.borderRadius = "8px";
 		container.style.marginRight = "4px";
 		container.style.marginLeft = "4px";

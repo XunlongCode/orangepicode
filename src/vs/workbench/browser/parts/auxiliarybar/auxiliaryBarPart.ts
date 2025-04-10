@@ -174,9 +174,9 @@ export class AuxiliaryBarPart extends AbstractPaneCompositePart {
 		container.style.borderRightWidth = borderColor && isPositionLeft ? '1px' : '0px';
 
 		// Custom
-		if (container.parentElement) {
-			container.parentElement.style.backgroundColor = "var(--vscode-activityBar-background)"
-		};
+		// if (container.parentElement) {
+		// 	container.parentElement.style.backgroundColor = "var(--vscode-activityBar-background)"
+		// };
 		container.style.borderRadius = "8px";
 		container.style.marginRight = "4px";
 		container.style.marginLeft = "4px";

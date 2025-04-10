@@ -124,9 +124,9 @@ export class PanelPart extends AbstractPaneCompositePart {
 		container.style.borderBottomColor = borderColor;
 
 		// Custom
-		if (container.parentElement) {
-			container.parentElement.style.backgroundColor = "var(--vscode-activityBar-background)"
-		};
+		// if (container.parentElement) {
+		// 	container.parentElement.style.backgroundColor = "var(--vscode-activityBar-background)"
+		// };
 		container.style.borderRadius = "8px";
 		container.style.marginRight = "4px";
 		container.style.marginLeft = "4px";

@@ -1386,8 +1386,14 @@ ToggleVisibilityActions.push(...[
 	CreateToggleLayoutItem(ToggleAuxiliaryBarAction.ID, AuxiliaryBarVisibleContext, localize('secondarySideBar', "Secondary Side Bar"), { whenA: ContextKeyExpr.equals('config.workbench.sideBar.location', 'left'), iconA: panelRightIcon, iconB: panelLeftIcon }),
 	CreateToggleLayoutItem(TogglePanelAction.ID, PanelVisibleContext, localize('panel', "Panel"), panelIcon),
 	CreateToggleLayoutItem(ToggleStatusbarVisibilityAction.ID, ContextKeyExpr.equals('config.workbench.statusBar.visible', true), localize('statusBar', "Status Bar"), statusBarIcon),
-	CreateToggleLayoutItem(ToggleOnboardingAction.ID, OrangePiVisibleContext, 'OrangePi', orangePiIcon),
 ]);
+
+// 布局面板是否添加ToggleOnboardingAction
+if (0) {
+	ToggleVisibilityActions.push(
+		CreateToggleLayoutItem(ToggleOnboardingAction.ID, OrangePiVisibleContext, 'OrangePi', orangePiIcon),
+	)
+}
 
 const MoveSideBarActions: CustomizeLayoutItem[] = [
 	CreateOptionLayoutItem(MoveSidebarLeftAction.ID, ContextKeyExpr.equals('config.workbench.sideBar.location', 'left'), localize('leftSideBar', "Left"), panelLeftIcon),
@@ -1485,11 +1491,11 @@ registerAction2(class CustomizeLayoutAction extends Action2 {
 				label: localize('toggleVisibility', "Visibility")
 			},
 			...ToggleVisibilityActions.map(toQuickPickItem),
-			{
-				type: 'separator',
-				label: localize('sideBarPosition', "Primary Side Bar Position")
-			},
-			...MoveSideBarActions.map(toQuickPickItem),
+			// {
+			// 	type: 'separator',
+			// 	label: localize('sideBarPosition', "Primary Side Bar Position")
+			// },
+			// ...MoveSideBarActions.map(toQuickPickItem),
 			{
 				type: 'separator',
 				label: localize('panelAlignment', "Panel Alignment")

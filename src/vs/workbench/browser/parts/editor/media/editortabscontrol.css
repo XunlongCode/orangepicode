@@ -60,3 +60,43 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
+
+/* Custom */
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-and-actions-container {
+	--editor-group-tab-height: var(--editor-group-tab-inner-height);
+}
+
+.monaco-workbench .part.editor > .content .editor-group-container > .title > .tabs-and-actions-container > .monaco-scrollable-element {
+	padding-top: var(--editor-group-tab-padding-y);
+	padding-bottom: var(--editor-group-tab-padding-y);
+}
+
+.monaco-workbench .part.editor > .content .editor-group-container > .title .editor-actions {
+	padding-top: var(--editor-group-tab-padding-y);
+	padding-bottom: var(--editor-group-tab-padding-y);
+}
+
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container::before {
+	content: '';
+}
+
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container {
+	gap: 10px;
+}
+
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container .tab {
+	border: none !important;
+}
+
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container .tab.active {
+	background-color: color-mix(in oklab, var(--vscode-activityBar-foreground) 8%, transparent);
+	border-radius: 4px;
+}
+
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container .tab.active .tab-border-top-container {
+	opacity: 0;
+}
+
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container .tab.active .tab-border-bottom-container {
+	opacity: 0;
+}

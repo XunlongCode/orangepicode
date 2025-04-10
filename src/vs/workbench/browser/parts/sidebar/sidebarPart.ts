@@ -149,12 +149,24 @@ export class SidebarPart extends AbstractPaneCompositePart {
 		container.style.borderLeftStyle = borderColor && !isPositionLeft ? 'solid' : '';
 		container.style.borderLeftColor = !isPositionLeft ? borderColor || '' : '';
 		container.style.outlineColor = this.getColor(SIDE_BAR_DRAG_AND_DROP_BACKGROUND) ?? '';
+
+		// Custom
+		// if (container.parentElement) {
+		// 	container.parentElement.style.backgroundColor = "var(--vscode-activityBar-background)"
+		// };
+		container.style.borderRadius = "8px";
+		container.style.marginRight = "4px";
+		container.style.marginLeft = "4px";
+		container.style.marginTop = "4px";
+		container.style.marginBottom = "4px";
 	}
 
 	override layout(width: number, height: number, top: number, left: number): void {
 		if (!this.layoutService.isVisible(Parts.SIDEBAR_PART)) {
 			return;
 		}
+		width = width - 8;
+		height = height - 8;
 
 		super.layout(width, height, top, left);
 	}

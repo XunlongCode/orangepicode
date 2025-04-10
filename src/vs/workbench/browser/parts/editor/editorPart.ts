@@ -984,6 +984,16 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		const container = assertIsDefined(this.container);
 		container.style.backgroundColor = this.getColor(editorBackground) || '';
 
+		// Custom
+		// if (container.parentElement) {
+		// 	container.parentElement.style.backgroundColor = "var(--vscode-activityBar-background)"
+		// };
+		container.style.borderRadius = "8px";
+		container.style.marginRight = "4px";
+		container.style.marginLeft = "4px";
+		container.style.marginTop = "4px";
+		container.style.marginBottom = "4px";
+
 		const separatorBorderStyle = { separatorBorder: this.gridSeparatorBorder, background: this.theme.getColor(EDITOR_PANE_BACKGROUND) || Color.transparent };
 		this.gridWidget.style(separatorBorderStyle);
 		this.centeredLayoutWidget.styles(separatorBorderStyle);
@@ -1312,6 +1322,8 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 	override layout(width: number, height: number, top: number, left: number): void {
 		this.top = top;
 		this.left = left;
+		width = width - 8;
+		height = height - 8;
 
 		// Layout contents
 		const contentAreaSize = super.layoutContents(width, height).contentSize;

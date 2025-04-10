@@ -183,16 +183,15 @@ export class OnboardingPart extends Part {
 		// 全屏背景
 		// create the full screen overlay. this serves as a click target for closing onboarding
 		this.element = element;
-		this.fullScreenOverlay = element; // use the pearOverlayPart root element as the fullScreenOverlay
+		this.fullScreenOverlay = element; // use the root element as the fullScreenOverlay
 		this.fullScreenOverlay.style.zIndex = this.isCompleted ? "-10" : "95"; // Only show on first launch
 		this.fullScreenOverlay.style.position = "absolute";
 		this.fullScreenOverlay.style.top = "0";
 		this.fullScreenOverlay.style.left = "0";
 		this.fullScreenOverlay.style.right = "0";
 		this.fullScreenOverlay.style.bottom = "0";
-		this.fullScreenOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
 		// this.fullScreenOverlay.style.pointerEvents = "none"; // Ignore clicks on the full screen overlay
-		this.fullScreenOverlay!.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Darken the overlay
+		// this.fullScreenOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Darken the overlay
 
 		// 引导页面
 		// create the popup area overlay. this is just a target for webview to layout over

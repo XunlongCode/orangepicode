@@ -123,6 +123,16 @@ export class PanelPart extends AbstractPaneCompositePart {
 		container.style.borderRightColor = borderColor;
 		container.style.borderBottomColor = borderColor;
 
+		// Custom
+		// if (container.parentElement) {
+		// 	container.parentElement.style.backgroundColor = "var(--vscode-activityBar-background)"
+		// };
+		container.style.borderRadius = "8px";
+		container.style.marginRight = "4px";
+		container.style.marginLeft = "4px";
+		container.style.marginTop = "4px";
+		container.style.marginBottom = "4px";
+
 		const title = this.getTitleArea();
 		if (title) {
 			title.style.borderTopColor = this.getColor(PANEL_BORDER) || this.getColor(contrastBorder) || '';
@@ -190,6 +200,9 @@ export class PanelPart extends AbstractPaneCompositePart {
 	}
 
 	override layout(width: number, height: number, top: number, left: number): void {
+		width = width - 8;
+		height = height - 8;
+
 		let dimensions: Dimension;
 		switch (this.layoutService.getPanelPosition()) {
 			case Position.RIGHT:

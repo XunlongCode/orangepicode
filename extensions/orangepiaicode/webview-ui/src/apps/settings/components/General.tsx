@@ -111,15 +111,20 @@ const General: FC = () => {
 			return
 		}
 
+		let theme
 		if (
 			message.theme === "OrangePi Dark"
 			|| message.theme === "OrangePi Light"
 			|| message.theme === "OrangePi Orange"
 		) {
-			setCurrentTheme({ value: message.theme, label: message.theme })
-		} else {
-			setCurrentTheme({ value: "", label: message.theme })
+			theme = themeOptions.find((item) => item.value === message.theme)!
 		}
+
+		if (!theme) {
+			theme = { value: "", label: message.theme }
+		}
+
+		setCurrentTheme(theme)
 	})
 
 	const selectTheme = (value: { value: string, label: string }) => {

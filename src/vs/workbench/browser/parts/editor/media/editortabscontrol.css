@@ -85,18 +85,17 @@
 }
 
 .monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container .tab {
-	border: none !important;
-}
-
-.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container .tab.active {
-	/* background-color: color-mix(in oklab, var(--vscode-activityBar-foreground) 8%, transparent); */
 	border-radius: 4px;
 }
 
-.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container .tab.active .tab-border-top-container {
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container .tab.active {
+	box-shadow: inset 0 0 1px 1px var(--vscode-tab-activeRing);
+}
+
+/* .monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container .tab.active .tab-border-top-container {
 	opacity: 0;
 }
 
 .monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container .tab.active .tab-border-bottom-container {
 	opacity: 0;
-}
+} */

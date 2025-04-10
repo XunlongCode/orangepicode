@@ -101,6 +101,27 @@ export const Usermenu: FC = () => {
 		hideUsermenu()
 	}
 
+	const openKeyboardShortcutsSettings = () => {
+		vscode.postMessage({
+			type: "openVSCodeKeyboardShortcuts"
+		})
+		hideUsermenu()
+	}
+
+	const onCheckForUpdatesClick = () => {
+		// vscode.postMessage({
+		// 	type: "openExternal",
+		// 	url: "https://github.com/XunlongCode/orangepicode/releases"
+		// })
+	}
+
+	const onHelpDocumentationClick = () => {
+		// vscode.postMessage({
+		// 	type: "openExternal",
+		// 	url: "https://github.com/XunlongCode/orangepicode"
+		// })
+	}
+
 	// 点击登出
 	const onLogout = () => {
 		vscode.postMessage({
@@ -167,9 +188,9 @@ export const Usermenu: FC = () => {
 									transform: none !important;
 								}
 
-								div[role="menuitem"][data-highlighted],
+								*[role="menuitem"][data-highlighted],
 								div[role="menuitem"][data-state="open"] {
-									${tw`text-foreground`};
+									${tw`text-foreground outline-none`};
 									background-color: var(--vscode-activityBar-background);
 								}
 							}
@@ -211,17 +232,41 @@ export const Usermenu: FC = () => {
 							<DropdownMenuItem className='h-[48px] cursor-pointer' onClick={openSettings}>
 								{t("settings", { ns: "usermenu" })}
 							</DropdownMenuItem>
-							<DropdownMenuItem className='h-[48px] cursor-pointer'>
+							<DropdownMenuItem className='h-[48px] cursor-pointer' onClick={openKeyboardShortcutsSettings}>
 								{t("keyboardShortcuts", { ns: "usermenu" })}
 							</DropdownMenuItem>
-							<DropdownMenuItem className='h-[48px] cursor-pointer'>
-								{t("checkUpdate", { ns: "usermenu" })}
+							<DropdownMenuItem asChild className='h-[48px] cursor-pointer' onClick={onCheckForUpdatesClick}>
+								<a
+									href="https://github.com/XunlongCode/orangepicode/releases"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									<span className='text-foreground'>
+										{t("checkUpdate", { ns: "usermenu" })}
+									</span>
+								</a>
 							</DropdownMenuItem>
-							<DropdownMenuItem className='h-[48px] cursor-pointer'>
-								{t("helpDocumentation", { ns: "usermenu" })}
+							<DropdownMenuItem asChild className='h-[48px] cursor-pointer' onClick={onHelpDocumentationClick}>
+								<a
+									href="https://github.com/XunlongCode/orangepicode"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									<span className='text-foreground'>
+										{t("helpDocumentation", { ns: "usermenu" })}
+									</span>
+								</a>
 							</DropdownMenuItem>
-							<DropdownMenuItem className='h-[48px] cursor-pointer'>
-								{t("contactUs", { ns: "usermenu" })}
+							<DropdownMenuItem asChild className='h-[48px] cursor-pointer' onClick={onHelpDocumentationClick}>
+								<a
+									href="https://github.com/XunlongCode/orangepicode"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									<span className='text-foreground'>
+										{t("contactUs", { ns: "usermenu" })}
+									</span>
+								</a>
 							</DropdownMenuItem>
 
 							<DropdownMenuSeparator className='m-0' />

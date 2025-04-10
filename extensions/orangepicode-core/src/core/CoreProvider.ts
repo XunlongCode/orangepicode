@@ -192,6 +192,18 @@ class CoreProvider implements vscode.WebviewViewProvider {
 					}
 					break;
 				}
+
+				case "openVSCodeKeyboardShortcuts": {
+					await vscode.commands.executeCommand("workbench.action.openGlobalKeybindings")
+					break
+				}
+
+				case "openExternal": {
+					if (message.url) {
+						await vscode.env.openExternal(vscode.Uri.parse(message.url))
+					}
+					break
+				}
 			}
 		})
 	}

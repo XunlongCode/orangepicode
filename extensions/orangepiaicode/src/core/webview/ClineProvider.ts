@@ -789,6 +789,18 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 				})
 			}
 		})
+
+
+		vscode.authentication.onDidChangeSessions(async (e) => {
+			// github登录成功
+			const session: vscode.AuthenticationSession = await vscode.commands.executeCommand('orangepicode-core.github.getSession')
+			if (session) {
+				this.postMessageToWebview({
+					type: "githubLoginSuccess",
+				})
+			}
+			// 其他登录成功...
+		})
 	}
 
 	/**

@@ -84,6 +84,14 @@ else if (globalThis._VSCODE_PRODUCT_JSON && globalThis._VSCODE_PACKAGE_JSON) {
 			release: pkg.release
 		});
 	}
+
+	if (!product.vscodeVersion) {
+		const pkg = globalThis._VSCODE_PACKAGE_JSON as { vscodeVersion: string };
+
+		Object.assign(product, {
+			vscodeVersion: pkg.vscodeVersion,
+		});
+	}
 }
 
 // Web environment or unknown

@@ -5,26 +5,26 @@ import platform
 install_dependencies = "i" in sys.argv
 
 base_commands = [
-    {"cwd": "extensions/orangepicode-theme", "commands": ["npm i", "npm run build"]},
+    {"cwd": "extensions/orangepicode-theme", "commands": ["yarn", "yarn build"]},
     {
         "cwd": "extensions/orangepiaicode",
         "commands": [
-            "npm run install:all",
-            "npm run build:webview",
-            "npm run build:esbuild",
+            "yarn install:all",
+            "yarn build:webview",
+            "yarn build:esbuild",
         ],
     },
-    {"cwd": "extensions/orangepicode-core", "commands": ["npm i", "npm run compile"]},
+    {"cwd": "extensions/orangepicode-core", "commands": ["yarn", "yarn compile"]},
     {
         "cwd": "extensions/orangepicode-core/webview-ui",
-        "commands": ["yarn", "npm run build"],
+        "commands": ["yarn", "yarn build"],
     },
 ]
 
 
 def run_command(cwd, command):
     if not install_dependencies:
-        if command == "npm i" or command == "yarn" or command == "npm run install:all":
+        if command == "npm i" or command == "yarn" or command == "yarn install:all":
             return
 
     print(f"\n* Running: `{command}` in `{cwd}`")
@@ -43,19 +43,22 @@ def get_package_commands():
 
     if system == "Windows":
         commands = [
-            "npx gulp vscode-win32-x64",
-            "npx gulp vscode-win32-x64-inno-updater",
-            "npx gulp vscode-win32-x64-user-setup",
+            "yarn gulp vscode-win32-x64 --max-old-space-size=8192",
+            "yarn gulp vscode-win32-x64-inno-updater --max-old-space-size=8192",
+            "yarn gulp vscode-win32-x64-user-setup --max-old-space-size=8192",
         ]
     elif system == "Darwin":
-        commands = ["npx gulp vscode-darwin-arm64"]
+        commands = ["yarn gulp vscode-darwin-arm64 --max-old-space-size=8192"]
     elif system == "Linux":
-        commands = ["npx gulp vscode-linux-x64"]
+        commands = ["yarn gulp vscode-linux-x64 --max-old-space-size=8192"]
 
     return [{"cwd": ".", "commands": commands}]
 
 
 def run():
+    if install_dependencies:
+        run_command(".", "npm i")
+
     for group in base_commands:
         cwd = group["cwd"]
         for cmd in group["commands"]:

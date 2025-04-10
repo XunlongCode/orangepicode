@@ -89,7 +89,7 @@
 }
 
 .monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container .tab.active {
-	background-color: color-mix(in oklab, var(--vscode-activityBar-foreground) 8%, transparent);
+	/* background-color: color-mix(in oklab, var(--vscode-activityBar-foreground) 8%, transparent); */
 	border-radius: 4px;
 }
 

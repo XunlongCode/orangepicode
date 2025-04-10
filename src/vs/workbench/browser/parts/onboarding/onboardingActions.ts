@@ -1,7 +1,7 @@
 import { registerAction2, Action2 } from "../../../../platform/actions/common/actions.js";
 import { ServicesAccessor } from "../../../../platform/instantiation/common/instantiation.js";
 import { IOnboardingService } from "./onboardingService.js";
-import { KeyCode, KeyMod } from "../../../../base/common/keyCodes.js";
+import { KeyCode } from "../../../../base/common/keyCodes.js";
 import { IStorageService } from '../../../../platform/storage/common/storage.js';
 import { IS_ONBOARDING_COMPLETED_KEY } from "./common.js";
 import { INotificationService, Severity } from '../../../../platform/notification/common/notification.js';
@@ -15,7 +15,6 @@ export class CloseOnboardingAction extends Action2 {
 			id: CloseOnboardingAction.ID,
 			category: "Developer",
 			title: { value: "Close Onboarding", original: "Close Onboarding" },
-			f1: true,
 			keybinding: {
 				weight: 200,
 				primary: KeyCode.Escape,
@@ -37,11 +36,6 @@ export class ToggleOnboardingAction extends Action2 {
 			id: ToggleOnboardingAction.ID,
 			category: "Developer",
 			title: { value: "Toggle Onboarding", original: "Toggle Onboarding" },
-			f1: true,
-			keybinding: {
-				weight: 200,
-				primary: KeyMod.CtrlCmd | KeyCode.KeyE,
-			},
 		});
 	}
 
@@ -114,7 +108,6 @@ export class IsOnboardingCompletedAction extends Action2 {
 			id: IsOnboardingCompletedAction.ID,
 			category: "Developer",
 			title: { value: "Get Onboarding Complete Key Value", original: "Get Onboarding Complete Key Value" },
-			f1: true,
 		});
 	}
 

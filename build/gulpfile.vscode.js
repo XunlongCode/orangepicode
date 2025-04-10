@@ -36,6 +36,9 @@ const { promisify } = require('util');
 const glob = promisify(require('glob'));
 const rcedit = promisify(require('rcedit'));
 
+// 修正版本号
+packageJson.version = packageJson.opcVersion;
+
 // Build
 const vscodeEntryPoints = [
 	buildfile.workerEditor,

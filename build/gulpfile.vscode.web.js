@@ -23,6 +23,9 @@ const { compileBuildTask } = require('./gulpfile.compile');
 const extensions = require('./lib/extensions');
 const VinylFile = require('vinyl');
 
+// 修正版本号
+packageJson.version = packageJson.opcVersion;
+
 const REPO_ROOT = path.dirname(__dirname);
 const BUILD_ROOT = path.dirname(REPO_ROOT);
 const WEB_FOLDER = path.join(REPO_ROOT, 'remote', 'web');

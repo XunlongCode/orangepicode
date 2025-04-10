@@ -56,7 +56,7 @@ export type ExtensionVirtualWorkspaceSupport = {
 
 export interface IProductConfiguration {
 	readonly version: string;
-	readonly vscodeVersion: string;
+	readonly opcVersion: string;
 	readonly release: string;
 	readonly date?: string;
 	readonly quality?: string;

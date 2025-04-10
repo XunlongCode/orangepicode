@@ -85,11 +85,11 @@ else if (globalThis._VSCODE_PRODUCT_JSON && globalThis._VSCODE_PACKAGE_JSON) {
 		});
 	}
 
-	if (!product.vscodeVersion) {
-		const pkg = globalThis._VSCODE_PACKAGE_JSON as { vscodeVersion: string };
+	if (!product.opcVersion) {
+		const pkg = globalThis._VSCODE_PACKAGE_JSON as { opcVersion: string };
 
 		Object.assign(product, {
-			vscodeVersion: pkg.vscodeVersion,
+			opcVersion: pkg.opcVersion,
 		});
 	}
 }

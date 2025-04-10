@@ -1,7 +1,7 @@
 {
   "name": "code-oss-dev",
-  "version": "0.0.1",
-  "vscodeVersion": "1.98.2",
+  "opcVersion": "0.0.1",
+  "version": "1.98.2",
   "distro": "de81a091068fb03e277543d4f4900db005edf9f3",
   "author": {
     "name": "OrangePi Code"

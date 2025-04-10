@@ -81,10 +81,12 @@ export class NativeDialogHandler extends AbstractDialogHandler {
 		const osProps = await this.nativeHostService.getOSProperties();
 		const releaseString = getReleaseString();
 
+		const opcVersion = this.productService.opcVersion;
+
 		const detailString = (useAgo: boolean): string => {
 			return localize({ key: 'aboutDetail', comment: ['Electron, Chromium, Node.js and V8 are product names that need no translation'] },
-				`Version: ${this.productService.opcVersion}\nVSCode Version: {0}\nCommit: {1}\nDate: {2}\nElectron: {3}\nElectronBuildId: {4}\nChromium: {5}\nNode.js: {6}\nV8: {7}\nOS: {8}`,
-				version,
+				"Version: {0}\nCommit: {1}\nDate: {2}\nElectron: {3}\nElectronBuildId: {4}\nChromium: {5}\nNode.js: {6}\nV8: {7}\nOS: {8}",
+				opcVersion,
 				this.productService.commit || 'Unknown',
 				this.productService.date ? `${this.productService.date}${useAgo ? ' (' + fromNow(new Date(this.productService.date), true) + ')' : ''}` : 'Unknown',
 				process.versions['electron'],
@@ -93,7 +95,7 @@ export class NativeDialogHandler extends AbstractDialogHandler {
 				process.versions['node'],
 				process.versions['v8'],
 				`${osProps.type} ${osProps.arch} ${osProps.release}${isLinuxSnap ? ' snap' : ''}`,
-			).replace('\n', `\n${releaseString} ${this.productService.release || 'Unknown'}\n`);
+			).replace('\n', `\nVSCode Version: ${version}\n${releaseString} ${this.productService.release || 'Unknown'}\n`);
 		};
 
 		const detail = detailString(true);

@@ -62,6 +62,24 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground) / <alpha-value>)',
 					border: 'hsl(var(--sidebar-border) / <alpha-value>)',
 					ring: 'hsl(var(--sidebar-ring) / <alpha-value>)'
+				},
+				menuBackground: {
+					DEFAULT: 'hsl(var(--menu-background) / <alpha-value>)',
+				},
+				menuForeground: {
+					DEFAULT: 'hsl(var(--menu-foreground) / <alpha-value>)',
+				},
+				menuSeparatorBackground: {
+					DEFAULT: 'hsl(var(--menu-separatorBackground) / <alpha-value>)',
+				},
+				menuBorder: {
+					DEFAULT: 'hsl(var(--menu-border) / <alpha-value>)',
+				},
+				menuSelectionBackground: {
+					DEFAULT: 'hsl(var(--menu-selectionBackground) / <alpha-value>)',
+				},
+				menuSelectionForeground: {
+					DEFAULT: 'hsl(var(--menu-selectionForeground) / <alpha-value>)',
 				}
 			}
 		}

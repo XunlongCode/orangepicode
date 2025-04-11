@@ -161,7 +161,7 @@ export const Usermenu: FC = () => {
 				style={{
 					boxShadow: "0px 0px 30px 0px rgba(0, 0, 0, 0.25)"
 				}}
-				className='w-full h-full bg-background text-foreground rounded-[8px] border border-secondary'
+				className='w-full h-full bg-menuBackground text-menuForeground rounded-[8px] border border-menuBorder'
 			>
 				<div className='pt-[16px]'>
 					{/* 用户信息 */}
@@ -190,8 +190,8 @@ export const Usermenu: FC = () => {
 
 								*[role="menuitem"][data-highlighted],
 								div[role="menuitem"][data-state="open"] {
-									${tw`text-foreground outline-none`};
-									background-color: var(--vscode-activityBar-background);
+									${tw`text-menuForeground outline-none`};
+									background-color: var(--vscode-menu-selectionBackground);
 								}
 							}
 						`}
@@ -200,34 +200,55 @@ export const Usermenu: FC = () => {
 						<DropdownMenuTrigger className='w-full h-0'>.</DropdownMenuTrigger>
 						<DropdownMenuContent
 							container={dropdownContiainerRef.current!}
-							className="w-[--radix-dropdown-menu-trigger-width] border-none !animate-none"
+							className="bg-menuBackground w-[--radix-dropdown-menu-trigger-width] border-none !animate-none"
 						>
 							<DropdownMenuSub open={themeSubOpen} onOpenChange={setThemeSubOpen}>
-								<DropdownMenuSubTrigger className='h-[48px] cursor-pointer' onClick={() => setThemeSubOpen(!themeSubOpen)}>
+								<DropdownMenuSubTrigger
+									className='h-[48px] cursor-pointer'
+									// onClick={() => setThemeSubOpen(!themeSubOpen)}
+								>
 									{t("theme", { ns: "usermenu" })}
 								</DropdownMenuSubTrigger>
 								<DropdownMenuPortal container={dropdownContiainerRef.current!}>
-									<DropdownMenuSubContent className='!animate-none'>
-										<DropdownMenuItem className='cursor-pointer' onClick={() => onSelectTheme("OrangePi Dark")}>{t("darkTheme", { ns: "theme" })}</DropdownMenuItem>
-										<DropdownMenuItem className='cursor-pointer' onClick={() => onSelectTheme("OrangePi Light")}>{t("lightTheme", { ns: "theme" })}</DropdownMenuItem>
-										<DropdownMenuItem className='cursor-pointer' onClick={() => onSelectTheme("OrangePi Orange")}>{t("orangeTheme", { ns: "theme" })}</DropdownMenuItem>
+									<DropdownMenuSubContent className='bg-menuBackground !animate-none border-menuBorder'>
+										<DropdownMenuItem
+											className='cursor-pointer'
+											onClick={() => onSelectTheme("OrangePi Dark")}
+										>
+											{t("darkTheme", { ns: "theme" })}
+										</DropdownMenuItem>
+										<DropdownMenuItem
+											className='cursor-pointer'
+											onClick={() => onSelectTheme("OrangePi Light")}
+										>
+											{t("lightTheme", { ns: "theme" })}
+										</DropdownMenuItem>
+										<DropdownMenuItem
+											className='cursor-pointer'
+											onClick={() => onSelectTheme("OrangePi Orange")}
+										>
+											{t("orangeTheme", { ns: "theme" })}
+										</DropdownMenuItem>
 									</DropdownMenuSubContent>
 								</DropdownMenuPortal>
 							</DropdownMenuSub>
 
 							<DropdownMenuSub open={languageSubOpen} onOpenChange={setLanguageSubOpen}>
-								<DropdownMenuSubTrigger className='h-[48px] cursor-pointer' onClick={() => setLanguageSubOpen(!languageSubOpen)}>
+								<DropdownMenuSubTrigger
+									className='h-[48px] cursor-pointer'
+									// onClick={() => setLanguageSubOpen(!languageSubOpen)}
+								>
 									{t("language", { ns: "usermenu" })}
 								</DropdownMenuSubTrigger>
 								<DropdownMenuPortal container={dropdownContiainerRef.current!}>
-									<DropdownMenuSubContent className='!animate-none'>
+									<DropdownMenuSubContent className='bg-menuBackground !animate-none border-menuBorder'>
 										<DropdownMenuItem className='cursor-pointer' onClick={() => setLanguage("en")}>English</DropdownMenuItem>
 										<DropdownMenuItem className='cursor-pointer' onClick={() => setLanguage("zh-CN")}>简体中文</DropdownMenuItem>
 									</DropdownMenuSubContent>
 								</DropdownMenuPortal>
 							</DropdownMenuSub>
 
-							<DropdownMenuSeparator className='m-0' />
+							<DropdownMenuSeparator className='m-0 bg-menuSeparatorBackground' />
 
 							<DropdownMenuItem className='h-[48px] cursor-pointer' onClick={openSettings}>
 								{t("settings", { ns: "usermenu" })}
@@ -241,7 +262,7 @@ export const Usermenu: FC = () => {
 									target="_blank"
 									rel="noopener noreferrer"
 								>
-									<span className='text-foreground'>
+									<span className='text-menuForeground'>
 										{t("checkUpdate", { ns: "usermenu" })}
 									</span>
 								</a>
@@ -252,7 +273,7 @@ export const Usermenu: FC = () => {
 									target="_blank"
 									rel="noopener noreferrer"
 								>
-									<span className='text-foreground'>
+									<span className='text-menuForeground'>
 										{t("helpDocumentation", { ns: "usermenu" })}
 									</span>
 								</a>
@@ -263,13 +284,13 @@ export const Usermenu: FC = () => {
 									target="_blank"
 									rel="noopener noreferrer"
 								>
-									<span className='text-foreground'>
+									<span className='text-menuForeground'>
 										{t("contactUs", { ns: "usermenu" })}
 									</span>
 								</a>
 							</DropdownMenuItem>
 
-							<DropdownMenuSeparator className='m-0' />
+							<DropdownMenuSeparator className='m-0 bg-menuSeparatorBackground' />
 
 							<DropdownMenuItem className='h-[48px] cursor-pointer' onClick={onLogout}>
 								{t("logout", { ns: "usermenu" })}

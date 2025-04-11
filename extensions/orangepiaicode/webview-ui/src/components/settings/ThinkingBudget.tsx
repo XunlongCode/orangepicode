@@ -41,6 +41,7 @@ export const ThinkingBudget = ({ apiConfiguration, setApiConfigurationField, mod
 			<div className="flex flex-col gap-1">
 				<div className="font-medium">{t("settings:thinkingBudget.maxTokens")}</div>
 				<div className="flex items-center gap-1">
+					<div className="text-sm">{tokensMin}</div>
 					<Slider
 						min={tokensMin}
 						max={tokensMax}
@@ -54,6 +55,7 @@ export const ThinkingBudget = ({ apiConfiguration, setApiConfigurationField, mod
 			<div className="flex flex-col gap-1">
 				<div className="font-medium">{t("settings:thinkingBudget.maxThinkingTokens")}</div>
 				<div className="flex items-center gap-1">
+					<div className="text-sm">{thinkingTokensMin}</div>
 					<Slider
 						min={thinkingTokensMin}
 						max={thinkingTokensMax}

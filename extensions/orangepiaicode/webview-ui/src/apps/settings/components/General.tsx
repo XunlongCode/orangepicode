@@ -16,7 +16,7 @@ const ThemeItem: FC<{
 }> = ({ value, isSelected, imgSrc, onChange, className, labelClassName }) => {
 
 	return <button className={cn(
-		'flex-1 p-2 bg-secondary rounded-[8px] text-left flex items-center hover:bg-primary cursor-pointer w-full',
+		'flex-1 p-2 bg-vscode-editorWidget-background rounded-[8px] text-left flex items-center hover:bg-vscode-button-hoverBackground cursor-pointer w-full',
 		{ 'bg-primary': isSelected },
 		className
 	)} onClick={() => onChange(value)}>
@@ -39,7 +39,7 @@ const LanguageItem: FC<{
 	className
 }) => {
 		return <button className={cn(
-			'h-[32px] text-left px-[5px] mx-[5px] rounded-[4px] text-sm hover:bg-primary cursor-pointer',
+			'h-[32px] text-left bg-vscode-editorWidget-background px-[5px] mx-[5px] rounded-[4px] text-sm hover:bg-vscode-button-hoverBackground cursor-pointer',
 			className
 		)} onClick={() => onChange(value)}>
 			{value.label}
@@ -253,7 +253,7 @@ const General: FC = () => {
 					{t("currentAccount", { ns: "settingsApp" })}: {userInfo?.label}
 				</div>
 				<div className='mb-[24px]'>
-					<Button className='min-w-[140px] rounded' onClick={onLogout}>
+					<Button variant={"secondary"} className='min-w-[140px] rounded' onClick={onLogout}>
 						{t("logout", { ns: "settingsApp" })}
 					</Button>
 				</div>
@@ -271,7 +271,7 @@ const General: FC = () => {
 
 		<Popover open={themePopverOpen} onOpenChange={setThemePopoverOpen}>
 			<PopoverTrigger asChild className='w-full max-w-[320px]'>
-				<div className='w-full h-8 bg-secondary flex items-center justify-between rounded px-[10px] cursor-pointer'>
+				<div className='w-full h-8 bg-vscode-editorWidget-background flex items-center justify-between rounded px-[10px] cursor-pointer'>
 					<ThemeItem
 						className='p-0 !bg-transparent'
 						labelClassName='line-clamp-1 break-all'
@@ -287,12 +287,12 @@ const General: FC = () => {
 					</div>
 				</div>
 			</PopoverTrigger>
-			<PopoverContent className='p-0 bg-secondary border-none w-[var(--radix-popover-trigger-width)] !animate-none'>
+			<PopoverContent className='p-0 bg-vscode-editorWidget-background border-none w-[var(--radix-popover-trigger-width)] !animate-none'>
 				{
 					themeOptions.map((item) => {
 						return <ThemeItem
 							value={item}
-							isSelected={currentTheme.value === item.value}
+							isSelected={false}
 							imgSrc={getThemePrevImage(item.value)}
 							onChange={selectTheme}
 							key={item.value}
@@ -307,7 +307,7 @@ const General: FC = () => {
 		</div>
 
 		<Popover open={langPopverOpen} onOpenChange={setLangPopoverOpen}>
-			<PopoverTrigger className='w-full max-w-[320px] h-8 bg-secondary flex items-center justify-between rounded px-[10px] cursor-pointer'>
+			<PopoverTrigger className='w-full max-w-[320px] h-8 bg-vscode-editorWidget-background flex items-center justify-between rounded px-[10px] cursor-pointer'>
 				<div className='text-sm line-clamp-1'>
 					{currentLanguage.label}
 				</div>
@@ -318,7 +318,7 @@ const General: FC = () => {
 				</div>
 			</PopoverTrigger>
 			<PopoverContent className='p-0 border-none w-[var(--radix-popover-trigger-width)] !animate-none'>
-				<div className='w-full flex flex-col text-vscode-foreground bg-secondary'>
+				<div className='w-full flex flex-col text-vscode-foreground bg-vscode-editorWidget-background'>
 					<div className='h-[5px]'></div>
 					<LanguageItem
 						value={{ value: "zh-CN", label: "简体中文" }}
@@ -349,11 +349,11 @@ const General: FC = () => {
 		</div>
 
 		<div className='mb-[24px] flex gap-2.5 flex-wrap'>
-			<Button className='min-w-[140px] rounded h-[34px]' disabled={isImportingExtensions} onClick={onImportFromVSCode}>
+			<Button variant={"secondary"} className='min-w-[140px] rounded h-[34px]' disabled={isImportingExtensions} onClick={onImportFromVSCode}>
 				{isImportingExtensions && importingFrom === "vscode" && <div className='codicon codicon-loading animate-spin'></div>}
 				{t("importFromVSCode", { ns: "settingsApp" })}
 			</Button>
-			<Button className='min-w-[140px] rounded h-[34px]' disabled={isImportingExtensions} onClick={onImportFromCursor}>
+			<Button variant={"secondary"} className='min-w-[140px] rounded h-[34px]' disabled={isImportingExtensions} onClick={onImportFromCursor}>
 				{isImportingExtensions && importingFrom === "cursor" && <div className='codicon codicon-loading animate-spin'></div>}
 				{t("importFromCursor", { ns: "settingsApp" })}
 			</Button>
@@ -368,7 +368,7 @@ const General: FC = () => {
 		</div>
 
 		<div className='mb-[24px]'>
-			<Button className='min-w-[140px] rounded h-[34px]' onClick={onOpenVSCodeSettings}>
+			<Button variant={"secondary"} className='min-w-[140px] rounded h-[34px]' onClick={onOpenVSCodeSettings}>
 				{t("goToSettings", { ns: "settingsApp" })}
 			</Button>
 		</div>
@@ -382,7 +382,7 @@ const General: FC = () => {
 		</div>
 
 		<div className='mb-[24px]'>
-			<Button className='min-w-[140px] rounded h-[34px]' onClick={onOpenVSCodeKeyboardShortcuts}>
+			<Button variant={"secondary"} className='min-w-[140px] rounded h-[34px]' onClick={onOpenVSCodeKeyboardShortcuts}>
 				{t("goToSettings", { ns: "settingsApp" })}
 			</Button>
 		</div>

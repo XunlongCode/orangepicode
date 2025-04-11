@@ -1312,7 +1312,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 			)}
 
 			<div
-				className='my-[16px] bg-vscode-background rounded-[8px] flex flex-col min-h-0'
+				className='my-[16px] bg-[var(--vscode-editorWidget-background)] rounded-[8px] flex flex-col min-h-0'
 				style={{
 					boxShadow: "0px 0px 20px 0px #00000033"
 				}}
@@ -1321,7 +1321,6 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 					isExpandedExternal={isAutoApproveMenuExpanded}
 					onExpandChange={handleAutoApproveMenuExpandChange}
 					style={{
-						marginBottom: -2,
 						flex: "0 1 auto", // flex-grow: 0, flex-shrink: 1, flex-basis: auto
 						minHeight: 0,
 						overflow: "auto"

@@ -117,6 +117,13 @@
 	--color-vscode-inputValidation-infoForeground: var(--vscode-inputValidation-infoForeground);
 	--color-vscode-inputValidation-infoBackground: var(--vscode-inputValidation-infoBackground);
 	--color-vscode-inputValidation-infoBorder: var(--vscode-inputValidation-infoBorder);
+
+	--color-vscode-textLink-foreground: var(--vscode-textLink-foreground);
+	--color-vscode-menu-separatorBackground: var(--vscode-menu-separatorBackground);
+	--color-vscode-button-hoverBackground: var(--vscode-button-hoverBackground);
+
+	--color-vscode-editorWidget-background: var(--vscode-editorWidget-background);
+	--color-vscode-editorWidget-foreground: var(--vscode-editorWidget-foreground);
 }
 
 @layer base {

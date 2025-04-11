@@ -591,7 +591,7 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 		return (
 			<div>
 				<div
-					className="chat-text-area border-[2px] border-primary"
+					className="chat-text-area border-[2px] border-[var(--vscode-button-background)]"
 					style={{
 						opacity: textAreaDisabled ? 0.5 : 1,
 						position: "relative",
@@ -932,12 +932,12 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 									},
 								]}
 								onChange={(value) => vscode.postMessage({ type: "loadApiConfiguration", text: value })}
-								contentClassName={cn("max-h-[300px] overflow-y-auto")}
+								contentClassName={cn("max-h-[300px] overflow-y-auto border-vscode-menu-separatorBackground")}
 								triggerClassName={cn("w-full text-ellipsis overflow-hidden bg-foreground/8 flex-row-reverse justify-between px-[10px] py-0 h-[32px] text-[14px] rounded-[4px]")}
 							/>
 						</div>
 						<div
-							className={`input-icon-button ${textAreaDisabled ? "disabled" : ""} bg-gradient-to-r from-primary to-primary-foreground to-[320%] !opacity-100 hover:!to-[999%] w-[30px] h-[22px] rounded-[2px]`}
+							className={`input-icon-button ${textAreaDisabled ? "disabled" : ""} bg-gradient-to-r from-vscode-textLink-foreground to-vscode-textLink-foreground to-[320%] !opacity-100 hover:!to-[999%] w-[30px] h-[22px] rounded-[2px] text-white`}
 							title={t("chat:sendMessage")}
 							onClick={() => !textAreaDisabled && onSend()}
 						>

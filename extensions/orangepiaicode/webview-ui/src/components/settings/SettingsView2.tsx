@@ -312,9 +312,9 @@ const SettingsView2 = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, 
 
 			<TabContent className="p-0 divide-y divide-vscode-sideBar-background">
 				<div ref={providersRef}>
-					<SectionHeader>
+					<SectionHeader className='px-0 py-0'>
 						<div className="flex items-center gap-2">
-							<Webhook className="w-4" />
+							{/* <Webhook className="w-4" /> */}
 							<div>{t("settings:sections.providers")}</div>
 						</div>
 					</SectionHeader>

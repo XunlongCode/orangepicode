@@ -10,7 +10,7 @@ root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # 定义要执行的命令
 commands = [
     {
-        "cmd": "yarn build",
+        "cmd": "yarn start",
         "cwd": os.path.join(root_dir, "extensions/orangepicode-theme"),
     },
     {"cmd": "yarn watch", "cwd": root_dir},

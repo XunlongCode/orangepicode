@@ -8,6 +8,7 @@ import { CheckpointStorage } from "../../../../src/shared/checkpoints"
 import { SetCachedStateField } from "./types"
 import { SectionHeader } from "./SectionHeader"
 import { Section } from "./Section"
+import { Checkbox } from '../ui/checkbox'
 
 type CheckpointSettingsProps = HTMLAttributes<HTMLDivElement> & {
 	enableCheckpoints?: boolean
@@ -25,22 +26,23 @@ export const CheckpointSettings = ({
 	const { t } = useAppTranslation()
 	return (
 		<div {...props}>
-			<SectionHeader>
+			<SectionHeader className='px-0 py-0'>
 				<div className="flex items-center gap-2">
-					<GitBranch className="w-4" />
+					{/* <GitBranch className="w-4" /> */}
 					<div>{t("settings:sections.checkpoints")}</div>
 				</div>
 			</SectionHeader>
 
 			<Section className={props.sectionClassName}>
 				<div>
-					<VSCodeCheckbox
+					<Checkbox
+						className='mb-1'
 						checked={enableCheckpoints}
-						onChange={(e: any) => {
-							setCachedStateField("enableCheckpoints", e.target.checked)
+						onCheckedChange={(e: any) => {
+							setCachedStateField("enableCheckpoints", e === "indeterminate" ? false : e)
 						}}>
 						<span className="font-medium">{t("settings:checkpoints.enable.label")}</span>
-					</VSCodeCheckbox>
+					</Checkbox>
 					<p className="text-vscode-descriptionForeground text-sm mt-0">
 						{t("settings:checkpoints.enable.description")}
 					</p>

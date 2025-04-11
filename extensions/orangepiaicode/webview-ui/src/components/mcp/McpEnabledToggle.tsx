@@ -3,23 +3,24 @@ import { FormEvent } from "react"
 import { useExtensionState } from "../../context/ExtensionStateContext"
 import { useAppTranslation } from "../../i18n/TranslationContext"
 import { vscode } from "../../utils/vscode"
+import { Checkbox } from '../ui/checkbox'
+import { CheckedState } from '@radix-ui/react-checkbox'
 
 const McpEnabledToggle = () => {
 	const { mcpEnabled, setMcpEnabled } = useExtensionState()
 	const { t } = useAppTranslation()
 
-	const handleChange = (e: Event | FormEvent<HTMLElement>) => {
-		const target = ("target" in e ? e.target : null) as HTMLInputElement | null
-		if (!target) return
-		setMcpEnabled(target.checked)
-		vscode.postMessage({ type: "mcpEnabled", bool: target.checked })
+	const handleChange = (e: CheckedState) => {
+		const checked = e === "indeterminate" ? false : e
+		setMcpEnabled(checked)
+		vscode.postMessage({ type: "mcpEnabled", bool: checked })
 	}
 
 	return (
 		<div style={{ marginBottom: "20px" }}>
-			<VSCodeCheckbox checked={mcpEnabled} onChange={handleChange}>
+			<Checkbox checked={mcpEnabled} onCheckedChange={handleChange}>
 				<span style={{ fontWeight: "500" }}>{t("mcp:enableToggle.title")}</span>
-			</VSCodeCheckbox>
+			</Checkbox>
 			<p
 				style={{
 					fontSize: "12px",

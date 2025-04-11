@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Slider }
 import { SetCachedStateField, SetExperimentEnabled } from "./types"
 import { SectionHeader } from "./SectionHeader"
 import { Section } from "./Section"
+import { Checkbox } from '../ui/checkbox'
 
 type AdvancedSettingsProps = HTMLAttributes<HTMLDivElement> & {
 	rateLimitSeconds: number
@@ -35,9 +36,9 @@ export const AdvancedSettings = ({
 
 	return (
 		<div className={cn("flex flex-col gap-2", className)} {...props}>
-			<SectionHeader>
+			<SectionHeader className='px-0 py-0'>
 				<div className="flex items-center gap-2">
-					<Cog className="w-4" />
+					{/* <Cog className="w-4" /> */}
 					<div>{t("settings:sections.advanced")}</div>
 				</div>
 			</SectionHeader>
@@ -47,6 +48,7 @@ export const AdvancedSettings = ({
 					<div className="flex flex-col gap-2">
 						<span className="font-medium">{t("settings:advanced.rateLimit.label")}</span>
 						<div className="flex items-center gap-2">
+							<span>0s</span>
 							<Slider
 								min={0}
 								max={60}
@@ -63,18 +65,19 @@ export const AdvancedSettings = ({
 				</div>
 
 				<div>
-					<VSCodeCheckbox
+					<Checkbox
 						checked={diffEnabled}
-						onChange={(e: any) => {
-							setCachedStateField("diffEnabled", e.target.checked)
-							if (!e.target.checked) {
+						onCheckedChange={(e) => {
+							e = e === "indeterminate" ? false : e
+							setCachedStateField("diffEnabled", e)
+							if (!e) {
 								// Reset both experimental strategies when diffs are disabled.
 								setExperimentEnabled(EXPERIMENT_IDS.DIFF_STRATEGY, false)
 								setExperimentEnabled(EXPERIMENT_IDS.MULTI_SEARCH_AND_REPLACE, false)
 							}
 						}}>
 						<span className="font-medium">{t("settings:advanced.diff.label")}</span>
-					</VSCodeCheckbox>
+					</Checkbox>
 					<div className="text-vscode-descriptionForeground text-sm">
 						{t("settings:advanced.diff.description")}
 					</div>
@@ -137,6 +140,7 @@ export const AdvancedSettings = ({
 								{t("settings:advanced.diff.matchPrecision.label")}
 							</label>
 							<div className="flex items-center gap-2">
+								<span>80%</span>
 								<Slider
 									min={0.8}
 									max={1}

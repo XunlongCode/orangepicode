@@ -3,6 +3,7 @@ import { useCallback, useState } from "react"
 import { useExtensionState } from "../../context/ExtensionStateContext"
 import { useAppTranslation } from "../../i18n/TranslationContext"
 import { vscode } from "../../utils/vscode"
+import { Checkbox } from '../ui/checkbox'
 
 interface AutoApproveAction {
 	id: string
@@ -205,14 +206,15 @@ const AutoApproveMenu = ({ style, isExpandedExternal, onExpandChange }: AutoAppr
 					display: "flex",
 					alignItems: "center",
 					gap: "8px",
-					padding: isExpanded ? "8px 0" : "8px 0 0 0",
+					paddingTop: "16px",
+					paddingBottom: "6px",
 					cursor: "pointer",
 				}}
 				onClick={toggleExpanded}>
 				<div onClick={(e) => e.stopPropagation()}>
-					<VSCodeCheckbox
+					<Checkbox
 						checked={autoApprovalEnabled ?? false}
-						onChange={() => {
+						onCheckedChange={() => {
 							const newValue = !(autoApprovalEnabled ?? false)
 							setAutoApprovalEnabled(newValue)
 							vscode.postMessage({ type: "autoApprovalEnabled", bool: newValue })
@@ -265,11 +267,11 @@ const AutoApproveMenu = ({ style, isExpandedExternal, onExpandChange }: AutoAppr
 						{t("chat:autoApprove.description")}
 					</div>
 					{actions.map((action) => (
-						<div key={action.id} style={{ margin: "6px 0" }}>
+						<div key={action.id} style={{ margin: "12px 0" }}>
 							<div onClick={(e) => e.stopPropagation()}>
-								<VSCodeCheckbox checked={action.enabled} onChange={actionHandlers[action.id]}>
+								<Checkbox checked={action.enabled} onCheckedChange={actionHandlers[action.id]}>
 									{action.label}
-								</VSCodeCheckbox>
+								</Checkbox>
 							</div>
 							<div
 								style={{

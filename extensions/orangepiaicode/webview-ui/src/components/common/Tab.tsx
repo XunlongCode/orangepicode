@@ -40,7 +40,7 @@ export const TabContent = ({ className, children, ...props }: TabProps) => {
 	)
 
 	return (
-		<div className={cn("flex-1 overflow-auto p-5", className)} onWheel={onWheel} {...props}>
+		<div className={cn("flex-1 overflow-auto p-5 text-vscode-foreground", className)} onWheel={onWheel} {...props}>
 			{children}
 		</div>
 	)

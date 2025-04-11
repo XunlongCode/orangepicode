@@ -21,6 +21,9 @@ const path = require('path');
 const cp = require('child_process');
 const util = require('util');
 
+// 修正版本号
+packageJson.version = packageJson.opcVersion;
+
 const exec = util.promisify(cp.exec);
 const root = path.dirname(__dirname);
 const commit = getVersion(root);

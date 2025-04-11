@@ -33,6 +33,9 @@ const cp = require('child_process');
 const log = require('fancy-log');
 const buildfile = require('./buildfile');
 
+// 修正版本号
+packageJson.version = packageJson.opcVersion;
+
 const REPO_ROOT = path.dirname(__dirname);
 const commit = getVersion(REPO_ROOT);
 const BUILD_ROOT = path.dirname(REPO_ROOT);

@@ -31,9 +31,9 @@ export const ExperimentalSettings = ({
 
 	return (
 		<div className={cn("flex flex-col gap-2", className)} {...props}>
-			<SectionHeader>
+			<SectionHeader className='px-0 py-0'>
 				<div className="flex items-center gap-2">
-					<FlaskConical className="w-4" />
+					{/* <FlaskConical className="w-4" /> */}
 					<div>{t("settings:sections.experimental")}</div>
 				</div>
 			</SectionHeader>

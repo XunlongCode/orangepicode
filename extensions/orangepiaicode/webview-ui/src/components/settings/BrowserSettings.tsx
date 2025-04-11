@@ -4,11 +4,12 @@ import { SquareMousePointer } from "lucide-react"
 
 import { vscode } from "@/utils/vscode"
 import { useAppTranslation } from "@/i18n/TranslationContext"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, Slider } from "@/components/ui"
+import { Button, Input, Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, Slider } from "@/components/ui"
 
 import { SetCachedStateField } from "./types"
 import { SectionHeader } from "./SectionHeader"
 import { Section } from "./Section"
+import { Checkbox } from '../ui/checkbox'
 
 type BrowserSettingsProps = HTMLAttributes<HTMLDivElement> & {
 	browserToolEnabled?: boolean
@@ -114,20 +115,20 @@ export const BrowserSettings = ({
 
 	return (
 		<div {...props}>
-			<SectionHeader>
+			<SectionHeader className='px-0 py-0'>
 				<div className="flex items-center gap-2">
-					<SquareMousePointer className="w-4" />
+					{/* <SquareMousePointer className="w-4" /> */}
 					<div>{t("settings:sections.browser")}</div>
 				</div>
 			</SectionHeader>
 
 			<Section className={props.sectionClassName}>
 				<div>
-					<VSCodeCheckbox
+					<Checkbox
 						checked={browserToolEnabled}
-						onChange={(e: any) => setCachedStateField("browserToolEnabled", e.target.checked)}>
+						onCheckedChange={(e: any) => setCachedStateField("browserToolEnabled", e === "indeterminate" ? false : e)}>
 						<span className="font-medium">{t("settings:browser.enable.label")}</span>
-					</VSCodeCheckbox>
+					</Checkbox>
 					<div className="text-vscode-descriptionForeground text-sm mt-1">
 						{t("settings:browser.enable.description")}
 					</div>
@@ -163,6 +164,7 @@ export const BrowserSettings = ({
 								{t("settings:browser.screenshotQuality.label")}
 							</label>
 							<div className="flex items-center gap-2">
+								<span>1%</span>
 								<Slider
 									min={1}
 									max={100}
@@ -178,19 +180,20 @@ export const BrowserSettings = ({
 						</div>
 
 						<div>
-							<VSCodeCheckbox
+							<Checkbox
 								checked={remoteBrowserEnabled}
-								onChange={(e: any) => {
+								onCheckedChange={(e: any) => {
+									e = e === "indeterminate" ? false : e
 									// Update the global state - remoteBrowserEnabled now means "enable remote browser connection".
-									setCachedStateField("remoteBrowserEnabled", e.target.checked)
+									setCachedStateField("remoteBrowserEnabled", e)
 
-									if (!e.target.checked) {
+									if (!e) {
 										// If disabling remote browser, clear the custom URL.
 										setCachedStateField("remoteBrowserHost", undefined)
 									}
 								}}>
-								<label className="block font-medium mb-1">{t("settings:browser.remote.label")}</label>
-							</VSCodeCheckbox>
+								<label className="block font-medium">{t("settings:browser.remote.label")}</label>
+							</Checkbox>
 							<div className="text-vscode-descriptionForeground text-sm mt-1">
 								{t("settings:browser.remote.description")}
 							</div>
@@ -199,29 +202,30 @@ export const BrowserSettings = ({
 						{remoteBrowserEnabled && (
 							<>
 								<div className="flex items-center gap-2">
-									<VSCodeTextField
+									<Input
 										value={remoteBrowserHost ?? ""}
-										onChange={(e: any) =>
+										onChange={(e: any) => {
 											setCachedStateField("remoteBrowserHost", e.target.value || undefined)
+										}
 										}
 										placeholder={t("settings:browser.remote.urlPlaceholder")}
 										style={{ flexGrow: 1 }}
 									/>
-									<VSCodeButton
+									<Button
+										variant={"secondary"}
 										disabled={testingConnection}
 										onClick={remoteBrowserHost ? testConnection : discoverBrowser}>
 										{testingConnection || discovering
 											? t("settings:browser.remote.testingButton")
 											: t("settings:browser.remote.testButton")}
-									</VSCodeButton>
+									</Button>
 								</div>
 								{testResult && (
 									<div
-										className={`p-2 rounded-xs text-sm ${
-											testResult.success
-												? "bg-green-800/20 text-green-400"
-												: "bg-red-800/20 text-red-400"
-										}`}>
+										className={`p-2 rounded-xs text-sm ${testResult.success
+											? "bg-green-800/20 text-green-400"
+											: "bg-red-800/20 text-red-400"
+											}`}>
 										{testResult.message}
 									</div>
 								)}

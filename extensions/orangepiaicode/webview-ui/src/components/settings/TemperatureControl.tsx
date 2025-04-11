@@ -4,6 +4,7 @@ import { useAppTranslation } from "@/i18n/TranslationContext"
 import { useDebounce } from "react-use"
 
 import { Slider } from "@/components/ui"
+import { Checkbox } from '../ui/checkbox'
 
 interface TemperatureControlProps {
 	value: number | undefined | null
@@ -28,10 +29,10 @@ export const TemperatureControl = ({ value, onChange, maxValue = 1 }: Temperatur
 	return (
 		<>
 			<div>
-				<VSCodeCheckbox
+				<Checkbox
 					checked={isCustomTemperature}
-					onChange={(e: any) => {
-						const isChecked = e.target.checked
+					onCheckedChange={(e) => {
+						const isChecked = e === "indeterminate" ? false : e
 						setIsCustomTemperature(isChecked)
 
 						if (!isChecked) {
@@ -40,8 +41,8 @@ export const TemperatureControl = ({ value, onChange, maxValue = 1 }: Temperatur
 							setInputValue(value ?? 0) // Use the value from apiConfiguration, if set.
 						}
 					}}>
-					<label className="block font-medium mb-1">{t("settings:temperature.useCustom")}</label>
-				</VSCodeCheckbox>
+					<label className="block font-medium">{t("settings:temperature.useCustom")}</label>
+				</Checkbox>
 				<div className="text-sm text-vscode-descriptionForeground mt-1">
 					{t("settings:temperature.description")}
 				</div>
@@ -51,6 +52,7 @@ export const TemperatureControl = ({ value, onChange, maxValue = 1 }: Temperatur
 				<div className="flex flex-col gap-3 pl-3 border-l-2 border-vscode-button-background">
 					<div>
 						<div className="flex items-center gap-2">
+							<span>{0}</span>
 							<Slider
 								min={0}
 								max={maxValue}

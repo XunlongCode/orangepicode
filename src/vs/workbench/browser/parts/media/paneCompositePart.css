@@ -366,6 +366,6 @@
 }
 
 .monaco-workbench .pane-composite-part.part.auxiliarybar > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item.checked {
-	background-color: color-mix(in oklab, var(--vscode-activityBar-foreground) 6%, transparent);
+	background-color: var(--vscode-activityBar-activeBackground, --vscode-titleBar-activeBackground);
 	border-radius: 4px;
 }

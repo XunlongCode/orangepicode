@@ -27,9 +27,9 @@ export const TerminalSettings = ({
 
 	return (
 		<div className={cn("flex flex-col gap-2", className)} {...props}>
-			<SectionHeader>
+			<SectionHeader className='px-0 py-0'>
 				<div className="flex items-center gap-2">
-					<SquareTerminal className="w-4" />
+					{/* <SquareTerminal className="w-4" /> */}
 					<div>{t("settings:sections.terminal")}</div>
 				</div>
 			</SectionHeader>
@@ -38,6 +38,7 @@ export const TerminalSettings = ({
 				<div>
 					<label className="block font-medium mb-1">{t("settings:terminal.outputLineLimit.label")}</label>
 					<div className="flex items-center gap-2">
+						<span>100</span>
 						<Slider
 							min={100}
 							max={5000}
@@ -58,6 +59,7 @@ export const TerminalSettings = ({
 						{t("settings:terminal.shellIntegrationTimeout.label")}
 					</label>
 					<div className="flex items-center gap-2">
+						<span>1000s</span>
 						<Slider
 							min={1000}
 							max={60000}

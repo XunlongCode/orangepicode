@@ -11,7 +11,7 @@ import {
 import { McpServer } from "../../../../src/shared/mcp"
 
 import { vscode } from "@/utils/vscode"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, Button } from "@/components/ui"
 
 import { useExtensionState } from "../../context/ExtensionStateContext"
 import { useAppTranslation } from "../../i18n/TranslationContext"
@@ -20,6 +20,7 @@ import { Tab, TabContent, TabHeader } from "../common/Tab"
 import McpToolRow from "./McpToolRow"
 import McpResourceRow from "./McpResourceRow"
 import McpEnabledToggle from "./McpEnabledToggle"
+import { Checkbox } from '../ui/checkbox'
 
 type McpViewProps = {
 	onDone?: () => void
@@ -43,13 +44,12 @@ const McpView2 = ({ onDone, className }: McpViewProps) => {
 				{onDone && <VSCodeButton onClick={onDone}>{t("mcp:done")}</VSCodeButton>}
 			</TabHeader>
 
-			<TabContent className='px-0'>
+			<TabContent className='px-0 !pt-0'>
 				<div
 					style={{
 						color: "var(--vscode-foreground)",
 						fontSize: "13px",
 						marginBottom: "10px",
-						marginTop: "5px",
 					}}>
 					<Trans i18nKey="mcp:description">
 						<VSCodeLink href="https://github.com/modelcontextprotocol" style={{ display: "inline" }}>
@@ -68,14 +68,15 @@ const McpView2 = ({ onDone, className }: McpViewProps) => {
 				{mcpEnabled && (
 					<>
 						<div style={{ marginBottom: 15 }}>
-							<VSCodeCheckbox
+							<Checkbox
 								checked={enableMcpServerCreation}
-								onChange={(e: any) => {
-									setEnableMcpServerCreation(e.target.checked)
-									vscode.postMessage({ type: "enableMcpServerCreation", bool: e.target.checked })
+								onCheckedChange={(e) => {
+									e = e === "indeterminate" ? false : e
+									setEnableMcpServerCreation(e)
+									vscode.postMessage({ type: "enableMcpServerCreation", bool: e })
 								}}>
 								<span style={{ fontWeight: "500" }}>{t("mcp:enableServerCreation.title")}</span>
-							</VSCodeCheckbox>
+							</Checkbox>
 							<p
 								style={{
 									fontSize: "12px",
@@ -97,15 +98,15 @@ const McpView2 = ({ onDone, className }: McpViewProps) => {
 
 						{/* Edit Settings Button */}
 						<div style={{ marginTop: "10px", width: "100%" }}>
-							<VSCodeButton
-								appearance="secondary"
+							<Button
+								variant={"secondary"}
 								style={{ width: "100%" }}
 								onClick={() => {
 									vscode.postMessage({ type: "openMcpSettings" })
 								}}>
 								<span className="codicon codicon-edit" style={{ marginRight: "6px" }}></span>
 								{t("mcp:editSettings")}
-							</VSCodeButton>
+							</Button>
 						</div>
 					</>
 				)}

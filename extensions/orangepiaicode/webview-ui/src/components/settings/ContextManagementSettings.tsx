@@ -9,6 +9,7 @@ import { Slider } from "@/components/ui"
 import { SetCachedStateField } from "./types"
 import { SectionHeader } from "./SectionHeader"
 import { Section } from "./Section"
+import { Checkbox } from '../ui/checkbox'
 
 type ContextManagementSettingsProps = HTMLAttributes<HTMLDivElement> & {
 	maxOpenTabsContext: number
@@ -29,9 +30,9 @@ export const ContextManagementSettings = ({
 	const { t } = useAppTranslation()
 	return (
 		<div className={cn("flex flex-col gap-2", className)} {...props}>
-			<SectionHeader description={t("settings:contextManagement.description")}>
+			<SectionHeader description={t("settings:contextManagement.description")} className='px-0 py-0'>
 				<div className="flex items-center gap-2">
-					<Database className="w-4" />
+					{/* <Database className="w-4" /> */}
 					<div>{t("settings:sections.contextManagement")}</div>
 				</div>
 			</SectionHeader>
@@ -40,6 +41,7 @@ export const ContextManagementSettings = ({
 				<div>
 					<span className="block font-medium mb-1">{t("settings:contextManagement.openTabs.label")}</span>
 					<div className="flex items-center gap-2">
+						<span>0</span>
 						<Slider
 							min={0}
 							max={500}
@@ -60,6 +62,7 @@ export const ContextManagementSettings = ({
 						{t("settings:contextManagement.workspaceFiles.label")}
 					</span>
 					<div className="flex items-center gap-2">
+						<span>0</span>
 						<Slider
 							min={0}
 							max={500}
@@ -76,14 +79,16 @@ export const ContextManagementSettings = ({
 				</div>
 
 				<div>
-					<VSCodeCheckbox
+					<Checkbox
 						checked={showRooIgnoredFiles}
-						onChange={(e: any) => setCachedStateField("showRooIgnoredFiles", e.target.checked)}
-						data-testid="show-rooignored-files-checkbox">
-						<label className="block font-medium mb-1">
+						onCheckedChange={(e: any) => setCachedStateField("showRooIgnoredFiles", e === "indeterminate" ? false : e)}
+						data-testid="show-rooignored-files-checkbox"
+						className='mb-1'
+					>
+						<label className="block font-medium">
 							{t("settings:contextManagement.rooignore.label")}
 						</label>
-					</VSCodeCheckbox>
+					</Checkbox>
 					<div className="text-vscode-descriptionForeground text-sm mt-1">
 						{t("settings:contextManagement.rooignore.description")}
 					</div>

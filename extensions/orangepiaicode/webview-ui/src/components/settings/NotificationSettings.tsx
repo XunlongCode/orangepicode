@@ -7,6 +7,7 @@ import { SetCachedStateField } from "./types"
 import { SectionHeader } from "./SectionHeader"
 import { Section } from "./Section"
 import { Slider } from "../ui"
+import { Checkbox } from '../ui/checkbox'
 
 type NotificationSettingsProps = HTMLAttributes<HTMLDivElement> & {
 	ttsEnabled?: boolean
@@ -28,21 +29,21 @@ export const NotificationSettings = ({
 	const { t } = useAppTranslation()
 	return (
 		<div {...props}>
-			<SectionHeader>
+			<SectionHeader className='px-0 py-0'>
 				<div className="flex items-center gap-2">
-					<Bell className="w-4" />
+					{/* <Bell className="w-4" /> */}
 					<div>{t("settings:sections.notifications")}</div>
 				</div>
 			</SectionHeader>
 
 			<Section className={props.sectionClassName}>
 				<div>
-					<VSCodeCheckbox
+					<Checkbox
 						checked={ttsEnabled}
-						onChange={(e: any) => setCachedStateField("ttsEnabled", e.target.checked)}
+						onCheckedChange={(e: any) => setCachedStateField("ttsEnabled", e === "indeterminate" ? false : e)}
 						data-testid="tts-enabled-checkbox">
 						<span className="font-medium">{t("settings:notifications.tts.label")}</span>
-					</VSCodeCheckbox>
+					</Checkbox>
 					<div className="text-vscode-descriptionForeground text-sm mt-1">
 						{t("settings:notifications.tts.description")}
 					</div>
@@ -55,6 +56,7 @@ export const NotificationSettings = ({
 								{t("settings:notifications.tts.speedLabel")}
 							</label>
 							<div className="flex items-center gap-2">
+								<span>10%</span>
 								<Slider
 									min={0.1}
 									max={2.0}
@@ -70,12 +72,12 @@ export const NotificationSettings = ({
 				)}
 
 				<div>
-					<VSCodeCheckbox
+					<Checkbox
 						checked={soundEnabled}
-						onChange={(e: any) => setCachedStateField("soundEnabled", e.target.checked)}
+						onCheckedChange={(e: any) => setCachedStateField("soundEnabled", e === "indeterminate" ? false : e)}
 						data-testid="sound-enabled-checkbox">
 						<span className="font-medium">{t("settings:notifications.sound.label")}</span>
-					</VSCodeCheckbox>
+					</Checkbox>
 					<div className="text-vscode-descriptionForeground text-sm mt-1">
 						{t("settings:notifications.sound.description")}
 					</div>
@@ -88,6 +90,7 @@ export const NotificationSettings = ({
 								{t("settings:notifications.sound.volumeLabel")}
 							</label>
 							<div className="flex items-center gap-2">
+								<span>0%</span>
 								<Slider
 									min={0}
 									max={1}

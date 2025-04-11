@@ -57,6 +57,12 @@ const VscodeTheme: FC<PropsWithChildren & { className?: string, style?: React.CS
 	const sidebarAccentForeground = useCssVar({ name: "--vscode-editor-foreground" });
 	const sidebarBorder = useCssVar({ name: "--vscode-input-border" });
 	const sidebarRing = useCssVar({ name: "--vscode-focusBorder" });
+	const menubackground = useCssVar({ name: "--vscode-menu-background" });
+	const menuforeground = useCssVar({ name: "--vscode-menu-foreground" });
+	const menuseparatorBackground = useCssVar({ name: "--vscode-menu-separatorBackground" });
+	const menuborder = useCssVar({ name: "--vscode-menu-border" });
+	const menuselectionBackground = useCssVar({ name: "--vscode-menu-selectionBackground" });
+	const menuselectionForeground = useCssVar({ name: "--vscode-menu-selectionForeground" });
 
 	const theme = useVscHlTheme()
 
@@ -113,6 +119,12 @@ const VscodeTheme: FC<PropsWithChildren & { className?: string, style?: React.CS
 			"--sidebar-accent-foreground": convertToHslValue(sidebarAccentForeground.get(), "240 5.9% 10%"),
 			"--sidebar-border": convertToHslValue(sidebarBorder.get(), "220 13% 91%"),
 			"--sidebar-ring": convertToHslValue(sidebarRing.get(), "217.2 91.2% 59.8%"),
+			"--menu-background": convertToHslValue(menubackground.get(), "0 0% 98%"),
+			"--menu-foreground": convertToHslValue(menuforeground.get(), "0 0% 98%"),
+			"--menu-separatorBackground": convertToHslValue(menuseparatorBackground.get(), "0 0% 98%"),
+			"--menu-border": convertToHslValue(menuborder.get(), "0 0% 98%"),
+			"--menu-selectionBackground": convertToHslValue(menuselectionBackground.get(), "0 0% 98%"),
+			"--menu-selectionForeground": convertToHslValue(menuselectionForeground.get(), "0 0% 98%"),
 		};
 	}, [
 		background,
@@ -148,7 +160,13 @@ const VscodeTheme: FC<PropsWithChildren & { className?: string, style?: React.CS
 		sidebarAccentForeground,
 		sidebarBorder,
 		sidebarRing,
-		theme
+		theme,
+		menubackground,
+		menuforeground,
+		menuseparatorBackground,
+		menuborder,
+		menuselectionBackground,
+		menuselectionForeground,
 	]);
 
 	return (

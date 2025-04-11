@@ -15,6 +15,10 @@ const { hygiene } = require('./hygiene');
 function checkPackageJSON(actualPath) {
 	const actual = require(path.join(__dirname, '..', actualPath));
 	const rootPackageJSON = require('../package.json');
+
+	// 修正版本号
+	rootPackageJSON.version = rootPackageJSON.opcVersion;
+
 	const checkIncluded = (set1, set2) => {
 		for (const depName in set1) {
 			const depVersion = set1[depName];

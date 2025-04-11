@@ -124,6 +124,8 @@
 
 	--color-vscode-editorWidget-background: var(--vscode-editorWidget-background);
 	--color-vscode-editorWidget-foreground: var(--vscode-editorWidget-foreground);
+
+	--color-vscode-button-secondaryRing: var(--vscode-button-secondaryRing);
 }
 
 @layer base {

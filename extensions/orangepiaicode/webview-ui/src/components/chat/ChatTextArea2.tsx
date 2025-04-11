@@ -759,7 +759,7 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							}}
 							placeholder={placeholderText}
 							autoFocus={true}
-							className='min-h-[132px] max-h-[132px]'
+							className='min-h-[112px] max-h-[112px]'
 							style={{
 								width: "100%",
 								outline: "none",

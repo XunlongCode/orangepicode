@@ -282,7 +282,7 @@ const General: FC = () => {
 					/>
 					<div className={cn({ "rotate-180": themePopverOpen })}>
 						<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path d="M12.2368 4.70752L7 9.94434L1.76318 4.70752" stroke="#DADDE5" strokeWidth="1.67" strokeLinecap="round" strokeLinejoin="round" />
+							<path d="M12.2368 4.70752L7 9.94434L1.76318 4.70752" stroke="currentColor" strokeWidth="1.67" strokeLinecap="round" strokeLinejoin="round" />
 						</svg>
 					</div>
 				</div>
@@ -313,7 +313,7 @@ const General: FC = () => {
 				</div>
 				<div className={cn({ "rotate-180": langPopverOpen })}>
 					<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M12.2368 4.70752L7 9.94434L1.76318 4.70752" stroke="#DADDE5" strokeWidth="1.67" strokeLinecap="round" strokeLinejoin="round" />
+						<path d="M12.2368 4.70752L7 9.94434L1.76318 4.70752" stroke="currentColor" strokeWidth="1.67" strokeLinecap="round" strokeLinejoin="round" />
 					</svg>
 				</div>
 			</PopoverTrigger>

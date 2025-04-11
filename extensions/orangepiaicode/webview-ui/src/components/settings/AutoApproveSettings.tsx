@@ -253,11 +253,11 @@ export const AutoApproveSettings = ({
 							{(allowedCommands ?? []).map((cmd, index) => (
 								<div
 									key={index}
-									className="border-none bg-vscode-button-secondaryBackground text-vscode-button-secondaryForeground flex items-center gap-1 rounded-[4px] px-1.5 p-0.5">
+									className="border-none bg-vscode-editorWidget-background text-vscode-editorWidget-foreground flex items-center gap-1 rounded-[4px] px-1.5 p-0.5">
 									<span>{cmd}</span>
 									<VSCodeButton
 										appearance="icon"
-										className="text-primary-foreground"
+										className="text-vscode-button-secondaryForeground"
 										data-testid={`remove-command-${index}`}
 										onClick={() => {
 											const newCommands = (allowedCommands ?? []).filter((_, i) => i !== index)

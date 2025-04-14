@@ -16,7 +16,8 @@ const ThemeItem: FC<{
 }> = ({ value, isSelected, imgSrc, onChange, className, labelClassName }) => {
 
 	return <button className={cn(
-		'flex-1 p-2 bg-vscode-editorWidget-background rounded-[8px] text-left flex items-center hover:bg-vscode-button-hoverBackground cursor-pointer w-full',
+		'flex-1 p-2 bg-vscode-editorWidget-background rounded-[8px] text-left flex items-center cursor-pointer w-full',
+		'hover:bg-vscode-button-hoverBackground hover:text-vscode-button-foreground',
 		{ 'bg-primary': isSelected },
 		className
 	)} onClick={() => onChange(value)}>
@@ -39,7 +40,8 @@ const LanguageItem: FC<{
 	className
 }) => {
 		return <button className={cn(
-			'h-[32px] text-left bg-vscode-editorWidget-background px-[5px] mx-[5px] rounded-[4px] text-sm hover:bg-vscode-button-hoverBackground cursor-pointer',
+			'h-[32px] text-left bg-vscode-editorWidget-background px-[5px] mx-[5px] rounded-[4px] text-sm cursor-pointer',
+			'hover:bg-vscode-button-hoverBackground hover:text-vscode-button-foreground',
 			className
 		)} onClick={() => onChange(value)}>
 			{value.label}
@@ -273,7 +275,7 @@ const General: FC = () => {
 			<PopoverTrigger asChild className='w-full max-w-[320px]'>
 				<div className='w-full h-8 bg-vscode-editorWidget-background flex items-center justify-between rounded px-[10px] cursor-pointer'>
 					<ThemeItem
-						className='p-0 !bg-transparent'
+						className='p-0 !bg-transparent hover:text-inherit'
 						labelClassName='line-clamp-1 break-all'
 						value={currentTheme}
 						isSelected={false}

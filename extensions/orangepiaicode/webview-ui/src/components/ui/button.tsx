@@ -10,13 +10,13 @@ const buttonVariants = cva(
 		variants: {
 			variant: {
 				default:
-					"border border-vscode-input-border bg-primary text-primary-foreground hover: hover:bg-vscode-button-hoverBackground/90",
+					"border ring-vscode-button-ring border-vscode-input-border bg-primary text-primary-foreground hover: hover:bg-vscode-button-hoverBackground/90",
 				destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
 				outline:
 					"border border-vscode-input-border bg-background hover:bg-accent hover:text-accent-foreground",
 				secondary:
 					cn("border-none bg-vscode-button-secondaryBackground ring-vscode-button-secondaryRing text-vscode-button-secondaryForeground hover:bg-secondary/80"),
-				ghost: "hover:bg-accent hover:text-accent-foreground",
+				ghost: "hover:bg-accent hover:text-accent-foreground ring-0",
 				link: "text-primary underline-offset-4 hover:underline",
 				combobox:
 					"border border-vscode-dropdown-border focus-visible:border-vscode-focusBorder bg-vscode-dropdown-background hover:bg-transparent text-vscode-dropdown-foreground font-normal",

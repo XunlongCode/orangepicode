@@ -17,7 +17,11 @@ function SelectValue({ ...props }: React.ComponentProps<typeof SelectPrimitive.V
 	return <SelectPrimitive.Value data-slot="select-value" {...props} />
 }
 
-function SelectTrigger({ className, children, ...props }: React.ComponentProps<typeof SelectPrimitive.Trigger>) {
+function SelectTrigger({ className, children, hasRing, ...props }: React.ComponentProps<typeof SelectPrimitive.Trigger> & {
+	hasRing?: boolean
+}) {
+	hasRing = hasRing ?? true
+
 	return (
 		<SelectPrimitive.Trigger
 			data-slot="select-trigger"
@@ -26,6 +30,7 @@ function SelectTrigger({ className, children, ...props }: React.ComponentProps<t
 				"aria-expanded:border-vscode-focusBorder focus-visible:border-vscode-focusBorder",
 				"bg-vscode-editorWidget-background hover:bg-vscode-editorWidget-background/80",
 				"text-vscode-editorWidget-foreground",
+				hasRing && "ring-1 ring-inset ring-vscode-button-secondaryRing",
 				className,
 			)}
 			{...props}>

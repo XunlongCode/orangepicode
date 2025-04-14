@@ -17,6 +17,7 @@ function checkPackageJSON(actualPath) {
 	const rootPackageJSON = require('../package.json');
 
 	// 修正版本号
+	rootPackageJSON = JSON.parse(JSON.stringify(rootPackageJSON));
 	rootPackageJSON.version = rootPackageJSON.opcVersion;
 
 	const checkIncluded = (set1, set2) => {

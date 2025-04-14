@@ -18,6 +18,7 @@ const vfs = require('vinyl-fs');
 const rcedit = require('rcedit');
 
 // 修正版本号
+pkg = JSON.parse(JSON.stringify(pkg));
 pkg.version = pkg.opcVersion;
 
 const repoPath = path.dirname(__dirname);

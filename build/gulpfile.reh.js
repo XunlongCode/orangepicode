@@ -34,6 +34,7 @@ const log = require('fancy-log');
 const buildfile = require('./buildfile');
 
 // 修正版本号
+packageJson = JSON.parse(JSON.stringify(packageJson));
 packageJson.version = packageJson.opcVersion;
 
 const REPO_ROOT = path.dirname(__dirname);

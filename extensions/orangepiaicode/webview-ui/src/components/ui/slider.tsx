@@ -11,7 +11,7 @@ const Slider = React.forwardRef<
 		ref={ref}
 		className={cn("relative flex w-full touch-none select-none items-center", className)}
 		{...props}>
-		<SliderPrimitive.Track className="relative w-full h-[8px] grow overflow-hidden bg-accent border border-[#767676] dark:border-[#858585] rounded-sm">
+		<SliderPrimitive.Track className="relative w-full h-[8px] grow overflow-hidden bg-accent rounded-sm">
 			<SliderPrimitive.Range className="absolute h-full bg-vscode-button-background" />
 		</SliderPrimitive.Track>
 		<SliderPrimitive.Thumb className="relative block h-[10px] w-[10px] rounded-full bg-primary shadow transition-none cursor-pointer focus-visible:outline-none focus-visible:ring-3 focus:ring-3 focus:ring-white active:ring-3 active:ring-white hover:ring-3 hover:ring-white ring-3 ring-white disabled:pointer-events-none disabled:opacity-50" />

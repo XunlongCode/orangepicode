@@ -14,7 +14,7 @@ const { hygiene } = require('./hygiene');
  */
 function checkPackageJSON(actualPath) {
 	const actual = require(path.join(__dirname, '..', actualPath));
-	const rootPackageJSON = require('../package.json');
+	let rootPackageJSON = require('../package.json');
 
 	// 修正版本号
 	rootPackageJSON = JSON.parse(JSON.stringify(rootPackageJSON));

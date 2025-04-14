@@ -37,8 +37,8 @@ const glob = promisify(require('glob'));
 const rcedit = promisify(require('rcedit'));
 
 // 修正版本号
-packageJson = JSON.parse(JSON.stringify(packageJson));
-packageJson.version = packageJson.opcVersion;
+// packageJson = JSON.parse(JSON.stringify(packageJson));
+// packageJson.version = packageJson.opcVersion;
 
 // Build
 const vscodeEntryPoints = [

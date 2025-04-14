@@ -24,8 +24,8 @@ const extensions = require('./lib/extensions');
 const VinylFile = require('vinyl');
 
 // 修正版本号
-packageJson = JSON.parse(JSON.stringify(packageJson));
-packageJson.version = packageJson.opcVersion;
+// packageJson = JSON.parse(JSON.stringify(packageJson));
+// packageJson.version = packageJson.opcVersion;
 
 const REPO_ROOT = path.dirname(__dirname);
 const BUILD_ROOT = path.dirname(REPO_ROOT);

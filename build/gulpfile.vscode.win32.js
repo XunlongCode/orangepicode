@@ -18,8 +18,8 @@ const vfs = require('vinyl-fs');
 const rcedit = require('rcedit');
 
 // 修正版本号
-pkg = JSON.parse(JSON.stringify(pkg));
-pkg.version = pkg.opcVersion;
+// pkg = JSON.parse(JSON.stringify(pkg));
+// pkg.version = pkg.opcVersion;
 
 const repoPath = path.dirname(__dirname);
 const buildPath = (/** @type {string} */ arch) => path.join(path.dirname(repoPath), `VSCode-win32-${arch}`);

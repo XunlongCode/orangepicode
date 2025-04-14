@@ -22,8 +22,8 @@ const cp = require('child_process');
 const util = require('util');
 
 // 修正版本号
-packageJson = JSON.parse(JSON.stringify(packageJson));
-packageJson.version = packageJson.opcVersion;
+// packageJson = JSON.parse(JSON.stringify(packageJson));
+// packageJson.version = packageJson.opcVersion;
 
 const exec = util.promisify(cp.exec);
 const root = path.dirname(__dirname);

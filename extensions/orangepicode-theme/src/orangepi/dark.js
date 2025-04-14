@@ -1973,7 +1973,7 @@ const darkTheme = {
 		"panelTitle.activeBorder": "#31343e",
 		"panelTitle.activeForeground": "#ffffff",
 		"panelTitle.inactiveForeground": "#dadde5",
-		"badge.background": "#24262b",
+		"badge.background": "#0078d4",
 		"badge.foreground": "#dadde5",
 		"terminal.foreground": "#cccccc",
 		"terminal.selectionBackground": "#ffffff40",

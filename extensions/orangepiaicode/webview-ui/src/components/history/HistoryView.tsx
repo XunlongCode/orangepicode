@@ -21,7 +21,7 @@ import { Tab, TabContent, TabHeader } from "../common/Tab"
 import { useTaskSearch } from "./useTaskSearch"
 import { ExportButton } from "./ExportButton"
 import { CopyButton } from "./CopyButton"
-import { useExtensionState } from '../../context/ExtensionStateContext'
+import useChatMode from '../../hooks/useChatMode'
 
 type HistoryViewProps = {
 	onDone: () => void
@@ -30,12 +30,10 @@ type HistoryViewProps = {
 type SortOption = "newest" | "oldest" | "mostExpensive" | "mostTokens" | "mostRelevant"
 
 const HistoryView = ({ onDone }: HistoryViewProps) => {
-	const {
-		renderContext
-	} = useExtensionState()
+	const mode = useChatMode()
 
 	const { tasks, searchQuery, setSearchQuery, sortOption, setSortOption, setLastNonRelevantSort } = useTaskSearch({
-		mode: renderContext
+		mode
 	})
 	const { t } = useAppTranslation()
 

@@ -178,7 +178,7 @@ export interface ExtensionState {
 	telemetryKey?: string
 	machineId?: string
 	showRooIgnoredFiles: boolean // Whether to show .rooignore'd files in listings
-	renderContext: "sidebar" | "editor" | "chat" | "code" | "settings"
+	renderContext: "sidebar" | "editor" | "settings"
 }
 
 export type { ClineMessage, ClineAsk, ClineSay }

@@ -34,6 +34,7 @@ import { useAppTranslation } from "@/i18n/TranslationContext"
 import removeMd from "remove-markdown"
 import ChatTextAreaXl from "./ChatTextAreaXl"
 import ChatTextArea2 from './ChatTextArea2'
+import useChatMode from '../../hooks/useChatMode'
 
 interface ChatViewProps {
 	isHidden: boolean
@@ -62,15 +63,15 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 		alwaysAllowMcp,
 		allowedCommands,
 		writeDelayMs,
-		mode,
 		setMode,
 		autoApprovalEnabled,
 		alwaysAllowModeSwitch,
 		alwaysAllowSubtasks,
 		customModes,
 		telemetrySetting,
-		renderContext
 	} = useExtensionState()
+
+	const mode = useChatMode()
 
 	// 添加一个状态来控制 AutoApproveMenu 的展开状态
 	const [isAutoApproveMenuExpanded, setIsAutoApproveMenuExpanded] = useState(false)
@@ -1158,10 +1159,10 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 							{/* <h2>{t("chat:greeting")}</h2>
 							<p>{t("chat:aboutMe")}</p> */}
 							{
-								renderContext === "chat" ? <>
+								mode === "chat" ? <>
 									<h2>{t("chat:chatMode")}</h2>
 									<p>{t("chat:chatModeDescription")}</p>
-								</> : renderContext === "code" ? <>
+								</> : mode === "code" ? <>
 									<h2>{t("chat:codeMode")}</h2>
 									<p>{t("chat:codeModeDescription")}</p>
 								</> : <>

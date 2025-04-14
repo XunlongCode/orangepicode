@@ -81,7 +81,7 @@ export function activate(context: vscode.ExtensionContext) {
 	registerCommands({ context, outputChannel, provider, battery })
 
 	// chat 模式
-	const chatViewProvider = new ClineProvider(context, outputChannel, "chat")
+	const chatViewProvider = new ClineProvider(context, outputChannel, "sidebar", "chat")
 	chatViewTelemetryService.setProvider(chatViewProvider)
 
 	chatViewProvider.validateTaskHistory().catch((error) => {
@@ -98,7 +98,7 @@ export function activate(context: vscode.ExtensionContext) {
 	registerCommands({ context, outputChannel, provider: chatViewProvider, battery }, "chat")
 
 	// code 模式
-	const codeViewProvider = new ClineProvider(context, outputChannel, "code")
+	const codeViewProvider = new ClineProvider(context, outputChannel, "sidebar", "code")
 	codeViewTelemetryService.setProvider(codeViewProvider)
 
 	// Validate task history on extension activation

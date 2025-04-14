@@ -109,7 +109,8 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 	constructor(
 		readonly context: vscode.ExtensionContext,
 		private readonly outputChannel: vscode.OutputChannel,
-		private readonly renderContext: "sidebar" | "editor" | "chat" | "code" | "settings" = "sidebar",
+		private readonly renderContext: "sidebar" | "editor" | "settings" = "sidebar",
+		public mode?: "chat" | "code"
 	) {
 		super()
 
@@ -161,6 +162,11 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 		)
 
 		this.context.subscriptions.push(this.inlineCompletionItemProvider)
+	}
+
+	async getMode() {
+		const { mode } = await this.getState()
+		return this.mode || mode
 	}
 
 	async onWrite(log: string) {
@@ -512,12 +518,10 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			enableCheckpoints,
 			checkpointStorage,
 			fuzzyMatchThreshold,
-			// mode,
+			mode,
 			customInstructions: globalInstructions,
 			experiments,
 		} = await this.getState()
-
-		const mode = this.renderContext
 
 		const modePrompt = customModePrompts?.[mode] as PromptComponent
 		const effectiveInstructions = [globalInstructions, modePrompt?.customInstructions].filter(Boolean).join("\n\n")
@@ -615,6 +619,8 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 	}
 
 	private async getHtmlCommonHead(webview: vscode.Webview, nonce: string): Promise<string> {
+		const { mode } = await this.getState()
+
 		const vscExtensionUrl: string = getUri(webview, this.context.extensionUri, ["webview-ui"])
 			.toString();
 
@@ -633,6 +639,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			<link href="${codiconsUri}" rel="stylesheet" />
 			<script nonce="${nonce}">window.vscExtensionUrl = "${vscExtensionUrl}"</script>
 			<script nonce="${nonce}">window.language = "${language}"</script>
+			<script nonce="${nonce}">window.chatMode = "${mode}"</script>
 		`
 	}
 
@@ -2839,6 +2846,8 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			apiConfiguration.apiProvider = apiProvider
 		}
 
+		const mode = this.mode ?? stateValues.mode ?? defaultModeSlug
+
 		// Return the same structure as before
 		return {
 			apiConfiguration,
@@ -2869,7 +2878,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			terminalOutputLineLimit: stateValues.terminalOutputLineLimit ?? 500,
 			terminalShellIntegrationTimeout:
 				stateValues.terminalShellIntegrationTimeout ?? TERMINAL_SHELL_INTEGRATION_TIMEOUT,
-			mode: stateValues.mode ?? defaultModeSlug,
+			mode,
 			// language: stateValues.language ?? formatLanguage(vscode.env.language),
 			language: formatLanguage(vscode.env.language),
 			mcpEnabled: stateValues.mcpEnabled ?? true,

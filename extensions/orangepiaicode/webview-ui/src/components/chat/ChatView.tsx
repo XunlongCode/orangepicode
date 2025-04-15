@@ -22,6 +22,7 @@ import HistoryPreview from "../history/HistoryPreview"
 import { normalizeApiConfiguration } from "../settings/ApiOptions"
 import Announcement from "./Announcement"
 import BrowserSessionRow from "./BrowserSessionRow"
+import ChatRow2 from "./ChatRow2"
 import ChatRow from "./ChatRow"
 import ChatTextArea from "./ChatTextArea"
 import TaskHeader from "./TaskHeader"
@@ -1020,7 +1021,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 
 			// regular message
 			return (
-				<ChatRow
+				<ChatRow2
 					key={messageOrGroup.ts}
 					message={messageOrGroup}
 					isExpanded={expandedRows[messageOrGroup.ts] || false}
@@ -1142,11 +1143,12 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 					/>
 
 					{/* Checkpoint warning message */}
-					{showCheckpointWarning && (
+					{/* 需要修改跳转路径 */}
+					{/* {showCheckpointWarning && (
 						<div>
 							<CheckpointWarningMessage />
 						</div>
-					)}
+					)} */}
 				</>
 			) : (
 				<div

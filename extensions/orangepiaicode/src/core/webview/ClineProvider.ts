@@ -110,7 +110,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 		readonly context: vscode.ExtensionContext,
 		private readonly outputChannel: vscode.OutputChannel,
 		private readonly renderContext: "sidebar" | "editor" | "settings" = "sidebar",
-		public mode?: "chat" | "code"
+		public mode: "chat" | "code" | "unset" = "unset"
 	) {
 		super()
 
@@ -2623,6 +2623,13 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 	async postStateToWebview() {
 		const state = await this.getStateToPostToWebview()
 		this.postMessageToWebview({ type: "state", state })
+
+		// console.log(this.mode);
+
+		// if (this.mode === "unset") {
+		// 	vscode.commands.executeCommand("orangepiaicode-chat.postStateToWebview")
+		// 	vscode.commands.executeCommand("orangepiaicode-code.postStateToWebview")
+		// }
 	}
 
 	async getStateToPostToWebview() {
@@ -2660,7 +2667,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			rateLimitSeconds,
 			currentApiConfigName,
 			listApiConfigMeta,
-			mode,
+			mode: stateMode,
 			customModePrompts,
 			customSupportPrompts,
 			enhancementApiConfigId,
@@ -2680,6 +2687,8 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 		const allowedCommands =
 			vscode.workspace.getConfiguration("orangepiaicode").get<string[]>("allowedCommands") || []
 		const cwd = this.cwd
+
+		const mode = this.mode ?? stateMode ?? defaultModeSlug
 
 		return {
 			version: this.context.extension?.packageJSON?.version ?? "",
@@ -2725,7 +2734,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			rateLimitSeconds: rateLimitSeconds ?? 0,
 			currentApiConfigName: currentApiConfigName ?? "default",
 			listApiConfigMeta: listApiConfigMeta ?? [],
-			mode: mode ?? defaultModeSlug,
+			mode: mode,
 			customModePrompts: customModePrompts ?? {},
 			customSupportPrompts: customSupportPrompts ?? {},
 			enhancementApiConfigId,

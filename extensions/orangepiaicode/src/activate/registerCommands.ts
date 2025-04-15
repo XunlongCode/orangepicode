@@ -81,19 +81,26 @@ const getCommandsMap = ({ context, outputChannel, provider, battery }: RegisterC
 		await provider.postMessageToWebview({ type: "action", action: "historyButtonClicked" })
 	}
 
+	const postStateToWebview = async () => {
+		// await provider.postStateToWebview()
+	}
+
 	if (mode === "chat") {
 		return {
 			"orangepiaicode-chat.plusButtonClicked": onPlusButtonClicked,
-			"orangepiaicode-chat.historyButtonClicked": onHistoryButtonClicked
+			"orangepiaicode-chat.historyButtonClicked": onHistoryButtonClicked,
+			"orangepiaicode-chat.postStateToWebview": postStateToWebview,
 		}
 	} else if (mode === "code") {
 		return {
 			"orangepiaicode-code.plusButtonClicked": onPlusButtonClicked,
-			"orangepiaicode-code.historyButtonClicked": onHistoryButtonClicked
+			"orangepiaicode-code.historyButtonClicked": onHistoryButtonClicked,
+			"orangepiaicode-code.postStateToWebview": postStateToWebview,
 		}
 	}
 
 	return {
+		"orangepiaicode.postStateToWebview": postStateToWebview,
 		"orangepiaicode.plusButtonClicked": onPlusButtonClicked,
 		"orangepiaicode.mcpButtonClicked": () => {
 			provider.postMessageToWebview({ type: "action", action: "mcpButtonClicked" })

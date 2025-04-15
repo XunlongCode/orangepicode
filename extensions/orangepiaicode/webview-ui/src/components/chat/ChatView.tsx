@@ -1137,10 +1137,6 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 						contextTokens={apiMetrics.contextTokens}
 						onClose={handleTaskCloseButtonClick}
 					/> */}
-					<TaskHeader2
-						task={task}
-						align="right"
-					/>
 
 					{/* Checkpoint warning message */}
 					{/* 需要修改跳转路径 */}
@@ -1215,6 +1211,10 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 							}}
 							components={{
 								Footer: () => <div style={{ height: 5 }} />, // Add empty padding at the bottom
+								Header: () => <TaskHeader2
+									task={task}
+									align="right"
+								/>
 							}}
 							// increasing top by 3_000 to prevent jumping around when user collapses a row
 							increaseViewportBy={{ top: 3_000, bottom: Number.MAX_SAFE_INTEGER }} // hack to make sure the last message is always rendered to get truly perfect scroll to bottom animation when new messages are added (Number.MAX_SAFE_INTEGER is safe for arithmetic operations, which is all virtuoso uses this value for in src/sizeRangeSystem.ts)

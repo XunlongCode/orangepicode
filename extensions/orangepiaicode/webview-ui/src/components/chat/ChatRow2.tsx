@@ -54,16 +54,6 @@ const ChatRow2 = memo(
 
 		const [chatrow, { height }] = useSize(
 			<div className="my-[24px] flex flex-col gap-[12px]">
-				{/* <div
-					className={cn(
-						"flex flex-row items-center gap-[12px]"
-					)}
-				>
-					<div className='h-[36px] w-[36px] overflow-hidden'>
-						<img className='h-full w-full object-cover' src={getVscExtensionPath("src/assets/logo.png")} alt="" />
-					</div>
-					<div className='font-medium text-[16px]'>OrangePi</div>
-				</div> */}
 				{
 					isUserMessage ? <div className='flex items-center gap-[12px] justify-end'>
 						<div className='font-medium text-[16px]'>我</div>

@@ -2189,6 +2189,10 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 						break
 					}
 
+					case "openSettings": {
+						await vscode.commands.executeCommand("orangepiaicode.openSettings")
+						break
+					}
 					case "openVSCodeSettings": {
 						await vscode.commands.executeCommand("workbench.action.openSettings")
 						break

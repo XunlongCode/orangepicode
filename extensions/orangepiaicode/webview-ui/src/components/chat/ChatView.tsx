@@ -979,7 +979,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 						href="#"
 						onClick={(e) => {
 							e.preventDefault()
-							window.postMessage({ type: "action", action: "settingsButtonClicked" }, "*")
+							vscode.postMessage({ type: "openSettings" })
 						}}
 						className="inline px-0.5">
 						disable checkpoints in settings
@@ -1139,12 +1139,11 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 					/> */}
 
 					{/* Checkpoint warning message */}
-					{/* 需要修改跳转路径 */}
-					{/* {showCheckpointWarning && (
+					{showCheckpointWarning && (
 						<div>
 							<CheckpointWarningMessage />
 						</div>
-					)} */}
+					)}
 				</>
 			) : (
 				<div

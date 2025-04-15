@@ -1213,6 +1213,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 								Header: () => <TaskHeader2
 									task={task}
 									align="right"
+									key={task.ts}
 								/>
 							}}
 							// increasing top by 3_000 to prevent jumping around when user collapses a row

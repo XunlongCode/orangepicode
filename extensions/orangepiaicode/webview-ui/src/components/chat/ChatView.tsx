@@ -35,6 +35,7 @@ import removeMd from "remove-markdown"
 import ChatTextAreaXl from "./ChatTextAreaXl"
 import ChatTextArea2 from './ChatTextArea2'
 import useChatMode from '../../hooks/useChatMode'
+import TaskHeader2 from './TaskHeader2'
 
 interface ChatViewProps {
 	isHidden: boolean
@@ -82,7 +83,10 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 	}, [])
 
 	//const task = messages.length > 0 ? (messages[0].say === "task" ? messages[0] : undefined) : undefined) : undefined
-	const task = useMemo(() => messages.at(0), [messages]) // leaving this less safe version here since if the first message is not a task, then the extension is in a bad state and needs to be debugged (see Cline.abort)
+	const task = useMemo(() => {
+		return messages.at(0)
+	}, [messages]) // leaving this less safe version here since if the first message is not a task, then the extension is in a bad state and needs to be debugged (see Cline.abort)
+
 	const modifiedMessages = useMemo(() => combineApiRequests(combineCommandSequences(messages.slice(1))), [messages])
 	// has to be after api_req_finished are all reduced into api_req_started messages
 	const apiMetrics = useMemo(() => getApiMetrics(modifiedMessages), [modifiedMessages])
@@ -1118,7 +1122,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 			}}>
 			{task ? (
 				<>
-					<TaskHeader
+					{/* <TaskHeader
 						style={{
 							padding: "0"
 						}}
@@ -1131,11 +1135,15 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 						totalCost={apiMetrics.totalCost}
 						contextTokens={apiMetrics.contextTokens}
 						onClose={handleTaskCloseButtonClick}
+					/> */}
+					<TaskHeader2
+						task={task}
+						align="right"
 					/>
 
 					{/* Checkpoint warning message */}
 					{showCheckpointWarning && (
-						<div className="px-3">
+						<div>
 							<CheckpointWarningMessage />
 						</div>
 					)}

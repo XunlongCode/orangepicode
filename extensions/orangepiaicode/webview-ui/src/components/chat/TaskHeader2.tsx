@@ -9,6 +9,7 @@ import { useExtensionState } from '../../context/ExtensionStateContext';
 import { DeleteTaskDialog } from '../history/DeleteTaskDialog';
 import { ExtensionMessage } from '../../../../src/shared/ExtensionMessage';
 import GithubUser from '../common/GithubUser';
+import { useCopyToClipboard } from '../../utils/clipboard';
 
 export interface ChatRow2Props {
 	task: ClineMessage
@@ -23,6 +24,8 @@ const TaskHeader2: FC<ChatRow2Props> = ({
 }) => {
 	const { currentTaskItem } = useExtensionState()
 	const [deleteTaskId, setDeleteTaskId] = useState<string | null>(null)
+
+	const { copyWithFeedback } = useCopyToClipboard()
 
 	return <div
 		className={cn(
@@ -45,28 +48,45 @@ const TaskHeader2: FC<ChatRow2Props> = ({
 
 		<div className='flex items-start gap-[12px] group'>
 			<div className='flex flex-col justify-center min-h-[37px]'>
-				<VSCodeButton
-					className='opacity-0 group-hover:opacity-100 transition-opacity'
-					appearance="icon"
-					style={{
-						padding: "3px",
-						flexShrink: 0,
-					}}
-					onClick={(e) => {
-						e.stopPropagation()
+				<div className='flex items-center gap-[12px]'>
+					<VSCodeButton
+						className='opacity-0 group-hover:opacity-100 transition-opacity'
+						appearance="icon"
+						style={{
+							padding: "3px",
+							flexShrink: 0,
+						}}
+						onClick={(e) => {
+							e.stopPropagation()
+							if (task.text) {
+								copyWithFeedback(task.text)
+							}
+						}}>
+						<span className="codicon codicon-copy"></span>
+					</VSCodeButton>
+					<VSCodeButton
+						className='opacity-0 group-hover:opacity-100 transition-opacity'
+						appearance="icon"
+						style={{
+							padding: "3px",
+							flexShrink: 0,
+						}}
+						onClick={(e) => {
+							e.stopPropagation()
 
-						if (!currentTaskItem?.id) {
-							return
-						}
+							if (!currentTaskItem?.id) {
+								return
+							}
 
-						if (e.shiftKey) {
-							vscode.postMessage({ type: "deleteTaskWithId", text: currentTaskItem.id })
-						} else {
-							setDeleteTaskId(currentTaskItem.id)
-						}
-					}}>
-					<span className="codicon codicon-trash"></span>
-				</VSCodeButton>
+							if (e.shiftKey) {
+								vscode.postMessage({ type: "deleteTaskWithId", text: currentTaskItem.id })
+							} else {
+								setDeleteTaskId(currentTaskItem.id)
+							}
+						}}>
+						<span className="codicon codicon-trash"></span>
+					</VSCodeButton>
+				</div>
 			</div>
 			{deleteTaskId && (
 				<DeleteTaskDialog

@@ -104,6 +104,7 @@ export const ChatRowContent = ({
 	const { t } = useTranslation()
 	const { mcpServers, alwaysAllowMcp, currentCheckpoint } = useExtensionState()
 	const [reasoningCollapsed, setReasoningCollapsed] = useState(true)
+	const { copyWithFeedback } = useCopyToClipboard()
 
 	const [cost, apiReqCancelReason, apiReqStreamingFailedMessage] = useMemo(() => {
 		if (message.text !== null && message.text !== undefined && message.say === "api_req_started") {
@@ -650,30 +651,47 @@ export const ChatRowContent = ({
 				case "text":
 					return (
 						<div>
-							<Markdown markdown={message.text} partial={message.partial} />
+							<Markdown markdown={message.text} partial={message.partial} isLast={isLast} />
 						</div>
 					)
 				case "user_feedback":
 					return <div className='flex items-center justify-end'>
 						<div className='flex items-start gap-[12px] group'>
 							<div className='flex flex-col justify-center min-h-[37px]'>
-								<VSCodeButton
-									className='opacity-0 group-hover:opacity-100 transition-opacity'
-									appearance="icon"
-									style={{
-										padding: "3px",
-										flexShrink: 0,
-									}}
-									disabled={isStreaming}
-									onClick={(e) => {
-										e.stopPropagation()
-										vscode.postMessage({
-											type: "deleteMessage",
-											value: message.ts,
-										})
-									}}>
-									<span className="codicon codicon-trash"></span>
-								</VSCodeButton>
+								<div className='flex items-center gap-[12px]'>
+									<VSCodeButton
+										className='opacity-0 group-hover:opacity-100 transition-opacity'
+										appearance="icon"
+										style={{
+											padding: "3px",
+											flexShrink: 0,
+										}}
+										onClick={(e) => {
+											e.stopPropagation()
+											if (message.text) {
+												copyWithFeedback(message.text)
+											}
+										}}>
+										<span className="codicon codicon-copy"></span>
+									</VSCodeButton>
+									<VSCodeButton
+										className='opacity-0 group-hover:opacity-100 transition-opacity'
+										appearance="icon"
+										style={{
+											padding: "3px",
+											flexShrink: 0,
+										}}
+										disabled={isStreaming}
+										onClick={(e) => {
+											e.stopPropagation()
+											vscode.postMessage({
+												type: "deleteMessage",
+												value: message.ts,
+											})
+										}}>
+										<span className="codicon codicon-trash"></span>
+									</VSCodeButton>
+								</div>
 							</div>
 							<div
 								className={cn(
@@ -727,7 +745,7 @@ export const ChatRowContent = ({
 								{title}
 							</div>
 							<div style={{ color: "var(--vscode-charts-green)", paddingTop: 10 }}>
-								<Markdown markdown={message.text} />
+								<Markdown markdown={message.text} isLast={isLast} />
 							</div>
 						</>
 					)
@@ -812,7 +830,7 @@ export const ChatRowContent = ({
 								</div>
 							)}
 							<div style={{ paddingTop: 10 }}>
-								<Markdown markdown={message.text} partial={message.partial} />
+								<Markdown markdown={message.text} partial={message.partial} isLast={isLast} />
 							</div>
 						</>
 					)
@@ -988,7 +1006,7 @@ export const ChatRowContent = ({
 									{title}
 								</div>
 								<div style={{ color: "var(--vscode-charts-green)", paddingTop: 10 }}>
-									<Markdown markdown={message.text} partial={message.partial} />
+									<Markdown markdown={message.text} partial={message.partial} isLast={isLast} />
 								</div>
 							</div>
 						)
@@ -1005,7 +1023,7 @@ export const ChatRowContent = ({
 								</div>
 							)}
 							<div style={{ paddingTop: 10 }}>
-								<Markdown markdown={message.text} />
+								<Markdown markdown={message.text} isLast={isLast} />
 							</div>
 						</>
 					)
@@ -1030,7 +1048,9 @@ export const ProgressIndicator = () => (
 	</div>
 )
 
-const Markdown = memo(({ markdown, partial }: { markdown?: string; partial?: boolean }) => {
+const Markdown = memo(({ markdown, partial, isLast }:
+	{ markdown?: string; partial?: boolean; isLast?: boolean }
+) => {
 	const { copyWithFeedback } = useCopyToClipboard(200) // shorter feedback duration for copy button flash
 
 	return (
@@ -1067,7 +1087,7 @@ const Markdown = memo(({ markdown, partial }: { markdown?: string; partial?: boo
 							title="Copy as markdown">
 							<span className="codicon codicon-copy"></span>
 						</VSCodeButton>
-						<VSCodeButton
+						{false && <VSCodeButton
 							className="bg-vscode-activityBar-activeBackground"
 							appearance="icon"
 							style={{
@@ -1080,7 +1100,7 @@ const Markdown = memo(({ markdown, partial }: { markdown?: string; partial?: boo
 							}}
 							title="Copy as markdown">
 							<span className="codicon codicon-refresh"></span>
-						</VSCodeButton>
+						</VSCodeButton>}
 					</div>
 				</>
 			)}

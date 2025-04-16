@@ -497,7 +497,7 @@ const PromptsView2 = ({ onDone, className }: PromptsViewProps) => {
 							}}
 						>
 							<SelectTrigger className="w-full max-w-[300px]">
-								<SelectValue placeholder={t("settings:common.select")} />
+								<SelectValue placeholder={t("prompts:supportPrompts.enhance.useCurrentConfig")} />
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="default">
@@ -1174,7 +1174,7 @@ const PromptsView2 = ({ onDone, className }: PromptsViewProps) => {
 											}}
 										>
 											<SelectTrigger className="w-full max-w-[300px]">
-												<SelectValue placeholder={t("settings:common.select")} />
+												<SelectValue placeholder={t("prompts:supportPrompts.enhance.useCurrentConfig")} />
 											</SelectTrigger>
 											<SelectContent>
 												<SelectItem value="default">

@@ -1227,7 +1227,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 								}
 								setShowScrollToBottom(disableAutoScrollRef.current && !isAtBottom)
 							}}
-							atBottomThreshold={10} // anything lower causes issues with followOutput
+							atBottomThreshold={200} // anything lower causes issues with followOutput
 							initialTopMostItemIndex={groupedMessages.length - 1}
 						/>
 					</div>

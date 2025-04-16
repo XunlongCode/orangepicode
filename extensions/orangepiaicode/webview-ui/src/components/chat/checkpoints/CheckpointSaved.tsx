@@ -34,7 +34,7 @@ export const CheckpointSaved = ({ checkpoint, ...props }: CheckpointSavedProps) 
 	}
 
 	return (
-		<div className="flex items-center justify-between">
+		<div className="flex flex-col gap-[12px]">
 			<div className="flex gap-2">
 				<span className="codicon codicon-git-commit text-blue-400" />
 				<span className="font-bold">

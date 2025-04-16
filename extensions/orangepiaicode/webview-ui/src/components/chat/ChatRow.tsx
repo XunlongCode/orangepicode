@@ -309,10 +309,9 @@ export const ChatRowContent = ({
 						/> */}
 						<div
 							style={{
-								borderRadius: 3,
+								borderRadius: 8,
 								backgroundColor: CODE_BLOCK_BG_COLOR,
 								overflow: "hidden",
-								border: "1px solid var(--vscode-editorGroup-border)",
 							}}>
 							<div
 								style={{
@@ -862,8 +861,7 @@ export const ChatRowContent = ({
 							/> */}
 							<div
 								style={{
-									borderRadius: 3,
-									border: "1px solid var(--vscode-editorGroup-border)",
+									borderRadius: 8,
 									overflow: "hidden",
 									backgroundColor: CODE_BLOCK_BG_COLOR,
 								}}>

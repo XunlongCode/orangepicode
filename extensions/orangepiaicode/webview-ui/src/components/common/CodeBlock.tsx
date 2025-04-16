@@ -5,12 +5,13 @@ import styled from "styled-components"
 import { visit } from "unist-util-visit"
 import { useExtensionState } from "../../context/ExtensionStateContext"
 
-export const CODE_BLOCK_BG_COLOR = "var(--vscode-editor-background, --vscode-sideBar-background, rgb(30 30 30))"
+export const CODE_BLOCK_BG_COLOR = "var(--vscode-editorWidget-background, --vscode-sideBar-background, rgb(30 30 30))"
+export const CODE_BLOCK_FG_COLOR = "var(--vscode-editorWidget-foreground, --vscode-sideBar-foreground, rgb(255 255 255))"
 
 /*
 overflowX: auto + inner div with padding results in an issue where the top/left/bottom padding renders but the right padding inside does not count as overflow as the width of the element is not exceeded. Once the inner div is outside the boundaries of the parent it counts as overflow.
 https://stackoverflow.com/questions/60778406/why-is-padding-right-clipped-with-overflowscroll/77292459#77292459
-this fixes the issue of right padding clipped off 
+this fixes the issue of right padding clipped off
 “ideal” size in a given axis when given infinite available space--allows the syntax highlighter to grow to largest possible width including its padding
 minWidth: "max-content",
 */
@@ -33,7 +34,7 @@ const StyledMarkdown = styled.div<{ forceWrap: boolean }>`
 
 	pre {
 		background-color: ${CODE_BLOCK_BG_COLOR};
-		border-radius: 5px;
+		border-radius: 8px;
 		margin: 0;
 		min-width: ${({ forceWrap }) => (forceWrap ? "auto" : "max-content")};
 		padding: 10px 10px;
@@ -57,7 +58,7 @@ const StyledMarkdown = styled.div<{ forceWrap: boolean }>`
 			display: none;
 		}
 		word-wrap: break-word;
-		border-radius: 5px;
+		border-radius: 8px;
 		background-color: ${CODE_BLOCK_BG_COLOR};
 		font-size: var(--vscode-editor-font-size, var(--vscode-font-size, 12px));
 		font-family: var(--vscode-editor-font-family);

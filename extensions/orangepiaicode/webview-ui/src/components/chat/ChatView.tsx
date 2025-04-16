@@ -1255,6 +1255,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 										padding: "10px 0 0 0",
 									}}>
 									<ScrollToBottomButton
+										className='!rounded-[8px] !h-[32px]'
 										onClick={() => {
 											scrollToBottomSmooth()
 											disableAutoScrollRef.current = false
@@ -1282,6 +1283,8 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 											style={{
 												flex: secondaryButtonText ? 1 : 2,
 												marginRight: secondaryButtonText ? "6px" : "0",
+												borderRadius: 8,
+												height: 32
 											}}
 											title={
 												primaryButtonText === t("chat:retry.title")
@@ -1314,6 +1317,8 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 											style={{
 												flex: isStreaming ? 2 : 1,
 												marginLeft: isStreaming ? 0 : "6px",
+												borderRadius: 8,
+												height: 32
 											}}
 											title={
 												isStreaming

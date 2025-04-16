@@ -133,6 +133,11 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			})
 	}
 
+	async getMode() {
+		const { mode } = await this.getState()
+		return this.mode || mode
+	}
+
 	async onWrite(log: string) {
 		this.outputChannel.appendLine("==========================================================================")
 		this.outputChannel.appendLine("==========================================================================")
@@ -482,10 +487,12 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			enableCheckpoints,
 			checkpointStorage,
 			fuzzyMatchThreshold,
-			mode,
+			// mode,
 			customInstructions: globalInstructions,
 			experiments,
 		} = await this.getState()
+
+		const mode = await this.getMode()
 
 		const modePrompt = customModePrompts?.[mode] as PromptComponent
 		const effectiveInstructions = [globalInstructions, modePrompt?.customInstructions].filter(Boolean).join("\n\n")
@@ -523,10 +530,12 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			enableCheckpoints,
 			checkpointStorage,
 			fuzzyMatchThreshold,
-			mode,
+			// mode,
 			customInstructions: globalInstructions,
 			experiments,
 		} = await this.getState()
+
+		const mode = await this.getMode()
 
 		const modePrompt = customModePrompts?.[mode] as PromptComponent
 		const effectiveInstructions = [globalInstructions, modePrompt?.customInstructions].filter(Boolean).join("\n\n")

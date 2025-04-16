@@ -37,6 +37,7 @@ import ChatTextAreaXl from "./ChatTextAreaXl"
 import ChatTextArea2 from './ChatTextArea2'
 import useChatMode from '../../hooks/useChatMode'
 import TaskHeader2 from './TaskHeader2'
+import { useWebviewListener } from '../../hooks/useWebviewListener'
 
 interface ChatViewProps {
 	isHidden: boolean
@@ -52,6 +53,17 @@ const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0
 const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryView }: ChatViewProps) => {
 	const { t } = useAppTranslation()
 	const modeShortcutText = `${isMac ? "⌘" : "Ctrl"} + . ${t("chat:forNextMode")}`
+
+	const [githubSession, setGitHubSession] = useState<ExtensionMessage["githubSession"]>()
+
+	useWebviewListener("getGitHubSessionSuccess", async (e) => {
+		setGitHubSession(e.githubSession)
+	})
+
+	useEffect(() => {
+		vscode.postMessage({ type: "getGitHubSession" })
+	}, [])
+
 	const {
 		version,
 		clineMessages: messages,
@@ -1024,6 +1036,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 				<ChatRow2
 					key={messageOrGroup.ts}
 					message={messageOrGroup}
+					githubSession={githubSession}
 					isExpanded={expandedRows[messageOrGroup.ts] || false}
 					onToggleExpand={() => toggleRowExpansion(messageOrGroup.ts)}
 					lastModifiedMessage={modifiedMessages.at(-1)}
@@ -1111,6 +1124,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 	const Header = useCallback(() => task && <TaskHeader2
 		task={task}
 		align="right"
+		githubSession={githubSession}
 	/>, [task?.ts])
 
 	return (

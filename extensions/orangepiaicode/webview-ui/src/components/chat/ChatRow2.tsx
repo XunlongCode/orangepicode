@@ -9,6 +9,7 @@ import {
 	ClineAskUseMcpServer,
 	ClineMessage,
 	ClineSayTool,
+	ExtensionMessage,
 } from "../../../../src/shared/ExtensionMessage"
 import { COMMAND_OUTPUT_STRING } from "../../../../src/shared/combineCommandSequences"
 import { useExtensionState } from "../../context/ExtensionStateContext"
@@ -25,6 +26,7 @@ import { highlightMentions } from "./TaskHeader"
 import { CheckpointSaved } from "./checkpoints/CheckpointSaved"
 import { cn } from '../../lib/utils'
 import { getVscExtensionPath } from '../../utils'
+import GithubUser from '../common/GithubUser'
 
 interface ChatRowProps {
 	message: ClineMessage
@@ -34,6 +36,7 @@ interface ChatRowProps {
 	isStreaming: boolean
 	onToggleExpand: () => void
 	onHeightChange: (isTaller: boolean) => void
+	githubSession?: ExtensionMessage['githubSession']
 }
 
 interface ChatRowContentProps extends Omit<ChatRowProps, "onHeightChange"> { }
@@ -56,10 +59,7 @@ const ChatRow2 = memo(
 			<div className="my-[24px] flex flex-col gap-[12px]">
 				{
 					isUserMessage ? <div className='flex items-center gap-[12px] justify-end'>
-						<div className='font-medium text-[16px]'>我</div>
-						<div className='h-[36px] w-[36px] rounded-full overflow-hidden'>
-							<img className='h-full w-full object-cover' src={getVscExtensionPath("src/assets/default-avatar.png")} alt="" />
-						</div>
+						<GithubUser githubSession={props.githubSession} />
 					</div> : <div className='flex items-center gap-[12px]'>
 						<div className='h-[36px] w-[36px]'>
 							<img className='h-full w-full object-cover' src={getVscExtensionPath("src/assets/logo.png")} alt="" />

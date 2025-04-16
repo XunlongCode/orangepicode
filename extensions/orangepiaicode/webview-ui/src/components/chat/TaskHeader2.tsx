@@ -1,37 +1,28 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { ClineMessage } from '../../../../src/exports/roo-code';
 import { cn } from '../../lib/utils';
-import { getVscExtensionPath } from '../../utils';
 import { highlightMentions } from './TaskHeader';
 import Thumbnails from '../common/Thumbnails';
 import { VSCodeButton } from '@vscode/webview-ui-toolkit/react';
 import { vscode } from '../../utils/vscode';
 import { useExtensionState } from '../../context/ExtensionStateContext';
 import { DeleteTaskDialog } from '../history/DeleteTaskDialog';
-import { useWebviewListener } from '../../hooks/useWebviewListener';
 import { ExtensionMessage } from '../../../../src/shared/ExtensionMessage';
-
+import GithubUser from '../common/GithubUser';
 
 export interface ChatRow2Props {
 	task: ClineMessage
 	align?: "left" | "right"
+	githubSession?: ExtensionMessage["githubSession"]
 }
 
 const TaskHeader2: FC<ChatRow2Props> = ({
 	task,
+	githubSession,
 	align = "right"
 }) => {
 	const { currentTaskItem } = useExtensionState()
 	const [deleteTaskId, setDeleteTaskId] = useState<string | null>(null)
-	const [githubSession, setGitHubSession] = useState<ExtensionMessage["githubSession"]>()
-
-	useWebviewListener("getGitHubSessionSuccess", async (e) => {
-		setGitHubSession(e.githubSession)
-	})
-
-	useEffect(() => {
-		vscode.postMessage({ type: "getGitHubSession" })
-	}, [])
 
 	return <div
 		className={cn(
@@ -49,15 +40,7 @@ const TaskHeader2: FC<ChatRow2Props> = ({
 				}
 			)}
 		>
-			<div className='font-medium text-[16px]'>
-				{githubSession?.account.label || "User"}
-			</div>
-			<div className='h-[36px] w-[36px] rounded-full overflow-hidden'>
-				{
-					githubSession ? <img className='h-full w-full' src={`https://avatars.githubusercontent.com/u/${githubSession.account.id}`} alt="" />
-						: <img className='h-full w-full' src={getVscExtensionPath("src/assets/default-avatar.png")} alt="" />
-				}
-			</div>
+			<GithubUser githubSession={githubSession} />
 		</div>
 
 		<div className='flex items-start gap-[12px] group'>

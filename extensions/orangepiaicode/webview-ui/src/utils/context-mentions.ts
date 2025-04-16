@@ -254,7 +254,8 @@ export function getContextMenuOptions(
 
 export function shouldShowContextMenu(text: string, position: number): boolean {
 	// Handle slash command
-	if (text.startsWith("/")) {
+	// if (text.startsWith("/")) {
+	if (text.includes("/")) {
 		return false
 		// return position <= text.length && !text.includes(" ")
 	}

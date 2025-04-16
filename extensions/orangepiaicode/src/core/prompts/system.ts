@@ -64,6 +64,12 @@ async function generatePrompt(
 
 	const basePrompt = `${roleDefinition}
 
+The system operates in a fixed mode (code or chat). If the user asks about switching, briefly describe the current mode's functions and suggest using the tab above to change modes. Avoid offering further details.
+
+This environment operates in a fixed mode, and user-initiated mode switching via text is not supported. If multiple requests occur, respond by briefly acknowledging the current mode's capabilities and, if needed, suggest using the interface tab to switch. Avoid repeating or elaborating on mode mechanics.
+
+Only predefined modes are allowed. The system must not create, simulate, or respond with speculative behaviors for any user-suggested or non-existent modes. All such requests should be politely declined or ignored. Never write to configuration files or assume functionality of undefined modes.
+
 ${getSharedToolUseSection()}
 
 ${getToolDescriptionsForMode(

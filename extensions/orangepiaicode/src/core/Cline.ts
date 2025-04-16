@@ -1392,8 +1392,8 @@ export class Cline extends EventEmitter<ClineEvents> {
 							return `[${block.name} for '${block.params.question}']`
 						case "attempt_completion":
 							return `[${block.name}]`
-						case "switch_mode":
-							return `[${block.name} to '${block.params.mode_slug}'${block.params.reason ? ` because: ${block.params.reason}` : ""}]`
+						// case "switch_mode":
+						// 	return `[${block.name} to '${block.params.mode_slug}'${block.params.reason ? ` because: ${block.params.reason}` : ""}]`
 						case "new_task": {
 							const mode = block.params.mode ?? defaultModeSlug
 							const message = block.params.message ?? "(no message)"
@@ -2812,69 +2812,69 @@ export class Cline extends EventEmitter<ClineEvents> {
 							break
 						}
 					}
-					case "switch_mode": {
-						const mode_slug: string | undefined = block.params.mode_slug
-						const reason: string | undefined = block.params.reason
-						try {
-							if (block.partial) {
-								const partialMessage = JSON.stringify({
-									tool: "switchMode",
-									mode: removeClosingTag("mode_slug", mode_slug),
-									reason: removeClosingTag("reason", reason),
-								})
-								await this.ask("tool", partialMessage, block.partial).catch(() => { })
-								break
-							} else {
-								if (!mode_slug) {
-									this.consecutiveMistakeCount++
-									pushToolResult(await this.sayAndCreateMissingParamError("switch_mode", "mode_slug"))
-									break
-								}
-								this.consecutiveMistakeCount = 0
+					// case "switch_mode": {
+					// 	const mode_slug: string | undefined = block.params.mode_slug
+					// 	const reason: string | undefined = block.params.reason
+					// 	try {
+					// 		if (block.partial) {
+					// 			const partialMessage = JSON.stringify({
+					// 				tool: "switchMode",
+					// 				mode: removeClosingTag("mode_slug", mode_slug),
+					// 				reason: removeClosingTag("reason", reason),
+					// 			})
+					// 			await this.ask("tool", partialMessage, block.partial).catch(() => { })
+					// 			break
+					// 		} else {
+					// 			if (!mode_slug) {
+					// 				this.consecutiveMistakeCount++
+					// 				pushToolResult(await this.sayAndCreateMissingParamError("switch_mode", "mode_slug"))
+					// 				break
+					// 			}
+					// 			this.consecutiveMistakeCount = 0
 
-								// Verify the mode exists
-								const targetMode = getModeBySlug(
-									mode_slug,
-									(await this.providerRef.deref()?.getState())?.customModes,
-								)
-								if (!targetMode) {
-									pushToolResult(formatResponse.toolError(`Invalid mode: ${mode_slug}`))
-									break
-								}
+					// 			// Verify the mode exists
+					// 			const targetMode = getModeBySlug(
+					// 				mode_slug,
+					// 				(await this.providerRef.deref()?.getState())?.customModes,
+					// 			)
+					// 			if (!targetMode) {
+					// 				pushToolResult(formatResponse.toolError(`Invalid mode: ${mode_slug}`))
+					// 				break
+					// 			}
 
-								// Check if already in requested mode
-								const currentMode =
-									(await this.getMode()) ?? defaultModeSlug
-								if (currentMode === mode_slug) {
-									pushToolResult(`Already in ${targetMode.name} mode.`)
-									break
-								}
+					// 			// Check if already in requested mode
+					// 			const currentMode =
+					// 				(await this.getMode()) ?? defaultModeSlug
+					// 			if (currentMode === mode_slug) {
+					// 				pushToolResult(`Already in ${targetMode.name} mode.`)
+					// 				break
+					// 			}
 
-								const completeMessage = JSON.stringify({
-									tool: "switchMode",
-									mode: mode_slug,
-									reason,
-								})
+					// 			const completeMessage = JSON.stringify({
+					// 				tool: "switchMode",
+					// 				mode: mode_slug,
+					// 				reason,
+					// 			})
 
-								const didApprove = await askApproval("tool", completeMessage)
-								if (!didApprove) {
-									break
-								}
+					// 			const didApprove = await askApproval("tool", completeMessage)
+					// 			if (!didApprove) {
+					// 				break
+					// 			}
 
-								// Switch the mode using shared handler
-								await this.providerRef.deref()?.handleModeSwitch(mode_slug)
-								pushToolResult(
-									`Successfully switched from ${getModeBySlug(currentMode)?.name ?? currentMode} mode to ${targetMode.name
-									} mode${reason ? ` because: ${reason}` : ""}.`,
-								)
-								await delay(500) // delay to allow mode change to take effect before next tool is executed
-								break
-							}
-						} catch (error) {
-							await handleError("switching mode", error)
-							break
-						}
-					}
+					// 			// Switch the mode using shared handler
+					// 			await this.providerRef.deref()?.handleModeSwitch(mode_slug)
+					// 			pushToolResult(
+					// 				`Successfully switched from ${getModeBySlug(currentMode)?.name ?? currentMode} mode to ${targetMode.name
+					// 				} mode${reason ? ` because: ${reason}` : ""}.`,
+					// 			)
+					// 			await delay(500) // delay to allow mode change to take effect before next tool is executed
+					// 			break
+					// 		}
+					// 	} catch (error) {
+					// 		await handleError("switching mode", error)
+					// 		break
+					// 	}
+					// }
 
 					case "new_task": {
 						const mode: string | undefined = block.params.mode

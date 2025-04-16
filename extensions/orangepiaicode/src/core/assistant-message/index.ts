@@ -23,7 +23,7 @@ export const toolUseNames = [
 	"access_mcp_resource",
 	"ask_followup_question",
 	"attempt_completion",
-	"switch_mode",
+	// "switch_mode",
 	"new_task",
 ] as const
 
@@ -130,10 +130,10 @@ export interface AttemptCompletionToolUse extends ToolUse {
 	params: Partial<Pick<Record<ToolParamName, string>, "result" | "command">>
 }
 
-export interface SwitchModeToolUse extends ToolUse {
-	name: "switch_mode"
-	params: Partial<Pick<Record<ToolParamName, string>, "mode_slug" | "reason">>
-}
+// export interface SwitchModeToolUse extends ToolUse {
+// 	name: "switch_mode"
+// 	params: Partial<Pick<Record<ToolParamName, string>, "mode_slug" | "reason">>
+// }
 
 export interface NewTaskToolUse extends ToolUse {
 	name: "new_task"

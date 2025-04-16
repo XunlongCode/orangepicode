@@ -18,7 +18,7 @@ export const TOOL_DISPLAY_NAMES = {
 	access_mcp_resource: "access mcp resources",
 	ask_followup_question: "ask questions",
 	attempt_completion: "complete tasks",
-	switch_mode: "switch modes",
+	// switch_mode: "switch modes",
 	new_task: "create new task",
 } as const
 
@@ -40,7 +40,10 @@ export const TOOL_GROUPS: Record<string, ToolGroupConfig> = {
 		tools: ["use_mcp_tool", "access_mcp_resource"],
 	},
 	modes: {
-		tools: ["switch_mode", "new_task"],
+		tools: [
+			// "switch_mode",
+			"new_task"
+		],
 		alwaysAvailable: true,
 	},
 }
@@ -51,7 +54,7 @@ export type ToolGroup = keyof typeof TOOL_GROUPS
 export const ALWAYS_AVAILABLE_TOOLS = [
 	"ask_followup_question",
 	"attempt_completion",
-	"switch_mode",
+	// "switch_mode",
 	"new_task",
 ] as const
 

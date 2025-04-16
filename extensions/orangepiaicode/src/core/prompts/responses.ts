@@ -24,9 +24,9 @@ ${toolUseInstructionsReminder}
 
 # Next Steps
 
-If you have completed the user's task, use the attempt_completion tool. 
-If you require additional information from the user, use the ask_followup_question tool. 
-Otherwise, if you have not completed the task and do not need additional information, then proceed with the next step of the task. 
+If you have completed the user's task, use the attempt_completion tool.
+If you require additional information from the user, use the ask_followup_question tool.
+Otherwise, if you have not completed the task and do not need additional information, then proceed with the next step of the task.
 (This is an automated message, so do not respond to it conversationally.)`,
 
 	tooManyMistakes: (feedback?: string) =>
@@ -138,14 +138,14 @@ Otherwise, if you have not completed the task and do not need additional informa
 const formatImagesIntoBlocks = (images?: string[]): Anthropic.ImageBlockParam[] => {
 	return images
 		? images.map((dataUrl) => {
-				// data:image/png;base64,base64string
-				const [rest, base64] = dataUrl.split(",")
-				const mimeType = rest.split(":")[1].split(";")[0]
-				return {
-					type: "image",
-					source: { type: "base64", media_type: mimeType, data: base64 },
-				} as Anthropic.ImageBlockParam
-			})
+			// data:image/png;base64,base64string
+			const [rest, base64] = dataUrl.split(",")
+			const mimeType = rest.split(":")[1].split(";")[0]
+			return {
+				type: "image",
+				source: { type: "base64", media_type: mimeType, data: base64 },
+			} as Anthropic.ImageBlockParam
+		})
 		: []
 }
 

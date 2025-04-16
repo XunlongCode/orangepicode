@@ -1228,7 +1228,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 								overflowY: "scroll", // always show scrollbar
 							}}
 							components={{
-								// Footer: () => <div style={{ height: 5 }} />, // Add empty padding at the bottom
+								Footer: () => <div style={{ height: 5 }} />, // Add empty padding at the bottom
 								Header
 							}}
 							// increasing top by 3_000 to prevent jumping around when user collapses a row

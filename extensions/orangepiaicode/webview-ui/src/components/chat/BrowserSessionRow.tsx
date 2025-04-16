@@ -249,8 +249,7 @@ const BrowserSessionRow = memo((props: BrowserSessionRowProps) => {
 			</div>
 			<div
 				style={{
-					borderRadius: 3,
-					border: "1px solid var(--vscode-editorGroup-border)",
+					borderRadius: 8,
 					overflow: "hidden",
 					backgroundColor: CODE_BLOCK_BG_COLOR,
 					marginBottom: 10,
@@ -483,8 +482,7 @@ const BrowserSessionRowContent = ({
 							</div>
 							<div
 								style={{
-									borderRadius: 3,
-									border: "1px solid var(--vscode-editorGroup-border)",
+									borderRadius: 8,
 									overflow: "hidden",
 									backgroundColor: CODE_BLOCK_BG_COLOR,
 								}}>
@@ -531,10 +529,9 @@ const BrowserActionBox = ({
 		<div style={{ padding: "10px 0 0 0" }}>
 			<div
 				style={{
-					borderRadius: 3,
+					borderRadius: 8,
 					backgroundColor: CODE_BLOCK_BG_COLOR,
 					overflow: "hidden",
-					border: "1px solid var(--vscode-editorGroup-border)",
 				}}>
 				<div
 					style={{

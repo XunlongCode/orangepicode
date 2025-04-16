@@ -37,6 +37,10 @@ export function getPanel(): vscode.WebviewPanel | vscode.WebviewView | undefined
 	return tabPanel || sidebarPanel
 }
 
+export function getSettingsPanel(): vscode.WebviewPanel | undefined {
+	return settingsPanel
+}
+
 /**
  * Set panel references
  */
@@ -81,19 +85,53 @@ const getCommandsMap = ({ context, outputChannel, provider, battery }: RegisterC
 		await provider.postMessageToWebview({ type: "action", action: "historyButtonClicked" })
 	}
 
+	const postStateToWebview = async () => {
+		const state = await provider.getStateToPostToWebview()
+		await provider.postMessageToWebview({ type: "state", state })
+	}
+
 	if (mode === "chat") {
 		return {
 			"orangepiaicode-chat.plusButtonClicked": onPlusButtonClicked,
-			"orangepiaicode-chat.historyButtonClicked": onHistoryButtonClicked
+			"orangepiaicode-chat.historyButtonClicked": onHistoryButtonClicked,
+			"orangepiaicode-chat.postStateToWebview": postStateToWebview,
 		}
 	} else if (mode === "code") {
 		return {
 			"orangepiaicode-code.plusButtonClicked": onPlusButtonClicked,
-			"orangepiaicode-code.historyButtonClicked": onHistoryButtonClicked
+			"orangepiaicode-code.historyButtonClicked": onHistoryButtonClicked,
+			"orangepiaicode-code.postStateToWebview": postStateToWebview,
 		}
 	}
 
 	return {
+		"orangepiaicode.insertText": async (text: string) => {
+			const editor = vscode.window.activeTextEditor;
+			if (!editor) {
+				return vscode.commands.executeCommand("orangepiaicode.insertTextToNewFile", text);
+			}
+
+			const position = editor.selection.active;
+			editor.edit(editBuilder => {
+				if (!text) return;
+				editBuilder.insert(position, text);
+			});
+
+			return editor;
+		},
+		"orangepiaicode.insertTextToNewFile": async (text: string) => {
+			const newFileUri = vscode.Uri.parse(`untitled:${text}`);
+			const newFileDocument = await vscode.workspace.openTextDocument(newFileUri);
+			const newFileEditor = await vscode.window.showTextDocument(newFileDocument);
+
+			newFileEditor.edit(editBuilder => {
+				if (!text) return;
+				editBuilder.insert(newFileEditor.selection.active, text);
+			})
+
+			return newFileEditor;
+		},
+		"orangepiaicode.postStateToWebview": postStateToWebview,
 		"orangepiaicode.plusButtonClicked": onPlusButtonClicked,
 		"orangepiaicode.mcpButtonClicked": () => {
 			provider.postMessageToWebview({ type: "action", action: "mcpButtonClicked" })

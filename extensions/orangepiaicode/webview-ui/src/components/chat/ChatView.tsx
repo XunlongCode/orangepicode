@@ -1,6 +1,6 @@
 import { VSCodeButton, VSCodeLink } from "@vscode/webview-ui-toolkit/react"
 import debounce from "debounce"
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useDeepCompareEffect, useEvent, useMount } from "react-use"
 import { Virtuoso, type VirtuosoHandle } from "react-virtuoso"
 import styled from "styled-components"
@@ -22,6 +22,7 @@ import HistoryPreview from "../history/HistoryPreview"
 import { normalizeApiConfiguration } from "../settings/ApiOptions"
 import Announcement from "./Announcement"
 import BrowserSessionRow from "./BrowserSessionRow"
+import ChatRow2 from "./ChatRow2"
 import ChatRow from "./ChatRow"
 import ChatTextArea from "./ChatTextArea"
 import TaskHeader from "./TaskHeader"
@@ -35,6 +36,8 @@ import removeMd from "remove-markdown"
 import ChatTextAreaXl from "./ChatTextAreaXl"
 import ChatTextArea2 from './ChatTextArea2'
 import useChatMode from '../../hooks/useChatMode'
+import TaskHeader2 from './TaskHeader2'
+import { useWebviewListener } from '../../hooks/useWebviewListener'
 
 interface ChatViewProps {
 	isHidden: boolean
@@ -50,6 +53,17 @@ const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0
 const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryView }: ChatViewProps) => {
 	const { t } = useAppTranslation()
 	const modeShortcutText = `${isMac ? "⌘" : "Ctrl"} + . ${t("chat:forNextMode")}`
+
+	const [githubSession, setGitHubSession] = useState<ExtensionMessage["githubSession"]>()
+
+	useWebviewListener("getGitHubSessionSuccess", async (e) => {
+		setGitHubSession(e.githubSession)
+	})
+
+	useEffect(() => {
+		vscode.postMessage({ type: "getGitHubSession" })
+	}, [])
+
 	const {
 		version,
 		clineMessages: messages,
@@ -82,7 +96,10 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 	}, [])
 
 	//const task = messages.length > 0 ? (messages[0].say === "task" ? messages[0] : undefined) : undefined) : undefined
-	const task = useMemo(() => messages.at(0), [messages]) // leaving this less safe version here since if the first message is not a task, then the extension is in a bad state and needs to be debugged (see Cline.abort)
+	const task = useMemo(() => {
+		return messages.at(0)
+	}, [messages]) // leaving this less safe version here since if the first message is not a task, then the extension is in a bad state and needs to be debugged (see Cline.abort)
+
 	const modifiedMessages = useMemo(() => combineApiRequests(combineCommandSequences(messages.slice(1))), [messages])
 	// has to be after api_req_finished are all reduced into api_req_started messages
 	const apiMetrics = useMemo(() => getApiMetrics(modifiedMessages), [modifiedMessages])
@@ -974,7 +991,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 						href="#"
 						onClick={(e) => {
 							e.preventDefault()
-							window.postMessage({ type: "action", action: "settingsButtonClicked" }, "*")
+							vscode.postMessage({ type: "openSettings" })
 						}}
 						className="inline px-0.5">
 						disable checkpoints in settings
@@ -1016,9 +1033,10 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 
 			// regular message
 			return (
-				<ChatRow
+				<ChatRow2
 					key={messageOrGroup.ts}
 					message={messageOrGroup}
+					githubSession={githubSession}
 					isExpanded={expandedRows[messageOrGroup.ts] || false}
 					onToggleExpand={() => toggleRowExpansion(messageOrGroup.ts)}
 					lastModifiedMessage={modifiedMessages.at(-1)}
@@ -1103,6 +1121,12 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 		}
 	}, [handleKeyDown])
 
+	const Header = useCallback(() => task && <TaskHeader2
+		task={task}
+		align="right"
+		githubSession={githubSession}
+	/>, [task?.ts])
+
 	return (
 		<div
 			style={{
@@ -1118,7 +1142,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 			}}>
 			{task ? (
 				<>
-					<TaskHeader
+					{/* <TaskHeader
 						style={{
 							padding: "0"
 						}}
@@ -1131,11 +1155,11 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 						totalCost={apiMetrics.totalCost}
 						contextTokens={apiMetrics.contextTokens}
 						onClose={handleTaskCloseButtonClick}
-					/>
+					/> */}
 
 					{/* Checkpoint warning message */}
 					{showCheckpointWarning && (
-						<div className="px-3">
+						<div>
 							<CheckpointWarningMessage />
 						</div>
 					)}
@@ -1205,6 +1229,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 							}}
 							components={{
 								Footer: () => <div style={{ height: 5 }} />, // Add empty padding at the bottom
+								Header
 							}}
 							// increasing top by 3_000 to prevent jumping around when user collapses a row
 							increaseViewportBy={{ top: 3_000, bottom: Number.MAX_SAFE_INTEGER }} // hack to make sure the last message is always rendered to get truly perfect scroll to bottom animation when new messages are added (Number.MAX_SAFE_INTEGER is safe for arithmetic operations, which is all virtuoso uses this value for in src/sizeRangeSystem.ts)
@@ -1217,7 +1242,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 								}
 								setShowScrollToBottom(disableAutoScrollRef.current && !isAtBottom)
 							}}
-							atBottomThreshold={10} // anything lower causes issues with followOutput
+							atBottomThreshold={200} // anything lower causes issues with followOutput
 							initialTopMostItemIndex={groupedMessages.length - 1}
 						/>
 					</div>
@@ -1230,6 +1255,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 										padding: "10px 0 0 0",
 									}}>
 									<ScrollToBottomButton
+										className='!rounded-[8px] !h-[32px]'
 										onClick={() => {
 											scrollToBottomSmooth()
 											disableAutoScrollRef.current = false
@@ -1257,6 +1283,8 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 											style={{
 												flex: secondaryButtonText ? 1 : 2,
 												marginRight: secondaryButtonText ? "6px" : "0",
+												borderRadius: 8,
+												height: 32
 											}}
 											title={
 												primaryButtonText === t("chat:retry.title")
@@ -1289,6 +1317,8 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 											style={{
 												flex: isStreaming ? 2 : 1,
 												marginLeft: isStreaming ? 0 : "6px",
+												borderRadius: 8,
+												height: 32
 											}}
 											title={
 												isStreaming

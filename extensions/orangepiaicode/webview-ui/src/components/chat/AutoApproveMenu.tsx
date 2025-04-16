@@ -97,13 +97,13 @@ const AutoApproveMenu = ({ style, isExpandedExternal, onExpandChange }: AutoAppr
 			enabled: alwaysAllowMcp ?? false,
 			description: t("chat:autoApprove.actions.useMcp.description"),
 		},
-		{
-			id: "switchModes",
-			label: t("chat:autoApprove.actions.switchModes.label"),
-			shortName: t("chat:autoApprove.actions.switchModes.shortName"),
-			enabled: alwaysAllowModeSwitch ?? false,
-			description: t("chat:autoApprove.actions.switchModes.description"),
-		},
+		// {
+		// 	id: "switchModes",
+		// 	label: t("chat:autoApprove.actions.switchModes.label"),
+		// 	shortName: t("chat:autoApprove.actions.switchModes.shortName"),
+		// 	enabled: alwaysAllowModeSwitch ?? false,
+		// 	description: t("chat:autoApprove.actions.switchModes.description"),
+		// },
 		{
 			id: "subtasks",
 			label: t("chat:autoApprove.actions.subtasks.label"),

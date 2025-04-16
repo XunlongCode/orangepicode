@@ -123,8 +123,11 @@ export interface WebviewMessage {
 	| "getCurrentTheme"
 	| "importUserSettingsFromVSCode"
 	| "importUserSettingsFromCursor"
+	| "openSettings"
 	| "openVSCodeSettings"
 	| "openVSCodeKeyboardShortcuts"
+	| "insertText"
+	| "insertTextToNewFile"
 	theme?: string
 	text?: string
 	disabled?: boolean

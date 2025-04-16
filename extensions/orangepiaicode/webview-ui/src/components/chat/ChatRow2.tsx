@@ -9,6 +9,7 @@ import {
 	ClineAskUseMcpServer,
 	ClineMessage,
 	ClineSayTool,
+	ExtensionMessage,
 } from "../../../../src/shared/ExtensionMessage"
 import { COMMAND_OUTPUT_STRING } from "../../../../src/shared/combineCommandSequences"
 import { useExtensionState } from "../../context/ExtensionStateContext"
@@ -23,6 +24,9 @@ import McpResourceRow from "../mcp/McpResourceRow"
 import McpToolRow from "../mcp/McpToolRow"
 import { highlightMentions } from "./TaskHeader"
 import { CheckpointSaved } from "./checkpoints/CheckpointSaved"
+import { cn } from '../../lib/utils'
+import { getVscExtensionPath } from '../../utils'
+import GithubUser from '../common/GithubUser'
 
 interface ChatRowProps {
 	message: ClineMessage
@@ -32,19 +36,37 @@ interface ChatRowProps {
 	isStreaming: boolean
 	onToggleExpand: () => void
 	onHeightChange: (isTaller: boolean) => void
+	githubSession?: ExtensionMessage['githubSession']
 }
 
-interface ChatRowContentProps extends Omit<ChatRowProps, "onHeightChange"> {}
+interface ChatRowContentProps extends Omit<ChatRowProps, "onHeightChange"> { }
 
-const ChatRow = memo(
+const ChatRow2 = memo(
 	(props: ChatRowProps) => {
 		const { isLast, onHeightChange, message } = props
 		// Store the previous height to compare with the current height
 		// This allows us to detect changes without causing re-renders
 		const prevHeightRef = useRef(0)
 
+		const isUserMessage = useMemo(() => {
+			if (props.message.say === "user_feedback") {
+				return true
+			}
+			return false
+		}, [props.message.say])
+
 		const [chatrow, { height }] = useSize(
-			<div className="py-[10px]">
+			<div className="my-[24px] flex flex-col gap-[12px]">
+				{
+					isUserMessage ? <div className='flex items-center gap-[12px] justify-end'>
+						<GithubUser githubSession={props.githubSession} />
+					</div> : <div className='flex items-center gap-[12px]'>
+						<div className='h-[36px] w-[36px]'>
+							<img className='h-full w-full object-cover' src={getVscExtensionPath("src/assets/logo.png")} alt="" />
+						</div>
+						<div className='font-medium text-[16px]'>OrangePi</div>
+					</div>
+				}
 				<ChatRowContent {...props} />
 			</div>,
 		)
@@ -69,7 +91,7 @@ const ChatRow = memo(
 	deepEqual,
 )
 
-export default ChatRow
+export default ChatRow2
 
 export const ChatRowContent = ({
 	message,
@@ -82,6 +104,7 @@ export const ChatRowContent = ({
 	const { t } = useTranslation()
 	const { mcpServers, alwaysAllowMcp, currentCheckpoint } = useExtensionState()
 	const [reasoningCollapsed, setReasoningCollapsed] = useState(true)
+	const { copyWithFeedback } = useCopyToClipboard()
 
 	const [cost, apiReqCancelReason, apiReqStreamingFailedMessage] = useMemo(() => {
 		if (message.text !== null && message.text !== undefined && message.say === "api_req_started") {
@@ -535,7 +558,7 @@ export const ChatRowContent = ({
 									...headerStyle,
 									marginBottom:
 										((cost === null || cost === undefined) && apiRequestFailedMessage) ||
-										apiReqStreamingFailedMessage
+											apiReqStreamingFailedMessage
 											? 10
 											: 0,
 									justifyContent: "space-between",
@@ -558,25 +581,25 @@ export const ChatRowContent = ({
 							</div>
 							{(((cost === null || cost === undefined) && apiRequestFailedMessage) ||
 								apiReqStreamingFailedMessage) && (
-								<>
-									<p style={{ ...pStyle, color: "var(--vscode-errorForeground)" }}>
-										{apiRequestFailedMessage || apiReqStreamingFailedMessage}
-										{apiRequestFailedMessage?.toLowerCase().includes("powershell") && (
-											<>
-												<br />
-												<br />
-												{t("chat:powershell.issues")}{" "}
-												<a
-													href="https://github.com/cline/cline/wiki/TroubleShooting-%E2%80%90-%22PowerShell-is-not-recognized-as-an-internal-or-external-command%22"
-													style={{ color: "inherit", textDecoration: "underline" }}>
-													troubleshooting guide
-												</a>
-												.
-											</>
-										)}
-									</p>
+									<>
+										<p style={{ ...pStyle, color: "var(--vscode-errorForeground)" }}>
+											{apiRequestFailedMessage || apiReqStreamingFailedMessage}
+											{apiRequestFailedMessage?.toLowerCase().includes("powershell") && (
+												<>
+													<br />
+													<br />
+													{t("chat:powershell.issues")}{" "}
+													<a
+														href="https://github.com/cline/cline/wiki/TroubleShooting-%E2%80%90-%22PowerShell-is-not-recognized-as-an-internal-or-external-command%22"
+														style={{ color: "inherit", textDecoration: "underline" }}>
+														troubleshooting guide
+													</a>
+													.
+												</>
+											)}
+										</p>
 
-									{/* {apiProvider === "" && (
+										{/* {apiProvider === "" && (
 											<div
 												style={{
 													display: "flex",
@@ -608,8 +631,8 @@ export const ChatRowContent = ({
 												</span>
 											</div>
 										)} */}
-								</>
-							)}
+									</>
+								)}
 
 							{isExpanded && (
 								<div style={{ marginTop: "10px" }}>
@@ -628,58 +651,64 @@ export const ChatRowContent = ({
 				case "text":
 					return (
 						<div>
-							<Markdown markdown={message.text} partial={message.partial} />
+							<Markdown markdown={message.text} partial={message.partial} isLast={isLast} />
 						</div>
 					)
 				case "user_feedback":
-					return (
-						<div
-							style={{
-								backgroundColor: "var(--vscode-badge-background)",
-								color: "var(--vscode-badge-foreground)",
-								borderRadius: "3px",
-								padding: "9px",
-								overflow: "hidden",
-								whiteSpace: "pre-wrap",
-								wordBreak: "break-word",
-								overflowWrap: "anywhere",
-							}}>
-							<div
-								style={{
-									display: "flex",
-									justifyContent: "space-between",
-									alignItems: "flex-start",
-									gap: "10px",
-								}}>
-								<span style={{ display: "block", flexGrow: 1, padding: "4px" }}>
-									{highlightMentions(message.text)}
-								</span>
-								<VSCodeButton
-									appearance="icon"
-									style={{
-										padding: "3px",
-										flexShrink: 0,
-										height: "24px",
-										marginTop: "-3px",
-										marginBottom: "-3px",
-										marginRight: "-6px",
-									}}
-									disabled={isStreaming}
-									onClick={(e) => {
-										e.stopPropagation()
-										vscode.postMessage({
-											type: "deleteMessage",
-											value: message.ts,
-										})
-									}}>
-									<span className="codicon codicon-trash"></span>
-								</VSCodeButton>
+					return <div className='flex items-center justify-end'>
+						<div className='flex items-start gap-[12px] group'>
+							<div className='flex flex-col justify-center min-h-[37px]'>
+								<div className='flex items-center gap-[12px]'>
+									<VSCodeButton
+										className='opacity-0 group-hover:opacity-100 transition-opacity'
+										appearance="icon"
+										style={{
+											padding: "3px",
+											flexShrink: 0,
+										}}
+										onClick={(e) => {
+											e.stopPropagation()
+											if (message.text) {
+												copyWithFeedback(message.text)
+											}
+										}}>
+										<span className="codicon codicon-copy"></span>
+									</VSCodeButton>
+									<VSCodeButton
+										className='opacity-0 group-hover:opacity-100 transition-opacity'
+										appearance="icon"
+										style={{
+											padding: "3px",
+											flexShrink: 0,
+										}}
+										disabled={isStreaming}
+										onClick={(e) => {
+											e.stopPropagation()
+											vscode.postMessage({
+												type: "deleteMessage",
+												value: message.ts,
+											})
+										}}>
+										<span className="codicon codicon-trash"></span>
+									</VSCodeButton>
+								</div>
 							</div>
-							{message.images && message.images.length > 0 && (
-								<Thumbnails images={message.images} style={{ marginTop: "8px" }} />
-							)}
+							<div
+								className={cn(
+									"flex flex-col justify-center gap-[12px]",
+									"text-vscode-editor-foreground",
+									"bg-vscode-editorWidget-background",
+									"p-[8px] rounded-[8px] min-h-[37px] w-fit",
+									"rounded-tr-none",
+								)}
+							>
+								<div>
+									{highlightMentions(message.text)}
+								</div>
+								{message.images && message.images.length > 0 && <Thumbnails images={message.images} />}
+							</div>
 						</div>
-					)
+					</div>
 				case "user_feedback_diff":
 					const tool = JSON.parse(message.text || "{}") as ClineSayTool
 					return (
@@ -716,7 +745,7 @@ export const ChatRowContent = ({
 								{title}
 							</div>
 							<div style={{ color: "var(--vscode-charts-green)", paddingTop: 10 }}>
-								<Markdown markdown={message.text} />
+								<Markdown markdown={message.text} isLast={isLast} />
 							</div>
 						</>
 					)
@@ -801,7 +830,7 @@ export const ChatRowContent = ({
 								</div>
 							)}
 							<div style={{ paddingTop: 10 }}>
-								<Markdown markdown={message.text} partial={message.partial} />
+								<Markdown markdown={message.text} partial={message.partial} isLast={isLast} />
 							</div>
 						</>
 					)
@@ -977,7 +1006,7 @@ export const ChatRowContent = ({
 									{title}
 								</div>
 								<div style={{ color: "var(--vscode-charts-green)", paddingTop: 10 }}>
-									<Markdown markdown={message.text} partial={message.partial} />
+									<Markdown markdown={message.text} partial={message.partial} isLast={isLast} />
 								</div>
 							</div>
 						)
@@ -994,7 +1023,7 @@ export const ChatRowContent = ({
 								</div>
 							)}
 							<div style={{ paddingTop: 10 }}>
-								<Markdown markdown={message.text} />
+								<Markdown markdown={message.text} isLast={isLast} />
 							</div>
 						</>
 					)
@@ -1019,61 +1048,61 @@ export const ProgressIndicator = () => (
 	</div>
 )
 
-const Markdown = memo(({ markdown, partial }: { markdown?: string; partial?: boolean }) => {
-	const [isHovering, setIsHovering] = useState(false)
+const Markdown = memo(({ markdown, partial, isLast }:
+	{ markdown?: string; partial?: boolean; isLast?: boolean }
+) => {
 	const { copyWithFeedback } = useCopyToClipboard(200) // shorter feedback duration for copy button flash
 
 	return (
 		<div
-			onMouseEnter={() => setIsHovering(true)}
-			onMouseLeave={() => setIsHovering(false)}
-			style={{ position: "relative" }}>
+			style={{ position: "relative" }}
+		>
 			<div style={{ wordBreak: "break-word", overflowWrap: "anywhere", marginBottom: -15, marginTop: -15 }}>
 				<MarkdownBlock markdown={markdown} />
 			</div>
-			{markdown && !partial && isHovering && (
-				<div
-					style={{
-						position: "absolute",
-						bottom: "-4px",
-						right: "8px",
-						opacity: 0,
-						animation: "fadeIn 0.2s ease-in-out forwards",
-						borderRadius: "4px",
-					}}>
-					<style>
-						{`
-							@keyframes fadeIn {
-								from { opacity: 0; }
-								to { opacity: 1.0; }
-							}
-						`}
-					</style>
-					<VSCodeButton
-						className="copy-button"
-						appearance="icon"
-						style={{
-							height: "24px",
-							border: "none",
-							background: "var(--vscode-editor-background)",
-							transition: "background 0.2s ease-in-out",
-						}}
-						onClick={async () => {
-							const success = await copyWithFeedback(markdown)
-							if (success) {
-								const button = document.activeElement as HTMLElement
-								if (button) {
-									button.style.background = "var(--vscode-button-background)"
-									setTimeout(() => {
-										button.style.background = ""
-									}, 200)
+			{markdown && !partial && (
+				<>
+					<div className='h-[12px]'></div>
+					<div className='flex items-center gap-[12px]'>
+						<VSCodeButton
+							className="bg-vscode-activityBar-activeBackground"
+							appearance="icon"
+							style={{
+								height: "24px",
+								border: "none",
+								transition: "background 0.2s ease-in-out",
+							}}
+							onClick={async () => {
+								const success = await copyWithFeedback(markdown)
+								if (success) {
+									const button = document.activeElement as HTMLElement
+									if (button) {
+										button.style.background = "var(--vscode-button-background)"
+										setTimeout(() => {
+											button.style.background = ""
+										}, 200)
+									}
 								}
-							}
-						}}
-						title="Copy as markdown">
-						<span className="codicon codicon-copy"></span>
-					</VSCodeButton>
-				</div>
+							}}
+							title="Copy as markdown">
+							<span className="codicon codicon-copy"></span>
+						</VSCodeButton>
+						{false && <VSCodeButton
+							className="bg-vscode-activityBar-activeBackground"
+							appearance="icon"
+							style={{
+								height: "24px",
+								border: "none",
+								transition: "background 0.2s ease-in-out",
+							}}
+							onClick={async () => {
+
+							}}
+							title="Copy as markdown">
+							<span className="codicon codicon-refresh"></span>
+						</VSCodeButton>}
+					</div>
+				</>
 			)}
 		</div>
 	)

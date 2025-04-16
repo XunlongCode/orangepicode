@@ -183,7 +183,7 @@ export const AutoApproveSettings = ({
 					</div>
 				</div>
 
-				<div>
+				{/* <div>
 					<Checkbox
 						checked={alwaysAllowModeSwitch}
 						onCheckedChange={(e: any) => setCachedStateField("alwaysAllowModeSwitch", e === "indeterminate" ? false : e)}
@@ -193,7 +193,7 @@ export const AutoApproveSettings = ({
 					<div className="text-vscode-descriptionForeground text-sm mt-1">
 						{t("settings:autoApprove.modeSwitch.description")}
 					</div>
-				</div>
+				</div> */}
 
 				<div>
 					<Checkbox

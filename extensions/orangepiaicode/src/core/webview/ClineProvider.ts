@@ -9,7 +9,7 @@ import * as path from "path"
 import * as vscode from "vscode"
 
 import { changeLanguage, t } from "../../i18n"
-import { setPanel } from "../../activate/registerCommands"
+import { getSettingsPanel, setPanel } from "../../activate/registerCommands"
 import { ApiConfiguration, ApiProvider, ModelInfo, API_CONFIG_KEYS } from "../../shared/api"
 import { findLast } from "../../shared/array"
 import { supportPrompt } from "../../shared/support-prompt"
@@ -65,13 +65,10 @@ import { getNonce } from "./getNonce"
 import { getUri } from "./getUri"
 import { telemetryService } from "../../services/telemetry/TelemetryService"
 import { TelemetrySetting } from "../../shared/TelemetrySetting"
-import { VsCodeIde } from "../autocomplete/VsCodeIde"
-import { VsCodeWebviewProtocol } from "../autocomplete/vscode/webviewProtocol"
-import { EXTENSION_NAME } from "../autocomplete/control-plane/env"
-import { setupStatusBar, StatusBarStatus } from "../autocomplete/statusBar"
-import { ContinueCompletionProvider } from "../autocomplete/ContinueCompletionProvider"
 import { getMindieModels } from "../../api/providers/mindie"
 import { getWorkspacePath } from "../../utils/path"
+import { Singleton } from '../../utils/singleton'
+import { registerInlineCompletionItemProvider } from '../autocomplete/ContinueCompletionProvider'
 
 /**
  * https://github.com/microsoft/vscode-webview-ui-toolkit-samples/blob/main/default/weather-webview/src/providers/WeatherViewProvider.ts
@@ -100,8 +97,6 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 	customModesManager: CustomModesManager
 	inlineCompletionItemProvider: vscode.Disposable | null = null
 
-	private ide: VsCodeIde
-	webviewProtocolPromise: Promise<VsCodeWebviewProtocol>
 
 	get cwd() {
 		return getWorkspacePath()
@@ -110,6 +105,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 		readonly context: vscode.ExtensionContext,
 		private readonly outputChannel: vscode.OutputChannel,
 		private readonly renderContext: "sidebar" | "editor" | "settings" = "sidebar",
+		// mode 是可选的，可为undefined，有值则固定webview的模式，否则读取state里的mode
 		public mode?: "chat" | "code"
 	) {
 		super()
@@ -123,7 +119,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 
 		this.workspaceTracker = new WorkspaceTracker(this)
 		this.configManager = new ConfigManager(this.context)
-		this.customModesManager = new CustomModesManager(this.context, async () => {
+		this.customModesManager = new (Singleton(CustomModesManager))(this.context, async () => {
 			await this.postStateToWebview()
 		})
 
@@ -135,38 +131,11 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			.catch((error) => {
 				this.outputChannel.appendLine(`Failed to initialize MCP Hub: ${error}`)
 			})
-
-		// Tab autocomplete requires
-		let resolveWebviewProtocol: any = undefined
-		this.webviewProtocolPromise = new Promise<VsCodeWebviewProtocol>((resolve) => {
-			resolveWebviewProtocol = resolve
-		})
-		this.ide = new VsCodeIde(this.webviewProtocolPromise, context)
-
-		// Tab autocomplete
-		const config = vscode.workspace.getConfiguration(EXTENSION_NAME)
-		const enabled = config.get<boolean>("enableTabAutocomplete")
-
-		// status bar
-		setupStatusBar(enabled ? StatusBarStatus.Enabled : StatusBarStatus.Disabled)
-
-		// Register inline completion provider
-		this.registerInlineCompletionItemProvider()
-	}
-
-	registerInlineCompletionItemProvider() {
-		this.inlineCompletionItemProvider?.dispose()
-		this.inlineCompletionItemProvider = vscode.languages.registerInlineCompletionItemProvider(
-			[{ pattern: "**" }],
-			new ContinueCompletionProvider(this.ide, this, this.contextProxy),
-		)
-
-		this.context.subscriptions.push(this.inlineCompletionItemProvider)
 	}
 
 	async getMode() {
 		const { mode } = await this.getState()
-		return this.mode || mode
+		return this.mode || mode || "code"
 	}
 
 	async onWrite(log: string) {
@@ -518,10 +487,12 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			enableCheckpoints,
 			checkpointStorage,
 			fuzzyMatchThreshold,
-			mode,
+			// mode,
 			customInstructions: globalInstructions,
 			experiments,
 		} = await this.getState()
+
+		const mode = await this.getMode()
 
 		const modePrompt = customModePrompts?.[mode] as PromptComponent
 		const effectiveInstructions = [globalInstructions, modePrompt?.customInstructions].filter(Boolean).join("\n\n")
@@ -559,10 +530,12 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			enableCheckpoints,
 			checkpointStorage,
 			fuzzyMatchThreshold,
-			mode,
+			// mode,
 			customInstructions: globalInstructions,
 			experiments,
 		} = await this.getState()
+
+		const mode = await this.getMode()
 
 		const modePrompt = customModePrompts?.[mode] as PromptComponent
 		const effectiveInstructions = [globalInstructions, modePrompt?.customInstructions].filter(Boolean).join("\n\n")
@@ -619,8 +592,6 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 	}
 
 	private async getHtmlCommonHead(webview: vscode.Webview, nonce: string): Promise<string> {
-		const { mode } = await this.getState()
-
 		const vscExtensionUrl: string = getUri(webview, this.context.extensionUri, ["webview-ui"])
 			.toString();
 
@@ -639,7 +610,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			<link href="${codiconsUri}" rel="stylesheet" />
 			<script nonce="${nonce}">window.vscExtensionUrl = "${vscExtensionUrl}"</script>
 			<script nonce="${nonce}">window.language = "${language}"</script>
-			<script nonce="${nonce}">window.chatMode = "${mode}"</script>
+			${this.mode ? `<script nonce="${nonce}">window.chatMode = "${this.mode}"</script>` : ""}
 		`
 	}
 
@@ -675,7 +646,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			"default-src 'none'",
 			`font-src ${webview.cspSource}`,
 			`style-src ${webview.cspSource} 'unsafe-inline' https://* http://${localServerUrl} http://0.0.0.0:${localPort}`,
-			`img-src ${webview.cspSource} data:`,
+			`img-src ${webview.cspSource} https://avatars.githubusercontent.com data:`,
 			`script-src 'unsafe-eval' https://* https://*.posthog.com http://${localServerUrl} http://0.0.0.0:${localPort} 'nonce-${nonce}'`,
 			`connect-src https://* https://*.posthog.com ws://${localServerUrl} ws://0.0.0.0:${localPort} http://${localServerUrl} http://0.0.0.0:${localPort}`,
 		]
@@ -766,7 +737,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
             <meta name="theme-color" content="#000000">
-            <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${webview.cspSource}; style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} data:; script-src 'nonce-${nonce}' https://us-assets.i.posthog.com; connect-src https://openrouter.ai https://us.i.posthog.com https://us-assets.i.posthog.com;">
+            <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${webview.cspSource}; style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} https://avatars.githubusercontent.com data:; script-src 'nonce-${nonce}' https://us-assets.i.posthog.com; connect-src https://openrouter.ai https://us.i.posthog.com https://us-assets.i.posthog.com;">
             ${await this.getHtmlCommonHead(webview, nonce)}
 						<link nonce="${nonce}" rel="modulepreload" crossorigin href="${codiconsJsUri}">
 						<link rel="stylesheet" type="text/css" href="${stylesUri}">
@@ -1760,7 +1731,8 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 						console.log("Setting autocompleteApiConfigId to ", message.text)
 						await this.updateGlobalState("autocompleteApiConfigId", message.text)
 						await this.postStateToWebview()
-						this.registerInlineCompletionItemProvider()
+
+						registerInlineCompletionItemProvider(this, this.context)
 						break
 					case "enableCustomModeCreation":
 						await this.updateGlobalState("enableCustomModeCreation", message.bool ?? true)
@@ -1895,7 +1867,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 
 								await this.postStateToWebview()
 
-								this.registerInlineCompletionItemProvider()
+								registerInlineCompletionItemProvider(this, this.context)
 							} catch (error) {
 								this.outputChannel.appendLine(
 									`Error create new api configuration: ${JSON.stringify(error, Object.getOwnPropertyNames(error), 2)}`,
@@ -1926,7 +1898,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 
 								await this.postStateToWebview()
 
-								this.registerInlineCompletionItemProvider()
+								registerInlineCompletionItemProvider(this, this.context)
 							} catch (error) {
 								this.outputChannel.appendLine(
 									`Error rename api configuration: ${JSON.stringify(error, Object.getOwnPropertyNames(error), 2)}`,
@@ -1949,7 +1921,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 
 								await this.postStateToWebview()
 
-								this.registerInlineCompletionItemProvider()
+								registerInlineCompletionItemProvider(this, this.context)
 							} catch (error) {
 								this.outputChannel.appendLine(
 									`Error load api configuration: ${JSON.stringify(error, Object.getOwnPropertyNames(error), 2)}`,
@@ -2189,12 +2161,27 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 						break
 					}
 
+					case "openSettings": {
+						await vscode.commands.executeCommand("orangepiaicode.openSettings")
+						break
+					}
 					case "openVSCodeSettings": {
 						await vscode.commands.executeCommand("workbench.action.openSettings")
 						break
 					}
 					case "openVSCodeKeyboardShortcuts": {
 						await vscode.commands.executeCommand("workbench.action.openGlobalKeybindings")
+						break
+					}
+
+					case "insertText": {
+						if (!message.text) return
+						vscode.commands.executeCommand("orangepiaicode.insertText", message.text)
+						break
+					}
+					case "insertTextToNewFile": {
+						if (!message.text) return
+						vscode.commands.executeCommand("orangepiaicode.insertTextToNewFile", message.text)
 						break
 					}
 				}
@@ -2618,7 +2605,18 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 
 	async postStateToWebview() {
 		const state = await this.getStateToPostToWebview()
-		this.postMessageToWebview({ type: "state", state })
+		await this.postMessageToWebview({ type: "state", state })
+
+		// 通知左右侧栏更新state
+		await delay(100)
+		await vscode.commands.executeCommand("orangepiaicode-chat.postStateToWebview")
+		await vscode.commands.executeCommand("orangepiaicode-code.postStateToWebview")
+		await vscode.commands.executeCommand("orangepiaicode.postStateToWebview")
+
+		// 通知设置页面更新state
+		await delay(100)
+		const settingsPanel = getSettingsPanel()
+		await settingsPanel?.webview.postMessage({ type: "state", state })
 	}
 
 	async getStateToPostToWebview() {
@@ -2656,7 +2654,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			rateLimitSeconds,
 			currentApiConfigName,
 			listApiConfigMeta,
-			mode,
+			mode: stateMode,
 			customModePrompts,
 			customSupportPrompts,
 			enhancementApiConfigId,
@@ -2676,6 +2674,8 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 		const allowedCommands =
 			vscode.workspace.getConfiguration("orangepiaicode").get<string[]>("allowedCommands") || []
 		const cwd = this.cwd
+
+		const mode = stateMode ?? defaultModeSlug
 
 		return {
 			version: this.context.extension?.packageJSON?.version ?? "",
@@ -2721,7 +2721,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			rateLimitSeconds: rateLimitSeconds ?? 0,
 			currentApiConfigName: currentApiConfigName ?? "default",
 			listApiConfigMeta: listApiConfigMeta ?? [],
-			mode: mode ?? defaultModeSlug,
+			mode: mode,
 			customModePrompts: customModePrompts ?? {},
 			customSupportPrompts: customSupportPrompts ?? {},
 			enhancementApiConfigId,
@@ -2846,7 +2846,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 			apiConfiguration.apiProvider = apiProvider
 		}
 
-		const mode = this.mode ?? stateValues.mode ?? defaultModeSlug
+		const mode = stateValues.mode ?? defaultModeSlug
 
 		// Return the same structure as before
 		return {

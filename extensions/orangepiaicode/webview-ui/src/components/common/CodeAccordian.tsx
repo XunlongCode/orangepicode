@@ -1,7 +1,11 @@
 import { memo, useMemo } from "react"
 import { getLanguageFromPath } from "../../utils/getLanguageFromPath"
-import CodeBlock, { CODE_BLOCK_BG_COLOR } from "./CodeBlock"
+import CodeBlock, { CODE_BLOCK_BG_COLOR, CODE_BLOCK_FG_COLOR } from "./CodeBlock"
 import { ToolProgressStatus } from "../../../../src/shared/ExtensionMessage"
+import { VSCodeButton } from '@vscode/webview-ui-toolkit/react'
+import { useClipboard } from '../ui/hooks'
+import { useCopyToClipboard } from '../../utils/clipboard'
+import { vscode } from '../../utils/vscode'
 
 interface CodeAccordianProps {
 	code?: string
@@ -41,22 +45,24 @@ const CodeAccordian = ({
 		[path, language, code],
 	)
 
+	const { copyWithFeedback } = useCopyToClipboard(200)
+
 	return (
 		<div
 			style={{
-				borderRadius: 3,
+				borderRadius: 8,
 				backgroundColor: CODE_BLOCK_BG_COLOR,
+				color: CODE_BLOCK_FG_COLOR,
 				overflow: "hidden", // This ensures the inner scrollable area doesn't overflow the rounded corners
-				border: "1px solid var(--vscode-editorGroup-border)",
-			}}>
+			}}
+		>
 			{(path || isFeedback || isConsoleLogs) && (
 				<div
 					style={{
-						color: "var(--vscode-descriptionForeground)",
 						display: "flex",
 						alignItems: "center",
 						padding: "9px 10px",
-						cursor: isLoading ? "wait" : "pointer",
+						cursor: isLoading ? "wait" : "unset",
 						opacity: isLoading ? 0.7 : 1,
 						// pointerEvents: isLoading ? "none" : "auto",
 						userSelect: "none",
@@ -64,7 +70,8 @@ const CodeAccordian = ({
 						MozUserSelect: "none",
 						msUserSelect: "none",
 					}}
-					onClick={isLoading ? undefined : onToggleExpand}>
+				// className='border-b border-[var(--vscode-statusBar-border)] border-x-[8px] border-x-transparent'
+				>
 					{isFeedback || isConsoleLogs ? (
 						<div style={{ display: "flex", alignItems: "center" }}>
 							<span
@@ -106,9 +113,57 @@ const CodeAccordian = ({
 							</span>
 						</>
 					)}
-					<span className={`codicon codicon-chevron-${isExpanded ? "up" : "down"}`}></span>
+					<div className='flex items-center gap-[12px]'>
+						<VSCodeButton
+							appearance="icon"
+							disabled={isLoading}
+							onClick={() => {
+								copyWithFeedback(code ?? diff ?? "")
+							}}
+						>
+							<span className={`codicon codicon-copy`}></span>
+						</VSCodeButton>
+						<VSCodeButton
+							appearance="icon"
+							disabled={isLoading}
+							onClick={() => {
+								vscode.postMessage({
+									type: "insertText",
+									text: code ?? diff ?? "",
+								})
+							}}
+						>
+							<span className={`codicon codicon-insert`}></span>
+						</VSCodeButton>
+						<VSCodeButton
+							appearance="icon"
+							disabled={isLoading}
+							onClick={() => {
+								vscode.postMessage({
+									type: "insertTextToNewFile",
+									text: code ?? diff ?? "",
+								})
+							}}
+						>
+							<span className={`codicon codicon-new-file`}></span>
+						</VSCodeButton>
+						<VSCodeButton
+							appearance="icon"
+							disabled={isLoading}
+							onClick={isLoading ? undefined : onToggleExpand}
+						>
+							<span className={`codicon codicon-chevron-${isExpanded ? "up" : "down"}`}></span>
+						</VSCodeButton>
+					</div>
 				</div>
 			)}
+			{
+				isExpanded && <div
+					className='h-px w-full px-[8px]'
+				>
+					<div className='h-full w-full bg-[var(--vscode-statusBar-border)]'></div>
+				</div>
+			}
 			{(!(path || isFeedback || isConsoleLogs) || isExpanded) && (
 				<div
 					//className="code-block-scrollable" this doesn't seem to be necessary anymore, on silicon macs it shows the native mac scrollbar instead of the vscode styled one

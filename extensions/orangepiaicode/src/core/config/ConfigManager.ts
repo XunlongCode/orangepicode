@@ -2,6 +2,7 @@ import { ExtensionContext } from "vscode"
 import { ApiConfiguration } from "../../shared/api"
 import { Mode } from "../../shared/modes"
 import { ApiConfigMeta } from "../../shared/ExtensionMessage"
+import { Singleton } from '../../utils/singleton'
 
 export interface ApiConfigData {
 	currentApiConfigName: string
@@ -11,7 +12,7 @@ export interface ApiConfigData {
 	modeApiConfigs?: Partial<Record<Mode, string>>
 }
 
-export class ConfigManager {
+class _ConfigManager {
 	private readonly defaultConfig: ApiConfigData = {
 		currentApiConfigName: "default",
 		apiConfigs: {
@@ -37,7 +38,7 @@ export class ConfigManager {
 	private _lock = Promise.resolve()
 	private lock<T>(cb: () => Promise<T>) {
 		const next = this._lock.then(cb)
-		this._lock = next.catch(() => {}) as Promise<void>
+		this._lock = next.catch(() => { }) as Promise<void>
 		return next
 	}
 	/**
@@ -258,3 +259,7 @@ export class ConfigManager {
 		}
 	}
 }
+
+// export const ConfigManager = _ConfigManager
+export const ConfigManager = Singleton(_ConfigManager)
+export type ConfigManager = InstanceType<typeof ConfigManager>

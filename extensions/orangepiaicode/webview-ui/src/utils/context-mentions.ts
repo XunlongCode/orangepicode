@@ -101,17 +101,17 @@ export function getContextMenuOptions(
 		// Get fuzzy matching items
 		const matchingModes = modeQuery
 			? fzf.find(modeQuery).map((result) => ({
-					type: ContextMenuOptionType.Mode,
-					value: result.item.original.slug,
-					label: result.item.original.name,
-					description: result.item.original.roleDefinition.split("\n")[0],
-				}))
+				type: ContextMenuOptionType.Mode,
+				value: result.item.original.slug,
+				label: result.item.original.name,
+				description: result.item.original.roleDefinition.split("\n")[0],
+			}))
 			: modes.map((mode) => ({
-					type: ContextMenuOptionType.Mode,
-					value: mode.slug,
-					label: mode.name,
-					description: mode.roleDefinition.split("\n")[0],
-				}))
+				type: ContextMenuOptionType.Mode,
+				value: mode.slug,
+				label: mode.name,
+				description: mode.roleDefinition.split("\n")[0],
+			}))
 
 		return matchingModes.length > 0 ? matchingModes : [{ type: ContextMenuOptionType.NoResults }]
 	}
@@ -255,7 +255,8 @@ export function getContextMenuOptions(
 export function shouldShowContextMenu(text: string, position: number): boolean {
 	// Handle slash command
 	if (text.startsWith("/")) {
-		return position <= text.length && !text.includes(" ")
+		return false
+		// return position <= text.length && !text.includes(" ")
 	}
 
 	const beforeCursor = text.slice(0, position)
@@ -267,6 +268,9 @@ export function shouldShowContextMenu(text: string, position: number): boolean {
 
 	// Check if there's any whitespace after the '@'
 	if (/\s/.test(textAfterAt)) return false
+
+	// 避免 `@/` 弹出面板的情况
+	if (textAfterAt.startsWith("/")) return false
 
 	// Don't show the menu if it's a URL
 	if (textAfterAt.toLowerCase().startsWith("http")) return false

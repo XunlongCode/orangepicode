@@ -7,6 +7,7 @@ import { useRooPortal } from "@/components/ui/hooks"
 
 import { vscode } from "../../../utils/vscode"
 import { Checkpoint } from "./schema"
+import { VSCodeButton } from '@vscode/webview-ui-toolkit/react'
 
 type CheckpointMenuProps = {
 	ts: number
@@ -46,15 +47,21 @@ export const CheckpointMenu = ({ ts, commitHash, currentHash, checkpoint }: Chec
 	}, [ts, commitHash])
 
 	return (
-		<div className="flex flex-row gap-1">
+		<div className="flex flex-row gap-[12px]">
 			{isDiffAvailable && (
-				<Button
-					variant="ghost"
-					size="icon"
+				<VSCodeButton
+					className="bg-vscode-activityBar-activeBackground"
+					appearance="icon"
+					style={{
+						height: "24px",
+						border: "none",
+						transition: "background 0.2s ease-in-out",
+					}}
 					onClick={onCheckpointDiff}
-					title={t("chat:checkpoint.menu.viewDiff")}>
+					title={t("chat:checkpoint.menu.viewDiff")}
+				>
 					<span className="codicon codicon-diff-single" />
-				</Button>
+				</VSCodeButton>
 			)}
 			{isRestoreAvailable && (
 				<Popover
@@ -64,9 +71,17 @@ export const CheckpointMenu = ({ ts, commitHash, currentHash, checkpoint }: Chec
 						setIsConfirming(false)
 					}}>
 					<PopoverTrigger asChild>
-						<Button variant="ghost" size="icon" title={t("chat:checkpoint.menu.restore")}>
-							<span className="codicon codicon-history" />
-						</Button>
+						<VSCodeButton
+							className="bg-vscode-activityBar-activeBackground"
+							appearance="icon"
+							style={{
+								height: "24px",
+								border: "none",
+								transition: "background 0.2s ease-in-out",
+							}}
+							title={t("chat:checkpoint.menu.restore")}
+						><span className="codicon codicon-history" />
+						</VSCodeButton>
 					</PopoverTrigger>
 					<PopoverContent align="end" container={portalContainer}>
 						<div className="flex flex-col gap-2">

@@ -127,6 +127,8 @@
 
 	--color-vscode-button-secondaryRing: var(--vscode-button-secondaryRing);
 	--color-vscode-button-ring: var(--vscode-button-ring);
+
+	--color-vscode-activityBar-activeBackground: var(--vscode-activityBar-activeBackground);
 }
 
 @layer base {

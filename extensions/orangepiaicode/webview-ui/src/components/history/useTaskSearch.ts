@@ -27,10 +27,12 @@ export const useTaskSearch = (options?: UseTaskSearchOptions) => {
 	}, [searchQuery, sortOption, lastNonRelevantSort])
 
 	const presentableTasks = useMemo(() => {
-		return taskHistory.filter((item) => item.ts && item.task).filter((item) => {
+		const result = taskHistory.filter((item) => item.ts && item.task).filter((item) => {
 			if (!options?.mode) return true
 			return item.mode === options.mode
 		})
+
+		return result
 	}, [taskHistory, options?.mode])
 
 	const fzf = useMemo(() => {

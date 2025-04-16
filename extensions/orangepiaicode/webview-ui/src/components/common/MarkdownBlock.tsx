@@ -54,7 +54,7 @@ const remarkUrlToLink = () => {
 const StyledMarkdown = styled.div`
 	pre {
 		background-color: ${CODE_BLOCK_BG_COLOR};
-		border-radius: 3px;
+		border-radius: 8px;
 		margin: 13x 0;
 		padding: 10px 10px;
 		max-width: calc(100vw - 20px);
@@ -85,7 +85,7 @@ const StyledMarkdown = styled.div`
 			display: none;
 		}
 		word-wrap: break-word;
-		border-radius: 3px;
+		border-radius: 8px;
 		background-color: ${CODE_BLOCK_BG_COLOR};
 		font-size: var(--vscode-editor-font-size, var(--vscode-font-size, 12px));
 		font-family: var(--vscode-editor-font-family);

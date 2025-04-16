@@ -105,6 +105,32 @@ const getCommandsMap = ({ context, outputChannel, provider, battery }: RegisterC
 	}
 
 	return {
+		"orangepiaicode.insertText": async (text: string) => {
+			const editor = vscode.window.activeTextEditor;
+			if (!editor) {
+				return vscode.commands.executeCommand("orangepiaicode.insertTextToNewFile", text);
+			}
+
+			const position = editor.selection.active;
+			editor.edit(editBuilder => {
+				if (!text) return;
+				editBuilder.insert(position, text);
+			});
+
+			return editor;
+		},
+		"orangepiaicode.insertTextToNewFile": async (text: string) => {
+			const newFileUri = vscode.Uri.parse(`untitled:${text}`);
+			const newFileDocument = await vscode.workspace.openTextDocument(newFileUri);
+			const newFileEditor = await vscode.window.showTextDocument(newFileDocument);
+
+			newFileEditor.edit(editBuilder => {
+				if (!text) return;
+				editBuilder.insert(newFileEditor.selection.active, text);
+			})
+
+			return newFileEditor;
+		},
 		"orangepiaicode.postStateToWebview": postStateToWebview,
 		"orangepiaicode.plusButtonClicked": onPlusButtonClicked,
 		"orangepiaicode.mcpButtonClicked": () => {

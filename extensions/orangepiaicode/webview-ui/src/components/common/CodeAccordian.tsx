@@ -3,6 +3,9 @@ import { getLanguageFromPath } from "../../utils/getLanguageFromPath"
 import CodeBlock, { CODE_BLOCK_BG_COLOR, CODE_BLOCK_FG_COLOR } from "./CodeBlock"
 import { ToolProgressStatus } from "../../../../src/shared/ExtensionMessage"
 import { VSCodeButton } from '@vscode/webview-ui-toolkit/react'
+import { useClipboard } from '../ui/hooks'
+import { useCopyToClipboard } from '../../utils/clipboard'
+import { vscode } from '../../utils/vscode'
 
 interface CodeAccordianProps {
 	code?: string
@@ -41,6 +44,8 @@ const CodeAccordian = ({
 		() => code && (language ?? (path ? getLanguageFromPath(path) : undefined)),
 		[path, language, code],
 	)
+
+	const { copyWithFeedback } = useCopyToClipboard(200)
 
 	return (
 		<div
@@ -112,18 +117,33 @@ const CodeAccordian = ({
 						<VSCodeButton
 							appearance="icon"
 							disabled={isLoading}
+							onClick={() => {
+								copyWithFeedback(code ?? diff ?? "")
+							}}
 						>
 							<span className={`codicon codicon-copy`}></span>
 						</VSCodeButton>
 						<VSCodeButton
 							appearance="icon"
 							disabled={isLoading}
+							onClick={() => {
+								vscode.postMessage({
+									type: "insertText",
+									text: code ?? diff ?? "",
+								})
+							}}
 						>
 							<span className={`codicon codicon-insert`}></span>
 						</VSCodeButton>
 						<VSCodeButton
 							appearance="icon"
 							disabled={isLoading}
+							onClick={() => {
+								vscode.postMessage({
+									type: "insertTextToNewFile",
+									text: code ?? diff ?? "",
+								})
+							}}
 						>
 							<span className={`codicon codicon-new-file`}></span>
 						</VSCodeButton>

@@ -126,6 +126,8 @@ export interface WebviewMessage {
 	| "openSettings"
 	| "openVSCodeSettings"
 	| "openVSCodeKeyboardShortcuts"
+	| "insertText"
+	| "insertTextToNewFile"
 	theme?: string
 	text?: string
 	disabled?: boolean

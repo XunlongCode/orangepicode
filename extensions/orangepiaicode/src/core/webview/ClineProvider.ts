@@ -2173,6 +2173,17 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 						await vscode.commands.executeCommand("workbench.action.openGlobalKeybindings")
 						break
 					}
+
+					case "insertText": {
+						if (!message.text) return
+						vscode.commands.executeCommand("orangepiaicode.insertText", message.text)
+						break
+					}
+					case "insertTextToNewFile": {
+						if (!message.text) return
+						vscode.commands.executeCommand("orangepiaicode.insertTextToNewFile", message.text)
+						break
+					}
 				}
 			},
 			null,

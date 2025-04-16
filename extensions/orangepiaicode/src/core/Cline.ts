@@ -252,6 +252,10 @@ export class Cline extends EventEmitter<ClineEvents> {
 		//
 	}
 
+	async getMode() {
+		return await this.providerRef.deref()?.getMode() || "code"
+	}
+
 	static create(options: ClineOptions): [Cline, Promise<void>] {
 		const instance = new Cline({ ...options, startTask: false })
 		const { images, task, historyItem } = options
@@ -396,10 +400,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 				)
 			}
 
-			let {
-				mode,
-			} = (await this.providerRef.deref()?.getState()) ?? {}
-			mode = this.providerRef.deref()?.mode || mode || "chat"
+			const mode = await this.getMode()
 
 			await this.providerRef.deref()?.updateTaskHistory({
 				id: this.taskId,
@@ -1132,13 +1133,15 @@ export class Cline extends EventEmitter<ClineEvents> {
 
 		const {
 			browserViewportSize,
-			mode,
+			// mode,
 			customModePrompts,
 			experiments,
 			enableMcpServerCreation,
 			browserToolEnabled,
 			language,
 		} = (await this.providerRef.deref()?.getState()) ?? {}
+		const mode = await this.getMode()
+
 		const { customModes } = (await this.providerRef.deref()?.getState()) ?? {}
 		const systemPrompt = await (async () => {
 			const provider = this.providerRef.deref()
@@ -1530,7 +1533,11 @@ export class Cline extends EventEmitter<ClineEvents> {
 				}
 
 				// Validate tool use before execution
-				const { mode, customModes } = (await this.providerRef.deref()?.getState()) ?? {}
+				const {
+					// mode,
+					customModes
+				} = (await this.providerRef.deref()?.getState()) ?? {}
+				const mode = await this.getMode()
 				try {
 					validateToolUse(
 						block.name as ToolName,
@@ -2837,7 +2844,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 
 								// Check if already in requested mode
 								const currentMode =
-									(await this.providerRef.deref()?.getState())?.mode ?? defaultModeSlug
+									(await this.getMode()) ?? defaultModeSlug
 								if (currentMode === mode_slug) {
 									pushToolResult(`Already in ${targetMode.name} mode.`)
 									break
@@ -3709,13 +3716,14 @@ export class Cline extends EventEmitter<ClineEvents> {
 		details += `\n\n# Current Cost\n${totalCost !== null ? `$${totalCost.toFixed(2)}` : "(Not available)"}`
 		// Add current mode and any mode-specific warnings
 		const {
-			mode,
+			// mode,
 			customModes,
 			customModePrompts,
 			experiments = {} as Record<ExperimentId, boolean>,
 			customInstructions: globalCustomInstructions,
 			language,
 		} = (await this.providerRef.deref()?.getState()) ?? {}
+		const mode = await this.getMode()
 		const currentMode = mode ?? defaultModeSlug
 		const modeDetails = await getFullModeDetails(currentMode, customModes, customModePrompts, {
 			cwd: this.cwd,

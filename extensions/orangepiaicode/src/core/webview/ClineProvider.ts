@@ -135,7 +135,7 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 
 	async getMode() {
 		const { mode } = await this.getState()
-		return this.mode || mode
+		return this.mode || mode || "code"
 	}
 
 	async onWrite(log: string) {

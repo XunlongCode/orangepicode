@@ -254,8 +254,7 @@ export function getContextMenuOptions(
 
 export function shouldShowContextMenu(text: string, position: number): boolean {
 	// Handle slash command
-	// if (text.startsWith("/")) {
-	if (text.includes("/")) {
+	if (text.startsWith("/")) {
 		return false
 		// return position <= text.length && !text.includes(" ")
 	}
@@ -269,6 +268,9 @@ export function shouldShowContextMenu(text: string, position: number): boolean {
 
 	// Check if there's any whitespace after the '@'
 	if (/\s/.test(textAfterAt)) return false
+
+	// 避免 `@/` 弹出面板的情况
+	if (textAfterAt.startsWith("/")) return false
 
 	// Don't show the menu if it's a URL
 	if (textAfterAt.toLowerCase().startsWith("http")) return false

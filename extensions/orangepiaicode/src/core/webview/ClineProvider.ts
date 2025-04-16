@@ -2588,15 +2588,15 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 		await this.postMessageToWebview({ type: "state", state })
 
 		// 通知左右侧栏更新state
-		await delay(200)
+		await delay(100)
 		await vscode.commands.executeCommand("orangepiaicode-chat.postStateToWebview")
 		await vscode.commands.executeCommand("orangepiaicode-code.postStateToWebview")
 		await vscode.commands.executeCommand("orangepiaicode.postStateToWebview")
 
 		// 通知设置页面更新state
-		await delay(200)
+		await delay(100)
 		const settingsPanel = getSettingsPanel()
-		settingsPanel?.webview.postMessage({ type: "state", state })
+		await settingsPanel?.webview.postMessage({ type: "state", state })
 	}
 
 	async getStateToPostToWebview() {

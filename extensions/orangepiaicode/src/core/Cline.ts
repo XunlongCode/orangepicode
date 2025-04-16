@@ -399,7 +399,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 			let {
 				mode,
 			} = (await this.providerRef.deref()?.getState()) ?? {}
-			mode = mode || "chat"
+			mode = this.providerRef.deref()?.mode || mode || "chat"
 
 			await this.providerRef.deref()?.updateTaskHistory({
 				id: this.taskId,

@@ -37,6 +37,10 @@ export function getPanel(): vscode.WebviewPanel | vscode.WebviewView | undefined
 	return tabPanel || sidebarPanel
 }
 
+export function getSettingsPanel(): vscode.WebviewPanel | undefined {
+	return settingsPanel
+}
+
 /**
  * Set panel references
  */
@@ -82,7 +86,8 @@ const getCommandsMap = ({ context, outputChannel, provider, battery }: RegisterC
 	}
 
 	const postStateToWebview = async () => {
-		// await provider.postStateToWebview()
+		const state = await provider.getStateToPostToWebview()
+		await provider.postMessageToWebview({ type: "state", state })
 	}
 
 	if (mode === "chat") {

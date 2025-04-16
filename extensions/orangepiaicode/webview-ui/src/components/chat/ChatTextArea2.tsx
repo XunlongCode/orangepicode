@@ -901,6 +901,43 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							gap: "16px",
 							flexShrink: 0,
 						}}>
+						{/* Mode selector - fixed width */}
+						{!window.chatMode && <div style={{ flexShrink: 0 }}>
+							<SelectDropdown
+								value={mode}
+								disabled={textAreaDisabled}
+								title={t("chat:selectMode")}
+								options={[
+									{
+										value: "shortcut",
+										label: modeShortcutText,
+										disabled: true,
+										type: DropdownOptionType.SHORTCUT,
+									},
+									...getAllModes(customModes).map((mode) => ({
+										value: mode.slug,
+										label: mode.name,
+										type: DropdownOptionType.ITEM,
+									})),
+									{
+										value: "sep-1",
+										label: t("chat:separator"),
+										type: DropdownOptionType.SEPARATOR,
+									},
+									{
+										value: "promptsButtonClicked",
+										label: t("chat:edit"),
+										type: DropdownOptionType.ACTION,
+									},
+								]}
+								onChange={(value) => {
+									setMode(value as Mode)
+									vscode.postMessage({ type: "mode", text: value })
+								}}
+								shortcutText={modeShortcutText}
+								triggerClassName="w-full"
+							/>
+						</div>}
 
 						{/* API configuration selector - flexible width */}
 						<div

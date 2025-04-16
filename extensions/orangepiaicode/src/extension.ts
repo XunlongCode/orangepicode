@@ -25,7 +25,9 @@ import { API } from "./exports/api"
 
 import { handleUri, registerCommands, registerCodeActions, registerTerminalActions } from "./activate"
 import { formatLanguage } from "./shared/language"
-import { monitorLanguageChange } from "./languageMonitor"
+import { EXTENSION_NAME } from './core/autocomplete/control-plane/env'
+import { setupStatusBar, StatusBarStatus } from './core/autocomplete/statusBar'
+import { registerInlineCompletionItemProvider } from './core/autocomplete/ContinueCompletionProvider'
 /**
  * Built using https://github.com/microsoft/vscode-webview-ui-toolkit
  *
@@ -113,6 +115,17 @@ export function activate(context: vscode.ExtensionContext) {
 	)
 	// 注册code模式指令
 	registerCommands({ context, outputChannel, provider: codeViewProvider, battery }, "code")
+
+	// 自动补全
+	// Tab autocomplete
+	const config = vscode.workspace.getConfiguration(EXTENSION_NAME)
+	const enabled = config.get<boolean>("enableTabAutocomplete")
+
+	// status bar
+	setupStatusBar(enabled ? StatusBarStatus.Enabled : StatusBarStatus.Disabled)
+
+	// Register inline completion provider
+	registerInlineCompletionItemProvider(provider, context)
 
 	/**
 	 * We use the text document content provider API to show the left side for diff

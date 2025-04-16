@@ -15,12 +15,13 @@ import {
 	stopStatusBarLoading,
 } from "./statusBar"
 
-import type { IDE } from "."
 import { handleLLMError } from "./util/errorHandling"
 import { ClineProvider } from "../webview/ClineProvider"
 import { ContextProxy } from "../contextProxy"
 import { ApiConfigMeta } from "../../shared/ExtensionMessage"
 import { ApiConfiguration } from "../../shared/api"
+import { VsCodeIde } from './VsCodeIde'
+import { VsCodeWebviewProtocol } from './vscode/webviewProtocol'
 
 const Diff = require("diff")
 
@@ -38,6 +39,9 @@ interface VsCodeCompletionInput {
 }
 
 export class ContinueCompletionProvider implements vscode.InlineCompletionItemProvider {
+	private ide: VsCodeIde
+	webviewProtocolPromise: Promise<VsCodeWebviewProtocol>
+
 	private onError(e: any) {
 		if (handleLLMError(e)) {
 			return
@@ -55,13 +59,23 @@ export class ContinueCompletionProvider implements vscode.InlineCompletionItemPr
 	private recentlyVisitedRanges: RecentlyVisitedRangesService
 	private recentlyEditedTracker = new RecentlyEditedTracker()
 
+	private contextProxy: ContextProxy
+
 	constructor(
-		private readonly ide: IDE,
 		private readonly provider: ClineProvider,
-		private readonly contextProxy: ContextProxy,
+		private readonly context: vscode.ExtensionContext,
 	) {
+		this.contextProxy = new ContextProxy(this.context)
+
+		// Tab autocomplete requires
+		let resolveWebviewProtocol: any = undefined
+		this.webviewProtocolPromise = new Promise<VsCodeWebviewProtocol>((resolve) => {
+			resolveWebviewProtocol = resolve
+		})
+
+		this.ide = new VsCodeIde(this.webviewProtocolPromise, this.context)
 		this.initCompletionProvider()
-		this.recentlyVisitedRanges = new RecentlyVisitedRangesService(ide)
+		this.recentlyVisitedRanges = new RecentlyVisitedRangesService(this.ide)
 	}
 
 	_lastShownCompletion: AutocompleteOutcome | undefined
@@ -304,7 +318,7 @@ export class ContinueCompletionProvider implements vscode.InlineCompletionItemPr
 				arguments: [input.completionId, this.completionProvider],
 			})
 
-			;(completionItem as any).completeBracketPairs = true
+				; (completionItem as any).completeBracketPairs = true
 			return [completionItem]
 		} finally {
 			stopStatusBarLoading()
@@ -353,4 +367,19 @@ function diffPatternMatches(diffs: DiffType[], pattern: DiffPartType[]): boolean
 	}
 
 	return true
+}
+
+let inlineCompletionItemProvider: vscode.Disposable
+
+export function registerInlineCompletionItemProvider(
+	provider: ClineProvider,
+	context: vscode.ExtensionContext
+) {
+	inlineCompletionItemProvider?.dispose()
+	inlineCompletionItemProvider = vscode.languages.registerInlineCompletionItemProvider(
+		[{ pattern: "**" }],
+		new ContinueCompletionProvider(provider, context),
+	)
+
+	context.subscriptions.push(inlineCompletionItemProvider)
 }

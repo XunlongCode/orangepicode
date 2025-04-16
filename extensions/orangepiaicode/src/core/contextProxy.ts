@@ -13,8 +13,9 @@ import {
 	isPassThroughStateKey,
 } from "../shared/globalState"
 import { API_CONFIG_KEYS, ApiConfiguration } from "../shared/api"
+import { Singleton } from '../utils/singleton'
 
-export class ContextProxy {
+class _ContextProxy {
 	private readonly originalContext: vscode.ExtensionContext
 
 	private stateCache: Map<GlobalStateKey, any>
@@ -187,3 +188,6 @@ export class ContextProxy {
 		this.initialize()
 	}
 }
+
+export const ContextProxy = Singleton(_ContextProxy)
+export type ContextProxy = InstanceType<typeof ContextProxy>

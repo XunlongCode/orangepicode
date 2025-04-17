@@ -130,15 +130,16 @@ export class OverlayPart extends Part implements IOverlayService {
 	public toggle(id: string) {
 		const overlay = this.overlayMap.get(id);
 		if (overlay) {
-			overlay.hide();
-			return overlay;
+			return overlay.isVisible ?
+				this.hide(id) :
+				this.show(id);
 		}
 		return null;
 	}
 
 	public hideAllOverlay() {
 		for (const overlay of this.overlayMap.values()) {
-			overlay.hide();
+			this.hide(overlay.id);
 		}
 	}
 

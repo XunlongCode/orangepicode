@@ -12,6 +12,7 @@ import { $, getActiveWindow } from '../../../../base/browser/dom.js';
 export type OverlayOptions = {
 	styles?: Record<string, string>;
 	id?: string;
+	pointerPass?: boolean; // 是否允许指针穿透
 }
 
 export class Overlay extends Disposable {
@@ -26,7 +27,7 @@ export class Overlay extends Disposable {
 	constructor(
 		private readonly overlayPart: OverlayPart,
 		private readonly viewId: string,
-		private readonly options?: OverlayOptions
+		public readonly options?: OverlayOptions
 	) {
 		super();
 
@@ -55,6 +56,9 @@ export class Overlay extends Disposable {
 
 	public createWebview(webview: IOverlayWebview) {
 		webview.container.classList.add("overlay-webview");
+		if (this.options?.pointerPass) {
+			webview.container.classList.add("pointer-pass");
+		}
 
 		const webviewView: WebviewView = {
 			webview,

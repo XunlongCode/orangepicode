@@ -104,9 +104,23 @@ export class OverlayPart extends Part implements IOverlayService {
 		const id = options?.id;
 		const styles = options?.styles;
 
-		const overlay = new Overlay(this, viewId, { styles, id });
+		const overlay = new Overlay(this, viewId, { styles, id, pointerPass: options?.pointerPass });
 		this.overlayMap.set(overlay.id, overlay);
 		return overlay;
+	}
+
+	public updateOverlayPointerEvents() {
+		if (!this.container) {
+			return;
+		}
+
+		for (const overlay of this.overlayMap.values()) {
+			if (overlay.isVisible && overlay.options?.pointerPass) {
+				this.container.classList.add('pointer-pass');
+				return
+			}
+		}
+		this.container.classList.remove('pointer-pass');
 	}
 
 	public show(id: string) {
@@ -130,7 +144,11 @@ export class OverlayPart extends Part implements IOverlayService {
 	public toggle(id: string) {
 		const overlay = this.overlayMap.get(id);
 		if (overlay) {
-			overlay.hide();
+			if (overlay.isVisible) {
+				this.hide(id);
+			} else {
+				this.show(id);
+			}
 			return overlay;
 		}
 		return null;
@@ -138,7 +156,7 @@ export class OverlayPart extends Part implements IOverlayService {
 
 	public hideAllOverlay() {
 		for (const overlay of this.overlayMap.values()) {
-			overlay.hide();
+			this.hide(overlay.id);
 		}
 	}
 
@@ -158,6 +176,7 @@ export class OverlayPart extends Part implements IOverlayService {
 			this.container?.classList.remove('active');
 		}
 
+		this.updateOverlayPointerEvents();
 		this.overlayVisibleContextKey.set(this.isVisible);
 		this.onVisibilityChange.fire(this.isVisible);
 	}

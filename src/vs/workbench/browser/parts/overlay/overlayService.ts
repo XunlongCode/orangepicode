@@ -11,6 +11,7 @@ export type CreateOverlayOptions = {
 	id?: string;
 	viewId?: string;
 	styles?: Record<string, string>;
+	pointerPass?: boolean // 是否允许指针穿透
 }
 
 export interface IOverlayService {

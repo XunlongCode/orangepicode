@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 
 const Layout = () => {
 	return (
-		<div className="h-screen bg-transparent">
+		<div className="h-screen bg-transparent pointer-events-none">
 			<Outlet />
 		</div>
 	);

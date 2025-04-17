@@ -49,3 +49,7 @@
 .overlay-webview.active {
 	display: block;
 }
+
+.overlay-webview.pointer-pass {
+	pointer-events: none;
+}

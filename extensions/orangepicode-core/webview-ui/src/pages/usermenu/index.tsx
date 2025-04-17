@@ -44,7 +44,7 @@ export const Usermenu: FC = () => {
 
 	useEffect(() => {
 		// 监听网页失焦
-		window.addEventListener("blur", hideUsermenu)
+		// window.addEventListener("blur", hideUsermenu)
 
 		vscode.postMessage({
 			type: "getGitHubSession"
@@ -154,9 +154,9 @@ export const Usermenu: FC = () => {
 		setUserInfo(null)
 	})
 
-	return <div className='absolute inset-0'>
+	return <div className='absolute inset-0 pointer-events-none'>
 		<div className='absolute inset-0' onClick={hideUsermenu}></div>
-		<div className='absolute w-[240px] h-[468px] right-[24px] top-[45px]'>
+		<div className='absolute w-[240px] h-[468px] right-[24px] top-[45px] !pointer-events-auto'>
 			<VscodeTheme
 				style={{
 					boxShadow: "0px 0px 30px 0px rgba(0, 0, 0, 0.25)"

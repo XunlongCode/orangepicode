@@ -16,3 +16,7 @@
 .overlay-part.active {
 	display: block;
 }
+
+.overlay-part.pointer-pass {
+	pointer-events: none;
+}

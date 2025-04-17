@@ -11,6 +11,7 @@ export type CreateOverlayOptions = {
 	id?: string
 	viewId?: string
 	styles?: Record<string, string>
+	pointerPass?: boolean // 是否允许指针穿透
 }
 
 export type RegisterCommandOptions = {
@@ -74,13 +75,14 @@ const getGithubSession = async (options?: AuthenticationGetSessionOptions) => {
 const getUsermenuCommandsMap = ({ context, outputChannel, provider }: RegisterCommandOptions) => {
 	const usermenuOverlayOptions: CreateOverlayOptions = {
 		id: "orangepicode-core-usermenu",
+		pointerPass: true,
 		viewId: "usermenu_view",
 		styles: {
 			// top: "45px",
 			// left: "calc(100% - 264px)",
 			// height: "456px",
 			// width: "240px",
-		}
+		},
 	}
 
 	return {

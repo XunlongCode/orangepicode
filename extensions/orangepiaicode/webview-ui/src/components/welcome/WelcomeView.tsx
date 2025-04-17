@@ -8,6 +8,8 @@ import ApiOptions from "../settings/ApiOptions"
 import { Tab, TabContent } from "../common/Tab"
 import { Alert } from "../common/Alert"
 import { useAppTranslation } from "../../i18n/TranslationContext"
+import { getVscExtensionPath } from '../../utils'
+import { Button } from '../ui'
 
 const WelcomeView = () => {
 	const { apiConfiguration, currentApiConfigName, setApiConfiguration, uriScheme } = useExtensionState()
@@ -29,10 +31,18 @@ const WelcomeView = () => {
 
 	return (
 		<Tab>
-			<TabContent className="flex flex-col gap-5">
-				<h2 className="m-0 p-0">{t("welcome:greeting")}</h2>
-				<div>{t("welcome:introduction")}</div>
-				<Alert className="font-bold text-sm">{t("welcome:notice")}</Alert>
+			<TabContent className="flex flex-col gap-12">
+				<h2 className="m-0 p-0 text-[24px] font-medium">{t("welcome:greeting")}</h2>
+				<div className='flex items-center justify-center'>
+					<div className='h-[100px] w-[100px]'>
+						<img className='h-full w-full' src={getVscExtensionPath("/src/assets/logo.png")} alt="" />
+					</div>
+				</div>
+
+				<div className='text-[14px]'>
+					<div>{t("welcome:introduction")}</div>
+					<div className="mt-[44px]">{t("welcome:notice")}</div>
+				</div>
 				<ApiOptions
 					fromWelcomeView
 					apiConfiguration={apiConfiguration || {}}
@@ -44,7 +54,16 @@ const WelcomeView = () => {
 			</TabContent>
 			<div className="sticky bottom-0 bg-vscode-sideBar-background p-5">
 				<div className="flex flex-col gap-1">
-					<VSCodeButton onClick={handleSubmit}>{t("welcome:start")}</VSCodeButton>
+					<div className='text-center'>
+						<Button
+							variant={"secondary"}
+							onClick={handleSubmit}
+							className='min-w-[200px]'
+							size={"lg"}
+						>
+							{t("welcome:start")}
+						</Button>
+					</div>
 					{errorMessage && <div className="text-vscode-errorForeground">{errorMessage}</div>}
 				</div>
 			</div>

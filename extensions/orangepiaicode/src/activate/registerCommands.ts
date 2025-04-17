@@ -177,12 +177,12 @@ const getCommandsMap = ({ context, outputChannel, provider, battery }: RegisterC
 			}
 
 			quickPick.items = [
-				{
-					label: "$(comment) Open OrangePi AI Code",
-				},
-				{
-					label: "$(screen-full) Open OrangePi AI Code in new tab",
-				},
+				// {
+				// 	label: "$(comment) Open OrangePi AI Code",
+				// },
+				// {
+				// 	label: "$(screen-full) Open OrangePi AI Code in new tab",
+				// },
 				{
 					label: quickPickStatusText(targetStatus),
 				},

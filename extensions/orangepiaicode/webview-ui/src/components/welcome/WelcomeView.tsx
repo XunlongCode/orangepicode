@@ -53,8 +53,8 @@ const WelcomeView = () => {
 				/>
 			</TabContent>
 			<div className="sticky bottom-0 bg-vscode-sideBar-background p-5">
-				<div className="flex flex-col gap-1">
-					<div className='text-center'>
+				<div className="flex flex-col gap-1 text-center">
+					<div>
 						<Button
 							variant={"secondary"}
 							onClick={handleSubmit}

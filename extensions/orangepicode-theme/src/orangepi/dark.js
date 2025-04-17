@@ -1947,7 +1947,7 @@ const darkTheme = {
 		"editorBracketMatch.background": "#0064001a",
 		"editorBracketMatch.border": "#888888",
 		"editor.foldBackground": "#264f784d",
-		"editorOverviewRuler.background": "#25252500",
+		"editorOverviewRuler.background": "#181a1f",
 		"editorOverviewRuler.border": "#7f7f7f4d",
 		"editorError.foreground": "#f48771",
 		"editorError.background": "#B73A3400",

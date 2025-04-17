@@ -1945,7 +1945,7 @@ const lightTheme = {
 		"editorBracketMatch.background": "#0064001a",
 		"editorBracketMatch.border": "#b9b9b9",
 		"editor.foldBackground": "#add6ff4d",
-		"editorOverviewRuler.background": "#25252500",
+		"editorOverviewRuler.background": "#ffffff",
 		"editorOverviewRuler.border": "#7f7f7f4d",
 		"editorError.foreground": "#e51400",
 		"editorError.background": "#B73A3400",

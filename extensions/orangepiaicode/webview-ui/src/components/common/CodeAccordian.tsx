@@ -6,6 +6,8 @@ import { VSCodeButton } from '@vscode/webview-ui-toolkit/react'
 import { useClipboard } from '../ui/hooks'
 import { useCopyToClipboard } from '../../utils/clipboard'
 import { vscode } from '../../utils/vscode'
+import { useAppTranslation } from '../../i18n/TranslationContext'
+import { SvgIcons } from '../../SvgIcons'
 
 interface CodeAccordianProps {
 	code?: string
@@ -28,6 +30,8 @@ The replace method removes these matched characters, effectively trimming the st
 */
 export const removeLeadingNonAlphanumeric = (path: string): string => path.replace(/^[^a-zA-Z0-9]+/, "")
 
+const COLLAPSED_CODE_BLOCK_LINES = 8
+
 const CodeAccordian = ({
 	code,
 	diff,
@@ -40,12 +44,38 @@ const CodeAccordian = ({
 	isLoading,
 	progressStatus,
 }: CodeAccordianProps) => {
+	const { t } = useAppTranslation()
+
 	const inferredLanguage = useMemo(
 		() => code && (language ?? (path ? getLanguageFromPath(path) : undefined)),
 		[path, language, code],
 	)
 
 	const { copyWithFeedback } = useCopyToClipboard(200)
+
+	const codeBlockContent = useMemo(() => {
+		return (
+			code ??
+			diff ??
+			""
+		).trim()
+	}, [code, diff])
+
+	const showExpandButton = useMemo(() => {
+		return codeBlockContent && codeBlockContent.split("\n").length > COLLAPSED_CODE_BLOCK_LINES
+	}, [codeBlockContent])
+
+	const showFullCodeBlock = useMemo(() => {
+		if (!showExpandButton) {
+			return true
+		}
+		return !(path || isFeedback || isConsoleLogs) || isExpanded
+	}, [
+		isExpanded,
+		isFeedback,
+		isConsoleLogs,
+		path,
+	])
 
 	return (
 		<div
@@ -121,7 +151,8 @@ const CodeAccordian = ({
 								copyWithFeedback(code ?? diff ?? "")
 							}}
 						>
-							<span className={`codicon codicon-copy`}></span>
+							{/* <span className={`codicon codicon-copy`}></span> */}
+							<SvgIcons.copy />
 						</VSCodeButton>
 						<VSCodeButton
 							appearance="icon"
@@ -133,7 +164,8 @@ const CodeAccordian = ({
 								})
 							}}
 						>
-							<span className={`codicon codicon-insert`}></span>
+							{/* <span className={`codicon codicon-insert`}></span> */}
+							<SvgIcons.insertToCursor />
 						</VSCodeButton>
 						<VSCodeButton
 							appearance="icon"
@@ -145,42 +177,91 @@ const CodeAccordian = ({
 								})
 							}}
 						>
-							<span className={`codicon codicon-new-file`}></span>
+							{/* <span className={`codicon codicon-new-file`}></span> */}
+							<SvgIcons.newFile />
 						</VSCodeButton>
-						<VSCodeButton
+						{/* <VSCodeButton
 							appearance="icon"
 							disabled={isLoading}
 							onClick={isLoading ? undefined : onToggleExpand}
 						>
 							<span className={`codicon codicon-chevron-${isExpanded ? "up" : "down"}`}></span>
-						</VSCodeButton>
+						</VSCodeButton> */}
 					</div>
 				</div>
 			)}
+			{showFullCodeBlock ? (
+				<>
+					<div
+						className='h-px w-full px-[8px]'
+					>
+						<div className='h-full w-full bg-[var(--vscode-statusBar-border)]'></div>
+					</div>
+					<div
+						//className="code-block-scrollable" this doesn't seem to be necessary anymore, on silicon macs it shows the native mac scrollbar instead of the vscode styled one
+						style={{
+							overflowX: "auto",
+							overflowY: "hidden",
+							maxWidth: "100%",
+						}}>
+						<CodeBlock
+							source={`${"```"}${diff !== undefined ? "diff" : inferredLanguage}\n${codeBlockContent}\n${"```"}`}
+						/>
+					</div>
+				</>
+			) : (
+				<>
+					<div
+						className='h-px w-full px-[8px]'
+					>
+						<div className='h-full w-full bg-[var(--vscode-statusBar-border)]'></div>
+					</div>
+					<div
+						//className="code-block-scrollable" this doesn't seem to be necessary anymore, on silicon macs it shows the native mac scrollbar instead of the vscode styled one
+						style={{
+							overflowX: "auto",
+							overflowY: "hidden",
+							maxWidth: "100%",
+						}}>
+						<CodeBlock
+							source={`${"```"}${diff !== undefined ? "diff" : inferredLanguage}\n${codeBlockContent
+								.split("\n")
+								.slice(0, COLLAPSED_CODE_BLOCK_LINES)
+								.join("\n")}\n${"```"}`}
+						/>
+					</div>
+				</>
+			)}
+
+			{/* 展开收起代码 */}
 			{
-				isExpanded && <div
-					className='h-px w-full px-[8px]'
+				showExpandButton && <div
+					className='flex items-center justify-center mt-[10px]'
 				>
-					<div className='h-full w-full bg-[var(--vscode-statusBar-border)]'></div>
+					<VSCodeButton
+						appearance='icon'
+						disabled={isLoading}
+						onClick={isLoading ? undefined : onToggleExpand}
+						className='bg-vscode-menu-background hover:bg-vscode-menu-background/70 rounded-b-none'
+					>
+						<div className='flex font-medium items-center gap-[4px] text-[12px] px-[4px] text-vscode-menu-foreground/60'>
+							{
+								isExpanded ? <>
+									<span>
+										{t("collapseCode", { ns: "chat" })}
+									</span>
+									<SvgIcons.arrowUp />
+								</> : <>
+									<span>
+										{t("expandCode", { ns: "chat" })}
+									</span>
+									<SvgIcons.arrowDown />
+								</>
+							}
+						</div>
+					</VSCodeButton>
 				</div>
 			}
-			{(!(path || isFeedback || isConsoleLogs) || isExpanded) && (
-				<div
-					//className="code-block-scrollable" this doesn't seem to be necessary anymore, on silicon macs it shows the native mac scrollbar instead of the vscode styled one
-					style={{
-						overflowX: "auto",
-						overflowY: "hidden",
-						maxWidth: "100%",
-					}}>
-					<CodeBlock
-						source={`${"```"}${diff !== undefined ? "diff" : inferredLanguage}\n${(
-							code ??
-							diff ??
-							""
-						).trim()}\n${"```"}`}
-					/>
-				</div>
-			)}
 		</div>
 	)
 }

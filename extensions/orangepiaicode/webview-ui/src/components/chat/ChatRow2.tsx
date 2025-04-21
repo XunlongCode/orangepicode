@@ -27,6 +27,7 @@ import { CheckpointSaved } from "./checkpoints/CheckpointSaved"
 import { cn } from '../../lib/utils'
 import { getVscExtensionPath } from '../../utils'
 import GithubUser from '../common/GithubUser'
+import { SvgIcons } from '../../SvgIcons'
 
 interface ChatRowProps {
 	message: ClineMessage
@@ -672,7 +673,8 @@ export const ChatRowContent = ({
 												copyWithFeedback(message.text)
 											}
 										}}>
-										<span className="codicon codicon-copy"></span>
+										{/* <span className="codicon codicon-copy"></span> */}
+										<SvgIcons.copy />
 									</VSCodeButton>
 									<VSCodeButton
 										className='opacity-0 group-hover:opacity-100 transition-opacity'
@@ -1085,7 +1087,8 @@ const Markdown = memo(({ markdown, partial, isLast }:
 								}
 							}}
 							title="Copy as markdown">
-							<span className="codicon codicon-copy"></span>
+							{/* <span className="codicon codicon-copy"></span> */}
+							<SvgIcons.copy />
 						</VSCodeButton>
 						{false && <VSCodeButton
 							className="bg-vscode-activityBar-activeBackground"
@@ -1098,7 +1101,7 @@ const Markdown = memo(({ markdown, partial, isLast }:
 							onClick={async () => {
 
 							}}
-							title="Copy as markdown">
+							title="Retry">
 							<span className="codicon codicon-refresh"></span>
 						</VSCodeButton>}
 					</div>

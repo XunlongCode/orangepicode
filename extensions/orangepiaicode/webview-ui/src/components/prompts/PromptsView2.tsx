@@ -32,6 +32,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Textarea
 
 import { Checkbox } from '../ui/checkbox'
 import { CheckedState } from '@radix-ui/react-checkbox'
+import { SvgIcons } from '../../SvgIcons'
 
 // Get all available groups that should show in prompts view
 const availableGroups = (Object.keys(TOOL_GROUPS) as ToolGroup[]).filter((group) => !TOOL_GROUPS[group].alwaysAvailable)
@@ -980,7 +981,8 @@ const PromptsView2 = ({ onDone, className }: PromptsViewProps) => {
 								}
 							}}
 							data-testid="copy-prompt-button">
-							<span className="codicon codicon-copy"></span>
+							{/* <span className="codicon codicon-copy"></span> */}
+							<SvgIcons.copy />
 						</VSCodeButton>
 					</div>
 

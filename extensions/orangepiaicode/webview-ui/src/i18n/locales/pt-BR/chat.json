@@ -2,6 +2,8 @@
 	"greeting": "O que o OrangePi AI pode fazer por você?",
 	"chatMode": "Chat modo",
 	"codeMode": "Code modo",
+	"expandCode": "Expandir código",
+	"collapseCode": "Recolher código",
 	"chatModeDescription": "Faça perguntas ou busque conselhos sobre seu código ou questões relacionadas à programação a qualquer momento.",
 	"codeModeDescription": "Complete facilmente a construção de projetos do zero.",
 	"task": {

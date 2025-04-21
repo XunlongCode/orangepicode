@@ -2,6 +2,8 @@
 	"greeting": "OrangePi AIにお手伝いできることはありますか？",
 	"chatMode": "Chat モード",
 	"codeMode": "Code モード",
+	"expandCode": "コードを展開",
+	"collapseCode": "コードを折りたたむ",
 	"chatModeDescription": "いつでもコードやプログラミング関連の質問やアドバイスを求めることができます。",
 	"codeModeDescription": "ゼロからプロジェクト構築を簡単に完了できます。",
 	"task": {

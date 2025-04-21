@@ -19,12 +19,14 @@ export enum DropdownOptionType {
 	SEPARATOR = "separator",
 	SHORTCUT = "shortcut",
 	ACTION = "action",
+	BUTTON = "button"
 }
 export interface DropdownOption {
 	value: string
 	label: string
 	disabled?: boolean
 	type?: DropdownOptionType
+	handler?: (value: string) => void
 }
 
 export interface SelectDropdownProps {
@@ -68,6 +70,11 @@ export const SelectDropdown = React.forwardRef<React.ElementRef<typeof DropdownM
 			if (option.type === DropdownOptionType.ACTION) {
 				window.postMessage({ type: "action", action: option.value })
 				setOpen(false)
+				return
+			} else if (option.type === DropdownOptionType.BUTTON) {
+				if (option.handler) {
+					option.handler(option.value)
+				}
 				return
 			}
 

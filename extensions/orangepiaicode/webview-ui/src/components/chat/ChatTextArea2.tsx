@@ -925,9 +925,12 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 										type: DropdownOptionType.SEPARATOR,
 									},
 									{
-										value: "promptsButtonClicked",
+										value: "openSettings",
 										label: t("chat:edit"),
-										type: DropdownOptionType.ACTION,
+										type: DropdownOptionType.BUTTON,
+										handler: () => {
+											vscode.postMessage({ type: "openSettings" })
+										}
 									},
 								]}
 								onChange={(value) => {
@@ -965,7 +968,10 @@ const ChatTextArea2 = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 									{
 										value: "settingsButtonClicked",
 										label: t("chat:edit"),
-										type: DropdownOptionType.ACTION,
+										type: DropdownOptionType.BUTTON,
+										handler: () => {
+											vscode.postMessage({ type: "openSettings" })
+										}
 									},
 								]}
 								onChange={(value) => vscode.postMessage({ type: "loadApiConfiguration", text: value })}

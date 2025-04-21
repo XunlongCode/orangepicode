@@ -62,7 +62,7 @@ const CodeAccordian = ({
 	}, [code, diff])
 
 	const showExpandButton = useMemo(() => {
-		return codeBlockContent && codeBlockContent.split("\n").length > COLLAPSED_CODE_BLOCK_LINES
+		return codeBlockContent && (codeBlockContent.split("\n").length > COLLAPSED_CODE_BLOCK_LINES)
 	}, [codeBlockContent])
 
 	const showFullCodeBlock = useMemo(() => {
@@ -75,6 +75,7 @@ const CodeAccordian = ({
 		isFeedback,
 		isConsoleLogs,
 		path,
+		showExpandButton,
 	])
 
 	return (

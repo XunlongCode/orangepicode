@@ -129,6 +129,9 @@
 	--color-vscode-button-ring: var(--vscode-button-ring);
 
 	--color-vscode-activityBar-activeBackground: var(--vscode-activityBar-activeBackground);
+
+	--color-vscode-menu-background: var(--vscode-menu-background);
+	--color-vscode-menu-foreground: var(--vscode-menu-foreground);
 }
 
 @layer base {

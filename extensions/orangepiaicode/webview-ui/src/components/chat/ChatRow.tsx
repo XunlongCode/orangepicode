@@ -23,6 +23,7 @@ import McpResourceRow from "../mcp/McpResourceRow"
 import McpToolRow from "../mcp/McpToolRow"
 import { highlightMentions } from "./TaskHeader"
 import { CheckpointSaved } from "./checkpoints/CheckpointSaved"
+import { SvgIcons } from '../../SvgIcons'
 
 interface ChatRowProps {
 	message: ClineMessage
@@ -1071,7 +1072,8 @@ const Markdown = memo(({ markdown, partial }: { markdown?: string; partial?: boo
 							}
 						}}
 						title="Copy as markdown">
-						<span className="codicon codicon-copy"></span>
+						{/* <span className="codicon codicon-copy"></span> */}
+						<SvgIcons.copy />
 					</VSCodeButton>
 				</div>
 			)}

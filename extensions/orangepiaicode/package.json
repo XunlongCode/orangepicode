@@ -182,7 +182,10 @@
 				"category": "Terminal"
 			},
 			{
-				"icon": "$(add)",
+				"icon": {
+					"light": "assets/icons/add2-light.svg",
+					"dark": "assets/icons/add2.svg"
+				},
 				"command": "orangepiaicode-chat.plusButtonClicked",
 				"title": "New Task",
 				"category": "OrangePi AI Code Chat"
@@ -194,7 +197,10 @@
 				"category": "OrangePi AI Code Chat"
 			},
 			{
-				"icon": "$(add)",
+				"icon": {
+					"light": "assets/icons/add2-light.svg",
+					"dark": "assets/icons/add2.svg"
+				},
 				"command": "orangepiaicode-code.plusButtonClicked",
 				"title": "New Task",
 				"category": "OrangePi AI Code Code"

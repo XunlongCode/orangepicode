@@ -2,6 +2,8 @@
 	"greeting": "Co OrangePi AI może dla Ciebie zrobić?",
 	"chatMode": "Chat tryb",
 	"codeMode": "Code tryb",
+	"expandCode": "Rozwiń kod",
+	"collapseCode": "Zwiń kod",
 	"chatModeDescription": "W każdej chwili zadawaj pytania lub szukaj porad dotyczących swojego kodu lub problemów związanych z programowaniem.",
 	"codeModeDescription": "Łatwo ukończ budowę projektu od zera do jednego.",
 	"task": {

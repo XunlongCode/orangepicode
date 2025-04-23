@@ -10,6 +10,7 @@ import { DeleteTaskDialog } from '../history/DeleteTaskDialog';
 import { ExtensionMessage } from '../../../../src/shared/ExtensionMessage';
 import GithubUser from '../common/GithubUser';
 import { useCopyToClipboard } from '../../utils/clipboard';
+import { SvgIcons } from '../../SvgIcons';
 
 export interface ChatRow2Props {
 	task: ClineMessage
@@ -62,7 +63,8 @@ const TaskHeader2: FC<ChatRow2Props> = ({
 								copyWithFeedback(task.text)
 							}
 						}}>
-						<span className="codicon codicon-copy"></span>
+						{/* <span className="codicon codicon-copy"></span> */}
+						<SvgIcons.copy />
 					</VSCodeButton>
 					<VSCodeButton
 						className='opacity-0 group-hover:opacity-100 transition-opacity'

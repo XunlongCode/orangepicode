@@ -28,6 +28,7 @@ import { Tab, TabContent, TabHeader } from "../common/Tab"
 import i18next from "i18next"
 import { useAppTranslation } from "../../i18n/TranslationContext"
 import { Trans } from "react-i18next"
+import { SvgIcons } from '../../SvgIcons'
 
 // Get all available groups that should show in prompts view
 const availableGroups = (Object.keys(TOOL_GROUPS) as ToolGroup[]).filter((group) => !TOOL_GROUPS[group].alwaysAvailable)
@@ -964,7 +965,8 @@ const PromptsView = ({ onDone, className }: PromptsViewProps) => {
 								}
 							}}
 							data-testid="copy-prompt-button">
-							<span className="codicon codicon-copy"></span>
+							{/* <span className="codicon codicon-copy"></span> */}
+							<SvgIcons.copy />
 						</VSCodeButton>
 					</div>
 
